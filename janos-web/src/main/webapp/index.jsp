@@ -21,7 +21,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Apache Olingo - OData2 Library</title>
+<title>Apache Olingo - OData2 Library - Janos Extension</title>
 <style type="text/css">
 body { font-family: Arial, sans-serif; font-size: 13px; line-height: 18px;
        color: blue; background-color: #ffffff; }
@@ -49,7 +49,7 @@ th, td { border: 1px solid; padding: 20px; }
 </style>
 </head>
 <body>
-	<h1>Apache Olingo - OData2 Library</h1>
+	<h1>Apache Olingo - OData2 Library - Janos Extension</h1>
 	<hr />
 	<h2>Reference Scenario</h2>
 	<table>
