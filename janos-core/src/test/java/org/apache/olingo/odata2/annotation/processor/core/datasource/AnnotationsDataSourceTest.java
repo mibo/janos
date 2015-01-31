@@ -27,7 +27,10 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.olingo.odata2.annotation.processor.core.datasource.DataSource.BinaryData;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataSource;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataSource.BinaryData;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStore;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreFactory;
 import org.apache.olingo.odata2.annotation.processor.core.edm.AnnotationEdmProvider;
 import org.apache.olingo.odata2.annotation.processor.core.model.Building;
 import org.apache.olingo.odata2.annotation.processor.core.model.City;

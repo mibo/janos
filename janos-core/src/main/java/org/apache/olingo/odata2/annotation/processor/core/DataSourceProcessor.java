@@ -18,8 +18,8 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.annotation.processor.core;
 
-import org.apache.olingo.odata2.annotation.processor.core.datasource.DataSource;
-import org.apache.olingo.odata2.annotation.processor.core.datasource.ValueAccess;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataSource;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.api.processor.ODataSingleProcessor;
 
 /**

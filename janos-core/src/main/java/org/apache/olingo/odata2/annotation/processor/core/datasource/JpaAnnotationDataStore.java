@@ -21,7 +21,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStore;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreException;
 import org.apache.olingo.odata2.annotation.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.annotation.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;

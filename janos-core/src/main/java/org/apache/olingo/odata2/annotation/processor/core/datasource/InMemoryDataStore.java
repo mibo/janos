@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStore;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreException;
 import org.apache.olingo.odata2.annotation.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.annotation.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.annotation.processor.core.util.ClassHelper;

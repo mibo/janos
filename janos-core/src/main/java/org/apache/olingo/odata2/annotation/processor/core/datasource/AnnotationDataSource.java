@@ -22,6 +22,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataSource;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStore;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreException;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreFactory;
 import org.apache.olingo.odata2.annotation.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.annotation.processor.core.util.AnnotationHelper.AnnotatedNavInfo;
 import org.apache.olingo.odata2.annotation.processor.core.util.AnnotationHelper.ODataAnnotationException;

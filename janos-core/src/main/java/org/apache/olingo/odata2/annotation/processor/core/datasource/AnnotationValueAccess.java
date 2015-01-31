@@ -18,6 +18,7 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.annotation.processor.core.datasource;
 
+import org.apache.olingo.odata2.annotation.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.annotation.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.api.edm.EdmMapping;
 import org.apache.olingo.odata2.api.edm.EdmProperty;

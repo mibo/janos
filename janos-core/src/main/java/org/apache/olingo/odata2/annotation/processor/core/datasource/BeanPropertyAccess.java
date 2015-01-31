@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import org.apache.olingo.odata2.annotation.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.api.edm.EdmException;
 import org.apache.olingo.odata2.api.edm.EdmMapping;
 import org.apache.olingo.odata2.api.edm.EdmProperty;

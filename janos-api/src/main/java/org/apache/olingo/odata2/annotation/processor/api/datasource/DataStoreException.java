@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.olingo.odata2.annotation.processor.api.datasource;
 
-package org.apache.olingo.odata2.annotation.processor.core.datasource;
-
-import java.util.Map;
+import java.util.Locale;
+import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 
 /**
  *
  */
-public interface DataStoreFactory {
-  static final String KEEP_PERSISTENT = "KEEP_PERSISTENT";
-  
-  void setDefaultProperty(String name, String value);
-  DataStore<?> createDataStore(Class<?> clz) throws DataStoreException;
-  DataStore<?> createDataStore(Class<?> clz, Map<String, String> properties) throws DataStoreException;
+public class DataStoreException extends ODataApplicationException {
+
+  private static final long serialVersionUID = 42L;
+
+  public DataStoreException(final String message) {
+    this(message, null);
+  }
+
+  public DataStoreException(final String message, final Throwable cause) {
+    super(message, Locale.ENGLISH, cause);
+  }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.olingo.odata2.annotation.processor.core.datasource;
+package org.apache.olingo.odata2.annotation.processor.api.datasource;
 
 import java.util.Collection;
 

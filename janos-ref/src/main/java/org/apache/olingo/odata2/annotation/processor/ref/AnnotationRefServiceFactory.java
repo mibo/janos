@@ -20,7 +20,7 @@ import java.util.Set;
 
 import org.apache.olingo.odata2.annotation.processor.api.AnnotationServiceFactory;
 import org.apache.olingo.odata2.annotation.processor.core.datasource.InMemoryDataStore;
-import org.apache.olingo.odata2.annotation.processor.core.datasource.DataStoreException;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreException;
 import org.apache.olingo.odata2.annotation.processor.ref.model.Building;
 import org.apache.olingo.odata2.annotation.processor.ref.model.City;
 import org.apache.olingo.odata2.annotation.processor.ref.model.Employee;
