@@ -42,6 +42,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>de.mirb.olingo</groupId>
+      <artifactId>janos-jpa-ref</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.olingo</groupId>
       <artifactId>olingo-odata2-core</artifactId>
       <version>${version.olingo}</version>

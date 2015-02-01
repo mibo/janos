@@ -20,9 +20,14 @@ language governing permissions and limitations under the License. -->
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>janos-ref</artifactId>
+  <artifactId>janos-jpa-ref</artifactId>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+
+  <properties>
+    <version.hsqldb>1.8.0.10</version.hsqldb>
+    <version.eclipselink>2.5.1</version.eclipselink>
+  </properties>
 
   <build>
     <finalName>${project.artifactId}</finalName>
@@ -73,6 +78,22 @@ language governing permissions and limitations under the License. -->
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+      <version>${version.javax.persistence}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>${version.hsqldb}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>eclipselink</artifactId>
+      <version>${version.eclipselink}</version>
     </dependency>
 
     <dependency>

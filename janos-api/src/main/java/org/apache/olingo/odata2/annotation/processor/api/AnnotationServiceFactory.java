@@ -20,6 +20,7 @@ package org.apache.olingo.odata2.annotation.processor.api;
 
 import java.util.Collection;
 
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
 
@@ -114,5 +115,19 @@ public abstract class AnnotationServiceFactory {
   public static ODataService createAnnotationService(final Collection<Class<?>> annotatedClasses)
       throws ODataException {
     return getInstance().createAnnotationService(annotatedClasses);
+  }
+
+  public static AnnotationServiceBuilder createAnnotationService()
+      throws ODataException {
+    return new AnnotationServiceBuilder();
+  }
+
+  public static class AnnotationServiceBuilder {
+    public AnnotationServiceBuilder with(DataStore ds) {
+      return this;
+    }
+    public ODataService build() {
+      return null;
+    }
   }
 }

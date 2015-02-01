@@ -26,6 +26,7 @@
         <module>janos-api</module>
         <module>janos-core</module>
         <module>janos-ref</module>
+        <module>janos-jpa-ref</module>
         <module>janos-web</module>
     </modules>
 

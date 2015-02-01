@@ -12,7 +12,7 @@
  * specific language governing permissions and limitations under the License.
  ***************************************************************************** 
  */
-package org.apache.olingo.odata2.annotation.processor.ref;
+package org.apache.olingo.odata2.annotation.processor.ref.jpa;
 
 import java.util.Calendar;
 import java.util.HashSet;
@@ -21,16 +21,16 @@ import java.util.Set;
 import org.apache.olingo.odata2.annotation.processor.api.AnnotationServiceFactory;
 import org.apache.olingo.odata2.annotation.processor.core.datasource.InMemoryDataStore;
 import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Building;
-import org.apache.olingo.odata2.annotation.processor.ref.model.City;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Employee;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Location;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Manager;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Photo;
-import org.apache.olingo.odata2.annotation.processor.ref.model.RefBase;
-import org.apache.olingo.odata2.annotation.processor.ref.model.ResourceHelper;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Room;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Team;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Building;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.City;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Employee;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Photo;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Room;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Location;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Manager;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.RefBase;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.ResourceHelper;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Team;
 import org.apache.olingo.odata2.api.ODataCallback;
 import org.apache.olingo.odata2.api.ODataDebugCallback;
 import org.apache.olingo.odata2.api.ODataService;
