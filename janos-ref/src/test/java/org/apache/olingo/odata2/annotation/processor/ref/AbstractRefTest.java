@@ -34,7 +34,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
-import org.apache.olingo.odata2.annotation.processor.api.AnnotationServiceFactory;
+import org.apache.olingo.odata2.annotation.processor.api.JanosService;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.commons.ODataHttpMethod;
@@ -62,7 +62,7 @@ public class AbstractRefTest extends AbstractFitTest {
 
   @Override
   protected ODataService createService() throws ODataException {
-    return AnnotationServiceFactory.createAnnotationService(MODEL_PACKAGE);
+    return JanosService.createFor(MODEL_PACKAGE).build();
   }
 
   protected HttpResponse callUri(

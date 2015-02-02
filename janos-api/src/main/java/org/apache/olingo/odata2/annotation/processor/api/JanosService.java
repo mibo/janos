@@ -20,7 +20,9 @@ package org.apache.olingo.odata2.annotation.processor.api;
 
 import java.util.Collection;
 
-import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStore;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataSource;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
 
@@ -29,10 +31,10 @@ import org.apache.olingo.odata2.api.exception.ODataException;
  * annotated with annotation from <code>org.apache.olingo.olingo-odata2-api-annotation</code> module
  * (see package <code>org.apache.olingo.odata2.api.annotation.edm</code>).
  */
-public abstract class AnnotationServiceFactory {
+public abstract class JanosService {
 
   private static final String IMPLEMENTATION =
-      "org.apache.olingo.odata2.annotation.processor.core.rt.AnnotationServiceFactoryImpl";
+      "org.apache.olingo.odata2.annotation.processor.core.rt.JanosServiceBuilderImpl";
 
   /**
    * Create a runtime delegate instance from the core library. The core
@@ -40,8 +42,8 @@ public abstract class AnnotationServiceFactory {
    * of the using application.
    * @return implementation instance
    */
-  private static AnnotationServiceFactoryInstance getInstance() {
-    AnnotationServiceFactoryInstance delegate;
+  private static JanosServiceBuilder getInstance() {
+    JanosServiceBuilder delegate;
 
     try {
       final Class<?> clazz = Class.forName(IMPLEMENTATION);
@@ -50,7 +52,7 @@ public abstract class AnnotationServiceFactory {
        * and avoid class loading issues also during hot deployment.
        */
       final Object object = clazz.newInstance();
-      delegate = (AnnotationServiceFactoryInstance) object;
+      delegate = (JanosServiceBuilder) object;
 
     } catch (final Exception e) {
       throw new RuntimeException(e);
@@ -59,12 +61,12 @@ public abstract class AnnotationServiceFactory {
   }
 
   /**
-   * Interface to be implemented for an instance of a {@link AnnotationServiceFactoryInstance} which
+   * Interface to be implemented for an instance of a {@link JanosService.JanosServiceBuilder} which
    * provides an {@link ODataService} based on annotation from
    * <code>org.apache.olingo.olingo-odata2-api-annotation</code> module
    * (see package <code>org.apache.olingo.odata2.api.annotation.edm</code>).
    */
-  public interface AnnotationServiceFactoryInstance {
+  public interface JanosServiceBuilder {
     /**
      * Create an {@link ODataService} which is based on an EDM and Processor which are using the annotations from
      * <code>org.apache.olingo.olingo-odata2-api-annotation</code> module
@@ -75,7 +77,7 @@ public abstract class AnnotationServiceFactory {
      * for model definition and data access.
      * @throws ODataException if an error during initialization occurs
      */
-    public ODataService createAnnotationService(String modelPackage) throws ODataException;
+    public JanosServiceBuilder createFor(String modelPackage) throws ODataException;
 
     /**
      * Create an {@link ODataService} which is based on an EDM and Processor which are using the annotations from
@@ -86,7 +88,15 @@ public abstract class AnnotationServiceFactory {
      * for model definition and data access.
      * @throws ODataException if an error during initialization occurs
      */
-    public ODataService createAnnotationService(Collection<Class<?>> annotatedClasses) throws ODataException;
+    public JanosServiceBuilder createFor(Collection<Class<?>> annotatedClasses) throws ODataException;
+
+    public JanosServiceBuilder with(DataStoreFactory dataStore);
+
+    public JanosServiceBuilder with(ValueAccess valueAccess);
+
+    public JanosServiceBuilder with(DataSource dataSource);
+
+    public ODataService build() throws ODataException;
   }
 
   /**
@@ -99,8 +109,8 @@ public abstract class AnnotationServiceFactory {
    * for model definition and data access.
    * @throws ODataException if an error during initialization occurs
    */
-  public static ODataService createAnnotationService(final String modelPackage) throws ODataException {
-    return getInstance().createAnnotationService(modelPackage);
+  public static JanosServiceBuilder createFor(final String modelPackage) throws ODataException {
+    return getInstance().createFor(modelPackage);
   }
 
   /**
@@ -112,22 +122,8 @@ public abstract class AnnotationServiceFactory {
    * for model definition and data access.
    * @throws ODataException if an error during initialization occurs
    */
-  public static ODataService createAnnotationService(final Collection<Class<?>> annotatedClasses)
+  public static JanosServiceBuilder createFor(final Collection<Class<?>> annotatedClasses)
       throws ODataException {
-    return getInstance().createAnnotationService(annotatedClasses);
-  }
-
-  public static AnnotationServiceBuilder createAnnotationService()
-      throws ODataException {
-    return new AnnotationServiceBuilder();
-  }
-
-  public static class AnnotationServiceBuilder {
-    public AnnotationServiceBuilder with(DataStore ds) {
-      return this;
-    }
-    public ODataService build() {
-      return null;
-    }
+    return getInstance().createFor(annotatedClasses);
   }
 }

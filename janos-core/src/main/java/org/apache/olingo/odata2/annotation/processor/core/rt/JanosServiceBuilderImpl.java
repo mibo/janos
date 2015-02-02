@@ -18,14 +18,19 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.annotation.processor.core.rt;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.olingo.odata2.annotation.processor.api.AnnotationServiceFactory.AnnotationServiceFactoryInstance;
+import org.apache.olingo.odata2.annotation.processor.api.JanosService.JanosServiceBuilder;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataSource;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.annotation.processor.core.ListsProcessor;
 import org.apache.olingo.odata2.annotation.processor.core.datasource.AnnotationDataSource;
 import org.apache.olingo.odata2.annotation.processor.core.datasource.AnnotationValueAccess;
 import org.apache.olingo.odata2.annotation.processor.core.edm.AnnotationEdmProvider;
 import org.apache.olingo.odata2.api.ODataService;
+import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.rt.RuntimeDelegate;
 
@@ -33,32 +38,65 @@ import org.apache.olingo.odata2.api.rt.RuntimeDelegate;
  * AnnotationServiceFactoryInstance (ODataServiceFactory) implementation based on ListProcessor
  * in combination with Annotation-Support-Classes for EdmProvider, DataSource and ValueAccess.
  */
-public class AnnotationServiceFactoryImpl implements AnnotationServiceFactoryInstance {
+public class JanosServiceBuilderImpl implements JanosServiceBuilder {
+  private EdmProvider edmProvider;
+  private DataSource dataSource;
+  private ValueAccess valueAccess;
+  private DataStoreFactory dataStoreFactory;
+  private String modelPackage;
+  private Collection<Class<?>> annotatedClasses = new ArrayList<>();
+
   /**
    * {@inheritDoc}
    */
   @Override
-  public ODataService createAnnotationService(final String modelPackage) throws ODataException {
-    AnnotationEdmProvider edmProvider = new AnnotationEdmProvider(modelPackage);
-    AnnotationDataSource dataSource = new AnnotationDataSource(modelPackage);
-    AnnotationValueAccess valueAccess = new AnnotationValueAccess();
-
-    // Edm via Annotations and ListProcessor via AnnotationDS with AnnotationsValueAccess
-    return RuntimeDelegate.createODataSingleProcessorService(edmProvider,
-        new ListsProcessor(dataSource, valueAccess));
+  public JanosServiceBuilder createFor(final String modelPackage) throws ODataException {
+    this.modelPackage = modelPackage;
+    return this;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public ODataService createAnnotationService(final Collection<Class<?>> annotatedClasses) throws ODataException {
-    AnnotationEdmProvider edmProvider = new AnnotationEdmProvider(annotatedClasses);
-    AnnotationDataSource dataSource = new AnnotationDataSource(annotatedClasses);
-    AnnotationValueAccess valueAccess = new AnnotationValueAccess();
+  public JanosServiceBuilder createFor(final Collection<Class<?>> annotatedClasses) throws ODataException {
+    this.annotatedClasses = annotatedClasses;
+    return this;
+  }
+
+  public JanosServiceBuilder with(DataStoreFactory dataStoreFactory) {
+    this.dataStoreFactory = dataStoreFactory;
+    return this;
+  }
+
+  public JanosServiceBuilder with(ValueAccess valueAccess) {
+    this.valueAccess = valueAccess;
+    return this;
+  }
+
+  public JanosServiceBuilder with(DataSource dataSource) {
+    this.dataSource = dataSource;
+    return this;
+  }
+
+  public ODataService build() throws ODataException {
+    if(!annotatedClasses.isEmpty()) {
+      edmProvider = new AnnotationEdmProvider(annotatedClasses);
+      dataSource = new AnnotationDataSource(annotatedClasses);
+    } else if(modelPackage != null) {
+      edmProvider = new AnnotationEdmProvider(modelPackage);
+      dataSource = new AnnotationDataSource(modelPackage);
+    } else {
+      throw new RuntimeException();
+    }
+
+    if(valueAccess == null) {
+      valueAccess = new AnnotationValueAccess();
+    }
 
     // Edm via Annotations and ListProcessor via AnnotationDS with AnnotationsValueAccess
     return RuntimeDelegate.createODataSingleProcessorService(edmProvider,
         new ListsProcessor(dataSource, valueAccess));
   }
+
 }

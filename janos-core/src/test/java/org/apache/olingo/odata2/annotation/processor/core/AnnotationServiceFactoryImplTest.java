@@ -27,7 +27,7 @@ import org.apache.olingo.odata2.annotation.processor.core.model.Photo;
 import org.apache.olingo.odata2.annotation.processor.core.model.RefBase;
 import org.apache.olingo.odata2.annotation.processor.core.model.Room;
 import org.apache.olingo.odata2.annotation.processor.core.model.Team;
-import org.apache.olingo.odata2.annotation.processor.core.rt.AnnotationServiceFactoryImpl;
+import org.apache.olingo.odata2.annotation.processor.core.rt.JanosServiceBuilderImpl;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.junit.Test;
@@ -39,15 +39,15 @@ public class AnnotationServiceFactoryImplTest {
 
   @Test
   public void createFromPackage() throws ODataException {
-    AnnotationServiceFactoryImpl factory = new AnnotationServiceFactoryImpl();
-    ODataService service = factory.createAnnotationService(Building.class.getPackage().getName());
+    JanosServiceBuilderImpl factory = new JanosServiceBuilderImpl();
+    ODataService service = factory.createFor(Building.class.getPackage().getName()).build();
 
     Assert.assertNotNull(service);
   }
 
   @Test
   public void createFromAnnotatedClasses() throws ODataException {
-    AnnotationServiceFactoryImpl factory = new AnnotationServiceFactoryImpl();
+    JanosServiceBuilderImpl factory = new JanosServiceBuilderImpl();
     final Collection<Class<?>> annotatedClasses = new ArrayList<Class<?>>();
     annotatedClasses.add(RefBase.class);
     annotatedClasses.add(Building.class);
@@ -56,19 +56,19 @@ public class AnnotationServiceFactoryImplTest {
     annotatedClasses.add(Photo.class);
     annotatedClasses.add(Room.class);
     annotatedClasses.add(Team.class);
-    ODataService service = factory.createAnnotationService(annotatedClasses);
+    ODataService service = factory.createFor(annotatedClasses).build();
 
     Assert.assertNotNull(service);
   }
 
   @Test(expected = ODataException.class)
   public void createFromClasses() throws ODataException {
-    AnnotationServiceFactoryImpl factory = new AnnotationServiceFactoryImpl();
+    JanosServiceBuilderImpl factory = new JanosServiceBuilderImpl();
 
     final Collection<Class<?>> notAnnotatedClasses = new ArrayList<Class<?>>();
     notAnnotatedClasses.add(String.class);
     notAnnotatedClasses.add(Long.class);
-    ODataService service = factory.createAnnotationService(notAnnotatedClasses);
+    ODataService service = factory.createFor(notAnnotatedClasses).build();
 
     Assert.assertNotNull(service);
   }

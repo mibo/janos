@@ -12,25 +12,25 @@
  * specific language governing permissions and limitations under the License.
  ***************************************************************************** 
  */
-package org.apache.olingo.odata2.annotation.processor.ref;
+package org.apache.olingo.odata2.annotation.processor.ref.jpa;
 
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.olingo.odata2.annotation.processor.api.AnnotationServiceFactory;
+import org.apache.olingo.odata2.annotation.processor.api.JanosService;
 import org.apache.olingo.odata2.annotation.processor.core.datasource.InMemoryDataStore;
 import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Building;
-import org.apache.olingo.odata2.annotation.processor.ref.model.City;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Employee;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Location;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Manager;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Photo;
-import org.apache.olingo.odata2.annotation.processor.ref.model.RefBase;
-import org.apache.olingo.odata2.annotation.processor.ref.model.ResourceHelper;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Room;
-import org.apache.olingo.odata2.annotation.processor.ref.model.Team;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Building;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.City;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Employee;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Photo;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Room;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Location;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Manager;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.RefBase;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.ResourceHelper;
+import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Team;
 import org.apache.olingo.odata2.api.ODataCallback;
 import org.apache.olingo.odata2.api.ODataDebugCallback;
 import org.apache.olingo.odata2.api.ODataService;
@@ -47,17 +47,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ODataServiceFactory implemantion based on ListProcessor
+ * ODataServiceFactory implementation based on ListProcessor
  * in combination with Annotation-Support-Classes for EdmProvider, DataSource and ValueAccess.
  */
-public class AnnotationRefServiceFactory extends ODataServiceFactory {
+public class JanosJpaRefServiceFactory extends ODataServiceFactory {
 
   /**
    * Instance holder for all annotation relevant instances which should be used as singleton
    * instances within the ODataApplication (ODataService)
    */
   private static class AnnotationInstances {
-    final static String MODEL_PACKAGE = "org.apache.olingo.odata2.annotation.processor.ref.model";
     final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<Class<?>>();
     static {
       ANNOTATED_MODEL_CLASSES.add(Building.class);
@@ -74,8 +73,7 @@ public class AnnotationRefServiceFactory extends ODataServiceFactory {
 
     static {
       try {
-//        ANNOTATION_ODATA_SERVICE = AnnotationServiceFactory.createAnnotationService(MODEL_PACKAGE);
-        ANNOTATION_ODATA_SERVICE = AnnotationServiceFactory.createAnnotationService(ANNOTATED_MODEL_CLASSES);
+        ANNOTATION_ODATA_SERVICE = JanosService.createFor(ANNOTATED_MODEL_CLASSES).build();
         initializeSampleData();
       } catch (ODataApplicationException ex) {
         throw new RuntimeException("Exception during sample data generation.", ex);
