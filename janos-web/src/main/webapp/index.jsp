@@ -51,47 +51,86 @@ th, td { border: 1px solid; padding: 20px; }
 <body>
 	<h1>Apache Olingo - OData2 Library - Janos Extension</h1>
 	<hr />
-	<h2>Reference Scenario</h2>
 	<table>
 		<tr>
 			<td valign="top">
+        <h2>InMemory Reference Scenario</h2>
 				<h3>Service Document and Metadata</h3>
 				<ul>
-					<li><a href="ReferenceScenario.svc?_wadl" target="_blank">wadl</a></li>
-					<li><a href="ReferenceScenario.svc/" target="_blank">service
+					<li><a href="ImScenario.svc?_wadl" target="_blank">wadl</a></li>
+					<li><a href="ImScenario.svc/" target="_blank">service
 							document</a></li>
-					<li><a href="ReferenceScenario.svc/$metadata" target="_blank">metadata</a></li>
+					<li><a href="ImScenario.svc/$metadata" target="_blank">metadata</a></li>
 				</ul>
 				<h3>EntitySets</h3>
 				<ul>
-					<li><a href="ReferenceScenario.svc/Employees" target="_blank">Employees</a></li>
-					<li><a href="ReferenceScenario.svc/Managers" target="_blank">Managers</a></li>
-					<li><a href="ReferenceScenario.svc/Buildings" target="_blank">Buildings</a></li>
-					<li><a href="ReferenceScenario.svc/Buildings/?$expand=nb_Rooms" 
+					<li><a href="ImScenario.svc/Employees" target="_blank">Employees</a></li>
+					<li><a href="ImScenario.svc/Managers" target="_blank">Managers</a></li>
+					<li><a href="ImScenario.svc/Buildings" target="_blank">Buildings</a></li>
+					<li><a href="ImScenario.svc/Buildings/?$expand=nb_Rooms" 
                  target="_blank">Buildings/?$expand=nb_Rooms</a></li>
-					<li><a href="ReferenceScenario.svc/Rooms" target="_blank">Rooms</a></li>
-					<li><a href="ReferenceScenario.svc/Rooms/?$orderby=Name" target="_blank">Rooms/?$orderby=Name</a></li>
-					<li><a href="ReferenceScenario.svc/Photos" target="_blank">Photos</a></li>
-					<li><a href="ReferenceScenario.svc/Photos/?$filter=Type%20eq%20'PNG'" 
+					<li><a href="ImScenario.svc/Rooms" target="_blank">Rooms</a></li>
+					<li><a href="ImScenario.svc/Rooms/?$orderby=Name" target="_blank">Rooms/?$orderby=Name</a></li>
+					<li><a href="ImScenario.svc/Photos" target="_blank">Photos</a></li>
+					<li><a href="ImScenario.svc/Photos/?$filter=Type%20eq%20'PNG'" 
                  target="_blank">Photos/?$filter=Type eq 'PNG'</a></li>
         </ul>
 				<h3>Entities</h3>
 				<ul>
-					<li><a href="ReferenceScenario.svc/Employees('1')" target="_blank">Employees('1')</a></li>
-					<li><a href="ReferenceScenario.svc/Managers('1')" target="_blank">Managers('1')</a></li>
-					<li><a href="ReferenceScenario.svc/Buildings(1)" target="_blank">Buildings(1)</a></li>
-					<li><a href="ReferenceScenario.svc/Buildings(1)/nb_Rooms" target="_blank">Buildings(1)/nb_Rooms</a></li>
-					<li><a href="ReferenceScenario.svc/Rooms('1')" target="_blank">Rooms('1')</a></li>
-					<li><a href="ReferenceScenario.svc/Rooms('1')/nr_Building" target="_blank">Rooms('1')/nr_Building</a></li>
- 					<li><a href="ReferenceScenario.svc/Photos(Name='Small%20picture',Type='GIF')"
+					<li><a href="ImScenario.svc/Employees('1')" target="_blank">Employees('1')</a></li>
+					<li><a href="ImScenario.svc/Managers('1')" target="_blank">Managers('1')</a></li>
+					<li><a href="ImScenario.svc/Buildings(1)" target="_blank">Buildings(1)</a></li>
+					<li><a href="ImScenario.svc/Buildings(1)/nb_Rooms" target="_blank">Buildings(1)/nb_Rooms</a></li>
+					<li><a href="ImScenario.svc/Rooms('1')" target="_blank">Rooms('1')</a></li>
+					<li><a href="ImScenario.svc/Rooms('1')/nr_Building" target="_blank">Rooms('1')/nr_Building</a></li>
+ 					<li><a href="ImScenario.svc/Photos(Name='Small%20picture',Type='GIF')"
                            target="_blank">Photos(Name='Small%20picture',Type='GIF')</a></li>
- 					<li><a href="ReferenceScenario.svc/Photos(Name='Big%20picture',Type='JPEG')/$value"
+ 					<li><a href="ImScenario.svc/Photos(Name='Big%20picture',Type='JPEG')/$value"
                            target="_blank">Photos(Name='Big%20picture',Type='JPEG')/$value</a></li>
         </ul>
 			</td>
-			<td valign="top">
+
+      <td valign="top">
+        <h2>JPA Reference Scenario</h2>
+        <h3>Service Document and Metadata</h3>
+        <ul>
+          <li><a href="JpaScenario.svc?_wadl" target="_blank">wadl</a></li>
+          <li><a href="JpaScenario.svc/" target="_blank">service
+            document</a></li>
+          <li><a href="JpaScenario.svc/$metadata" target="_blank">metadata</a></li>
+        </ul>
+        <h3>EntitySets</h3>
+        <ul>
+          <li><a href="JpaScenario.svc/Employees" target="_blank">Employees</a></li>
+          <li><a href="JpaScenario.svc/Managers" target="_blank">Managers</a></li>
+          <li><a href="JpaScenario.svc/Buildings" target="_blank">Buildings</a></li>
+          <li><a href="JpaScenario.svc/Buildings/?$expand=nb_Rooms"
+                 target="_blank">Buildings/?$expand=nb_Rooms</a></li>
+          <li><a href="JpaScenario.svc/Rooms" target="_blank">Rooms</a></li>
+          <li><a href="JpaScenario.svc/Rooms/?$orderby=Name" target="_blank">Rooms/?$orderby=Name</a></li>
+          <li><a href="JpaScenario.svc/Photos" target="_blank">Photos</a></li>
+          <li><a href="JpaScenario.svc/Photos/?$filter=Type%20eq%20'PNG'"
+                 target="_blank">Photos/?$filter=Type eq 'PNG'</a></li>
+        </ul>
+        <h3>Entities</h3>
+        <ul>
+          <li><a href="JpaScenario.svc/Employees('1')" target="_blank">Employees('1')</a></li>
+          <li><a href="JpaScenario.svc/Managers('1')" target="_blank">Managers('1')</a></li>
+          <li><a href="JpaScenario.svc/Buildings(1)" target="_blank">Buildings(1)</a></li>
+          <li><a href="JpaScenario.svc/Buildings(1)/nb_Rooms" target="_blank">Buildings(1)/nb_Rooms</a></li>
+          <li><a href="JpaScenario.svc/Rooms('1')" target="_blank">Rooms('1')</a></li>
+          <li><a href="JpaScenario.svc/Rooms('1')/nr_Building" target="_blank">Rooms('1')/nr_Building</a></li>
+          <li><a href="JpaScenario.svc/Photos(Name='Small%20picture',Type='GIF')"
+                 target="_blank">Photos(Name='Small%20picture',Type='GIF')</a></li>
+          <li><a href="JpaScenario.svc/Photos(Name='Big%20picture',Type='JPEG')/$value"
+                 target="_blank">Photos(Name='Big%20picture',Type='JPEG')/$value</a></li>
+        </ul>
+      </td>
+
+      <td valign="top">
 				&nbsp;
 			</td>
+
 			<td valign="bottom">
 				<div class="code">
 					<%
