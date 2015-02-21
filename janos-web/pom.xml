@@ -24,9 +24,9 @@
   <packaging>war</packaging>
   <name>${project.artifactId}</name>
 
-  <properties>
-    <version.slf4j>1.7.1</version.slf4j>
-  </properties>
+  <build>
+    <defaultGoal>package jetty:run</defaultGoal>
+  </build>
 
   <dependencies>
     <dependency>

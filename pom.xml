@@ -41,7 +41,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <version.olingo>2.0.2-SNAPSHOT</version.olingo>
-    <version.jetty>7.5.4.v20111024</version.jetty>
+    <version.jetty-plugin>8.1.14.v20131031</version.jetty-plugin>
     <version.slf4j>1.7.1</version.slf4j>
     <version.log4j>1.2.17</version.log4j>
     <version.mockito>1.9.0</version.mockito>
@@ -61,6 +61,11 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-  </plugins>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>${version.jetty-plugin}</version>
+      </plugin>
+    </plugins>
   </build>
 </project>
