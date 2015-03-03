@@ -38,8 +38,8 @@ import com.google.gson.internal.StringMap;
  */
 public class EntryJsonCreateTest extends AbstractRefJsonTest {
 
-  public EntryJsonCreateTest(final ServletType servletType) {
-    super(servletType);
+  public EntryJsonCreateTest(final ServletType servletType, String modelPackage) {
+    super(servletType, modelPackage);
   }
 
   @Test

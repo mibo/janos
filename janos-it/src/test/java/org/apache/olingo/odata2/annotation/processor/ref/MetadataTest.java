@@ -33,8 +33,8 @@ import static org.junit.Assert.assertFalse;
  */
 public class MetadataTest extends AbstractRefXmlTest {
 
-  public MetadataTest(final ServletType servletType) {
-    super(servletType);
+  public MetadataTest(final ServletType servletType, String modelPackage) {
+    super(servletType, modelPackage);
   }
 
   private static String payload;

@@ -42,8 +42,8 @@ import org.xml.sax.SAXException;
  */
 @Ignore("no test methods")
 public class AbstractRefXmlTest extends AbstractRefTest {
-  public AbstractRefXmlTest(final ServletType servletType) {
-    super(servletType);
+  public AbstractRefXmlTest(final ServletType servletType, String modelPackage) {
+    super(servletType, modelPackage);
   }
 
   @Before

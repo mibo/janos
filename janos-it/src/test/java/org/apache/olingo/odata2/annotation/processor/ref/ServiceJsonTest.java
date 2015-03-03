@@ -40,8 +40,8 @@ import org.junit.Test;
  * 
  */
 public class ServiceJsonTest extends AbstractRefTest {
-  public ServiceJsonTest(final ServletType servletType) {
-    super(servletType);
+  public ServiceJsonTest(final ServletType servletType, String modelPackage) {
+    super(servletType, modelPackage);
   }
 
   @Test

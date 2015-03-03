@@ -23,6 +23,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
@@ -34,6 +36,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
+import org.apache.log4j.Logger;
 import org.apache.olingo.odata2.annotation.processor.api.JanosService;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
@@ -43,26 +46,52 @@ import org.apache.olingo.odata2.testutil.fit.AbstractFitTest;
 import org.apache.olingo.odata2.testutil.helper.StringHelper;
 import org.apache.olingo.odata2.testutil.server.ServletType;
 import org.junit.Ignore;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 /**
  * Abstract base class for tests employing the reference scenario.
  * 
  */
 @Ignore("no test methods")
+//@RunWith(Parameterized.class)
 public class AbstractRefTest extends AbstractFitTest {
 
-  public AbstractRefTest(final ServletType servletType) {
+  private static final Logger LOG = Logger.getLogger(AbstractRefTest.class);
+
+  public AbstractRefTest(final ServletType servletType, String modelPackage) {
     super(servletType);
+    LOG.trace("Test servlet " + servletType + " with model " + modelPackage);
   }
 
   protected static final String IMAGE_JPEG = "image/jpeg";
   protected static final String IMAGE_GIF = "image/gif";
 
   final static String MODEL_PACKAGE = "org.apache.olingo.odata2.annotation.processor.ref.model";
+  final static String MODEL_PACKAGE_JPA = "org.apache.olingo.odata2.annotation.processor.ref.jpa.model";
+
 
   @Override
   protected ODataService createService() throws ODataException {
     return JanosService.createFor(MODEL_PACKAGE).build();
+  }
+
+  @Parameterized.Parameters
+  public static List<Object[]> modelPackage() {
+    // If desired this can be made dependent on runtime variables
+    String[] modelPackages = new String[]{MODEL_PACKAGE, MODEL_PACKAGE_JPA};
+    ServletType[] servletTypes = new ServletType[]{ServletType.ODATA_SERVLET, ServletType.JAXRS_SERVLET};
+    Object[][] a = new Object[modelPackages.length * servletTypes.length][2];
+
+    int count = 0;
+    for (String modelPackage : modelPackages) {
+      for (ServletType servletType : servletTypes) {
+        a[count][0] = servletType;
+        a[count++][1] = modelPackage;
+      }
+    }
+
+    return Arrays.asList(a);
   }
 
   protected HttpResponse callUri(
