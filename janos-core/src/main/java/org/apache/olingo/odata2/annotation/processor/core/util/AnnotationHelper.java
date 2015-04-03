@@ -79,6 +79,9 @@ public class AnnotationHelper {
    * @return
    */
   public boolean keyMatch(final Object instance, final Map<String, Object> keyName2Value) {
+    if(instance == null) {
+      return false;
+    }
     Map<String, Object> instanceKeyFields = getValueForAnnotatedFields(instance, EdmKey.class);
     return keyValuesMatch(instanceKeyFields, keyName2Value);
   }
@@ -586,15 +589,14 @@ public class AnnotationHelper {
 
   public Map<String, Object> getValueForAnnotatedFields(final Object instance,
       final Class<? extends Annotation> annotation) {
+    if (instance == null) {
+      return null;
+    }
     return getValueForAnnotatedFields(instance, instance.getClass(), annotation, true);
   }
 
   private Map<String, Object> getValueForAnnotatedFields(final Object instance, final Class<?> resultClass,
       final Class<? extends Annotation> annotation, final boolean inherited) {
-    if (instance == null) {
-      return null;
-    }
-
     Field[] fields = resultClass.getDeclaredFields();
     Map<String, Object> fieldName2Value = new HashMap<String, Object>();
 
