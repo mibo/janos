@@ -92,6 +92,27 @@ th, td { border: 1px solid; padding: 20px; }
 
       <td valign="top">
         <h2>JPA Reference Scenario</h2>
+        <div class="code">
+          <%
+            if (request.getParameter("genSampleData") != null) { //genSampleData is the name of your button, not id of that button.
+              String requestUrl = request.getRequestURL().toString();
+              if(requestUrl.endsWith("index.jsp")) {
+                requestUrl = requestUrl.substring(0, requestUrl.length()-9);
+              }
+              org.apache.olingo.odata2.annotation.processor.ref.jpa.util.JpaSampleDataGenerator.generateData(
+                  requestUrl + "JpaScenario.svc");
+              response.sendRedirect(requestUrl);
+            }
+          %>
+          <form method="POST">
+            <div>
+              For generation of sample data this button can be used.
+              <br/>
+              But be aware that multiple clicking results in multiple data generation.
+            </div>
+            <input type="submit" id="genSampleData" name="genSampleData" value="Generate sample Data"/>
+          </form>
+        </div>
         <h3>Service Document and Metadata</h3>
         <ul>
           <li><a href="JpaScenario.svc?_wadl" target="_blank">wadl</a></li>

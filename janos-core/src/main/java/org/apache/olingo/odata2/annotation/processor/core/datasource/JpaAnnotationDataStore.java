@@ -41,12 +41,12 @@ public class JpaAnnotationDataStore<T> implements DataStore<T> {
   protected Class<T> dataTypeClass;
   protected EntityManager entityManager;
 
-  public static DataStore<?> createInstance(Class<?> clz) {
+  public static <T> DataStore<T> createInstance(Class<T> clz) {
     return createInstance(clz, DEFAULT_PERSISTENCE_NAME);
   }
 
-  public static DataStore<?> createInstance(Class<?> clz, String persistenceName) {
-    return new JpaAnnotationDataStore<Object>((Class<Object>) clz, persistenceName);
+  public static <T> DataStore<T> createInstance(Class<T> clz, String persistenceName) {
+    return new JpaAnnotationDataStore<>(clz, persistenceName);
   }
 
   private JpaAnnotationDataStore(final Class<T> clz, String persistenceName) {
@@ -69,9 +69,7 @@ public class JpaAnnotationDataStore<T> implements DataStore<T> {
   public T createInstance() {
     try {
       return dataTypeClass.newInstance();
-    } catch (InstantiationException e) {
-      throw new AnnotationRuntimeException("Unable to create instance of class '" + dataTypeClass + "'.", e);
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       throw new AnnotationRuntimeException("Unable to create instance of class '" + dataTypeClass + "'.", e);
     }
   }

@@ -22,6 +22,8 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmComplexType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -31,7 +33,9 @@ import javax.persistence.OneToOne;
 @Entity
 @EdmComplexType(name = "c_Location", namespace = ModelSharedConstants.NAMESPACE_1)
 public class Location {
-  @Id private String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private String id;
   @EdmProperty
   private String country;
   @OneToOne

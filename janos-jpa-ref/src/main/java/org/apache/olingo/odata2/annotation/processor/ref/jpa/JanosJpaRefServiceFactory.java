@@ -19,8 +19,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.olingo.odata2.annotation.processor.api.JanosService;
-import org.apache.olingo.odata2.annotation.processor.core.datasource.InMemoryDataStore;
+import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.annotation.processor.api.datasource.DataStoreException;
+import org.apache.olingo.odata2.annotation.processor.core.datasource.JpaAnnotationDataStore;
 import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Building;
 import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.City;
 import org.apache.olingo.odata2.annotation.processor.ref.jpa.model.Employee;
@@ -57,7 +58,7 @@ public class JanosJpaRefServiceFactory extends ODataServiceFactory {
    * instances within the ODataApplication (ODataService)
    */
   private static class AnnotationInstances {
-    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<Class<?>>();
+    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<>();
     static {
       ANNOTATED_MODEL_CLASSES.add(Building.class);
       ANNOTATED_MODEL_CLASSES.add(City.class);
@@ -130,12 +131,12 @@ public class JanosJpaRefServiceFactory extends ODataServiceFactory {
 
   }
 
-  private static <T> InMemoryDataStore<T> getDataStore(Class<T> clz) throws DataStoreException {
-    return InMemoryDataStore.createInMemory(clz, true);
+  private static <T> DataStore<T> getDataStore(Class<T> clz) throws DataStoreException {
+    return JpaAnnotationDataStore.createInstance(clz, "JpaAnnotationDataStorePersistence");
   }
 
   private static void initializeSampleData() throws ODataApplicationException {
-    InMemoryDataStore<Team> teamDs = getDataStore(Team.class);
+    DataStore<Team> teamDs = getDataStore(Team.class);
     teamDs.create(createTeam("Team Alpha", true));
     teamDs.create(createTeam("Team Beta", false));
     teamDs.create(createTeam("Team Gamma", false));
@@ -144,7 +145,7 @@ public class JanosJpaRefServiceFactory extends ODataServiceFactory {
     teamDs.create(subTeam);
     teamDs.create(createTeam("Team Zeta", true, subTeam));
 
-    InMemoryDataStore<Building> buildingsDs = getDataStore(Building.class);
+    DataStore<Building> buildingsDs = getDataStore(Building.class);
     Building redBuilding = createBuilding("Red Building");
     buildingsDs.create(redBuilding);
     Building greenBuilding = createBuilding("Green Building");
@@ -154,13 +155,13 @@ public class JanosJpaRefServiceFactory extends ODataServiceFactory {
     Building yellowBuilding = createBuilding("Yellow Building");
     buildingsDs.create(yellowBuilding);
 
-    InMemoryDataStore<Photo> photoDs = getDataStore(Photo.class);
+    DataStore<Photo> photoDs = getDataStore(Photo.class);
     photoDs.create(createPhoto("Small picture", ResourceHelper.Format.GIF));
     photoDs.create(createPhoto("Medium picture", ResourceHelper.Format.PNG));
     photoDs.create(createPhoto("Big picture", ResourceHelper.Format.JPEG));
     photoDs.create(createPhoto("Huge picture", ResourceHelper.Format.BMP));
 
-    InMemoryDataStore<Room> roomDs = getDataStore(Room.class);
+    DataStore<Room> roomDs = getDataStore(Room.class);
     roomDs.create(createRoom("Tiny red room", 5, 1, redBuilding));
     roomDs.create(createRoom("Small red room", 20, 1, redBuilding));
     roomDs.create(createRoom("Small green room", 20, 1, greenBuilding));
@@ -168,7 +169,7 @@ public class JanosJpaRefServiceFactory extends ODataServiceFactory {
     roomDs.create(createRoom("Huge blue room", 120, 1, blueBuilding));
     roomDs.create(createRoom("Huge yellow room", 120, 1, yellowBuilding));
 
-    InMemoryDataStore<Employee> employeeDataStore = getDataStore(Employee.class);
+    DataStore<Employee> employeeDataStore = getDataStore(Employee.class);
     employeeDataStore.create(createEmployee("first Employee",
         new Location("Norge", "8392", "Ä"), 42, null,
         photoDs.read().iterator().next().getImage(), photoDs.read().iterator().next().getImageType(),
