@@ -58,12 +58,12 @@
         <configuration>
           <instructions>
             <Import-Package>
-              org.apache.olingo.odata2.annotation.processor.core.rt;resolution:=optional,
+              org.apache.olingo.odata2.janos.processor.core.rt;resolution:=optional,
               *
             </Import-Package>
             <Export-Package>
-              org.apache.olingo.odata2.annotation.processor.api;version=${project.version},
-              org.apache.olingo.odata2.annotation.processor.api.*;version=${project.version}
+              org.apache.olingo.odata2.janos.processor.api;version=${project.version},
+              org.apache.olingo.odata2.janos.processor.api.*;version=${project.version}
             </Export-Package>
             <Bundle-DocURL>${project.url}</Bundle-DocURL>
             <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>

@@ -31,7 +31,7 @@
 		<servlet-class>org.apache.olingo.odata2.core.servlet.ODataServlet</servlet-class>
 		<init-param>
 			<param-name>org.apache.olingo.odata2.service.factory</param-name>
-			<param-value>org.apache.olingo.odata2.annotation.processor.ref.jpa.JanosJpaRefServiceFactory</param-value>
+			<param-value>org.apache.olingo.odata2.janos.processor.ref.jpa.JanosJpaRefServiceFactory</param-value>
     </init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -41,7 +41,7 @@
     <servlet-class>org.apache.olingo.odata2.core.servlet.ODataServlet</servlet-class>
     <init-param>
       <param-name>org.apache.olingo.odata2.service.factory</param-name>
-      <param-value>org.apache.olingo.odata2.annotation.processor.ref.JanosRefServiceFactory</param-value>
+      <param-value>org.apache.olingo.odata2.janos.processor.ref.JanosRefServiceFactory</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>

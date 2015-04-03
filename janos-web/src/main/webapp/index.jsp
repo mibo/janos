@@ -1,4 +1,4 @@
-<%@ page import="org.apache.olingo.odata2.annotations.processor.ref.jpa.util.JpaSampleDataGenerator" %>
+<%@ page import="org.apache.olingo.odata2.janos.processor.ref.jpa.util.JpaSampleDataGenerator" %>
 <%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8"%>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one

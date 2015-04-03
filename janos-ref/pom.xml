@@ -54,8 +54,8 @@ language governing permissions and limitations under the License. -->
               *
             </Import-Package>
             <Export-Package>
-              org.apache.olingo.odata2.annotation.processor.ref;version=${project.version},
-              org.apache.olingo.odata2.annotation.processor.ref.*;version=${project.version}
+              org.apache.olingo.odata2.janos.processor.ref;version=${project.version},
+              org.apache.olingo.odata2.janos.processor.ref.*;version=${project.version}
             </Export-Package>
             <Bundle-DocURL>${project.url}</Bundle-DocURL>
             <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
