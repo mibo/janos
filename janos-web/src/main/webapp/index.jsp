@@ -1,3 +1,4 @@
+<%@ page import="org.apache.olingo.odata2.annotations.processor.ref.jpa.util.JpaSampleDataGenerator" %>
 <%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8"%>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
@@ -99,8 +100,7 @@ th, td { border: 1px solid; padding: 20px; }
               if(requestUrl.endsWith("index.jsp")) {
                 requestUrl = requestUrl.substring(0, requestUrl.length()-9);
               }
-              org.apache.olingo.odata2.annotation.processor.ref.jpa.util.JpaSampleDataGenerator.generateData(
-                  requestUrl + "JpaScenario.svc");
+              JpaSampleDataGenerator.generateData(requestUrl + "JpaScenario.svc");
               response.sendRedirect(requestUrl);
             }
           %>
@@ -147,15 +147,12 @@ th, td { border: 1px solid; padding: 20px; }
                  target="_blank">Photos(Name='Big%20picture',Type='JPEG')/$value</a></li>
         </ul>
       </td>
-
-      <td valign="top">
-				&nbsp;
-			</td>
-
-			<td valign="bottom">
+    </tr>
+    <tr>
+			<td colspan="2" valign="bottom">
 				<div class="code">
 					<%
-					  String version = "gen/version.html";
+					  String version = "version.html";
 					%>
 					<%
 					  try {
