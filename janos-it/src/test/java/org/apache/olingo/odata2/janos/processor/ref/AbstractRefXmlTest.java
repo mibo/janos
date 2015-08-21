@@ -28,7 +28,6 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.edm.Edm;
-import org.apache.olingo.odata2.testutil.server.ServletType;
 import org.custommonkey.xmlunit.SimpleNamespaceContext;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.exceptions.XpathException;
@@ -42,8 +41,8 @@ import org.xml.sax.SAXException;
  */
 @Ignore("no test methods")
 public class AbstractRefXmlTest extends AbstractRefTest {
-  public AbstractRefXmlTest(final ServletType servletType, String modelPackage) {
-    super(servletType, modelPackage);
+  public AbstractRefXmlTest(String modelPackage) {
+    super(modelPackage);
   }
 
   @Before

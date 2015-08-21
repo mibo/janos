@@ -28,7 +28,6 @@ import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.testutil.TestUtilRuntimeException;
 import org.apache.olingo.odata2.testutil.server.ServerRuntimeException;
-import org.apache.olingo.odata2.testutil.server.ServletType;
 import org.apache.olingo.odata2.testutil.server.TestServer;
 import org.junit.After;
 import org.junit.Before;
@@ -38,7 +37,6 @@ import org.junit.runners.Parameterized;
 /**
  *  
  */
-@RunWith(Parameterized.class)
 public abstract class AbstractFitTest extends BaseTest {
 
   private final TestServer server;
@@ -47,23 +45,9 @@ public abstract class AbstractFitTest extends BaseTest {
 
   private final HttpClient httpClient = new DefaultHttpClient();
 
-  public AbstractFitTest(final ServletType servletType) {
-    server = new TestServer(this.getClass().getSimpleName(), servletType);
+  public AbstractFitTest() {
+    server = new TestServer(this.getClass().getSimpleName());
   }
-
-  @Parameterized.Parameters
-  public static List<Object[]> data() {
-    // If desired this can be made dependent on runtime variables
-    Object[][] a;
-    a = new Object[2][1];
-    a[0][0] = ServletType.JAXRS_SERVLET;
-    a[1][0] = ServletType.ODATA_SERVLET;
-
-    return Arrays.asList(a);
-  }
-
-  // public AbstractFitTest() {
-  // }
 
   protected URI getEndpoint() {
     return server.getEndpoint();
