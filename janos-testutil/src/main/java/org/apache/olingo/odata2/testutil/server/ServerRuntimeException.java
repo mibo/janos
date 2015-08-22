@@ -16,26 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.ref.jpa;
-
-import org.junit.Ignore;
-
-import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
-import com.google.gson.reflect.TypeToken;
+package org.apache.olingo.odata2.testutil.server;
 
 /**
  *  
  */
-@Ignore("no test methods")
-public class AbstractRefJsonTest extends AbstractRefTest {
-  public StringMap<?> getStringMap(final String body) {
-    Gson gson = new Gson();
-    final StringMap<?> map = gson.fromJson(body, new TypeToken<StringMap<?>>() {}.getType());
-    if (map.get("d") instanceof StringMap<?>) {
-      return (StringMap<?>) map.get("d");
-    } else {
-      return map;
-    }
+public class ServerRuntimeException extends RuntimeException {
+
+  public ServerRuntimeException(final Exception e) {
+    super(e);
   }
+
+  private static final long serialVersionUID = 1L;
+
 }

@@ -16,26 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.ref.jpa;
+package org.apache.olingo.odata2.testutil.fit;
 
-import org.junit.Ignore;
-
-import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
-import com.google.gson.reflect.TypeToken;
+import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
+import org.apache.olingo.odata2.api.ep.EntityProvider;
+import org.apache.olingo.odata2.api.exception.ODataApplicationException;
+import org.apache.olingo.odata2.api.processor.ODataErrorCallback;
+import org.apache.olingo.odata2.api.processor.ODataErrorContext;
+import org.apache.olingo.odata2.api.processor.ODataResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *  
  */
-@Ignore("no test methods")
-public class AbstractRefJsonTest extends AbstractRefTest {
-  public StringMap<?> getStringMap(final String body) {
-    Gson gson = new Gson();
-    final StringMap<?> map = gson.fromJson(body, new TypeToken<StringMap<?>>() {}.getType());
-    if (map.get("d") instanceof StringMap<?>) {
-      return (StringMap<?>) map.get("d");
-    } else {
-      return map;
+public class FitErrorCallback implements ODataErrorCallback {
+
+  private static final Logger LOG = LoggerFactory.getLogger(FitErrorCallback.class);
+
+  @Override
+  public ODataResponse handleError(final ODataErrorContext context) throws ODataApplicationException {
+    if (context.getHttpStatus() == HttpStatusCodes.INTERNAL_SERVER_ERROR) {
+      LOG.error("Internal Server Error", context.getException());
     }
+    return EntityProvider.writeErrorDocument(context);
   }
+
 }

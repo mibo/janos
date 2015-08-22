@@ -16,26 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.ref.jpa;
+package org.apache.olingo.odata2.testutil.mock;
 
-import org.junit.Ignore;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
-import com.google.gson.reflect.TypeToken;
+import org.apache.olingo.odata2.api.edm.Edm;
+import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.api.uri.PathSegment;
+import org.mockito.Mockito;
 
 /**
- *  
+ * Mocked Entity Data Model, more or less aligned to the Reference Scenario.
+ * 
  */
-@Ignore("no test methods")
-public class AbstractRefJsonTest extends AbstractRefTest {
-  public StringMap<?> getStringMap(final String body) {
-    Gson gson = new Gson();
-    final StringMap<?> map = gson.fromJson(body, new TypeToken<StringMap<?>>() {}.getType());
-    if (map.get("d") instanceof StringMap<?>) {
-      return (StringMap<?>) map.get("d");
-    } else {
-      return map;
+public class MockFacade {
+
+  public static Edm getMockEdm() throws ODataException {
+    return EdmMock.createMockEdm();
+  }
+
+  public static List<PathSegment> getPathSegmentsAsODataPathSegmentMock(final List<String> segments) {
+    final List<PathSegment> pathSegmentsMock = new ArrayList<PathSegment>();
+    for (final String segment : segments) {
+      PathSegment pathSegment = Mockito.mock(PathSegment.class);
+      Mockito.when(pathSegment.getPath()).thenReturn(segment);
+      pathSegmentsMock.add(pathSegment);
     }
+    return pathSegmentsMock;
   }
 }

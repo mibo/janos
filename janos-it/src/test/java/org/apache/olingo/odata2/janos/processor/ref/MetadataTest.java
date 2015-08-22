@@ -20,7 +20,6 @@ package org.apache.olingo.odata2.janos.processor.ref;
 
 import org.apache.http.HttpResponse;
 import org.apache.olingo.odata2.api.commons.HttpContentType;
-import org.apache.olingo.odata2.testutil.server.ServletType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,8 +32,8 @@ import static org.junit.Assert.assertFalse;
  */
 public class MetadataTest extends AbstractRefXmlTest {
 
-  public MetadataTest(final ServletType servletType, String modelPackage) {
-    super(servletType, modelPackage);
+  public MetadataTest(String modelPackage) {
+    super(modelPackage);
   }
 
   private static String payload;

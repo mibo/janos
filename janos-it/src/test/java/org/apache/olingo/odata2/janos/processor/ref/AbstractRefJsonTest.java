@@ -18,7 +18,6 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref;
 
-import org.apache.olingo.odata2.testutil.server.ServletType;
 import org.junit.Ignore;
 
 import com.google.gson.Gson;
@@ -30,8 +29,8 @@ import com.google.gson.reflect.TypeToken;
  */
 @Ignore("no test methods")
 public class AbstractRefJsonTest extends AbstractRefTest {
-  public AbstractRefJsonTest(final ServletType servletType, String modelPackage) {
-    super(servletType, modelPackage);
+  public AbstractRefJsonTest(String modelPackage) {
+    super(modelPackage);
   }
 
   public StringMap<?> getStringMap(final String body) {

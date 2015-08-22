@@ -68,14 +68,6 @@ language governing permissions and limitations under the License. -->
 
   <dependencies>
     <dependency>
-      <!-- required because of auto detection of web facet 2.5 -->
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.apache.olingo</groupId>
       <artifactId>olingo-odata2-api</artifactId>
       <version>${version.olingo}</version>
@@ -102,9 +94,9 @@ language governing permissions and limitations under the License. -->
     </dependency>
     <!-- Test dependencies -->
     <dependency>
-      <groupId>org.apache.olingo</groupId>
-      <artifactId>olingo-odata2-testutil</artifactId>
-      <version>${version.olingo}</version>
+      <groupId>de.mirb.olingo</groupId>
+      <artifactId>janos-testutil</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

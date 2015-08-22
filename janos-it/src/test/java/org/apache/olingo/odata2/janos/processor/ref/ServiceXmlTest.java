@@ -27,7 +27,6 @@ import org.apache.http.HttpResponse;
 import org.apache.olingo.odata2.api.commons.HttpContentType;
 import org.apache.olingo.odata2.api.commons.HttpHeaders;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
-import org.apache.olingo.odata2.testutil.server.ServletType;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -37,8 +36,8 @@ import org.xml.sax.SAXException;
  */
 public class ServiceXmlTest extends AbstractRefXmlTest {
 
-  public ServiceXmlTest(final ServletType servletType, String modelPackage) {
-    super(servletType, modelPackage);
+  public ServiceXmlTest(String modelPackage) {
+    super(modelPackage);
   }
 
   @Test

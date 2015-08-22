@@ -10,7 +10,7 @@
   OF ANY KIND, either express or implied. See the License for the specific
   language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -40,16 +40,10 @@
           </webResources>
         </configuration>
       </plugin>
-    </plugins>  </build>
+    </plugins>
+  </build>
 
   <dependencies>
-    <dependency>
-      <!-- required because of auto detection of web facet 2.5 -->
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>provided</scope>
-    </dependency>
     <dependency>
       <groupId>de.mirb.olingo</groupId>
       <artifactId>janos-ref</artifactId>

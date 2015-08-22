@@ -16,26 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.ref.jpa;
+package org.apache.olingo.odata2.testutil.mock;
 
-import org.junit.Ignore;
+import static org.junit.Assert.fail;
 
-import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
-import com.google.gson.reflect.TypeToken;
+import org.apache.olingo.odata2.api.edm.Edm;
+import org.apache.olingo.odata2.api.edm.EdmEntityType;
+import org.apache.olingo.odata2.api.edm.EdmException;
 
 /**
- *  
+ * Helper for the entity data model used as technical reference scenario.
+ * 
  */
-@Ignore("no test methods")
-public class AbstractRefJsonTest extends AbstractRefTest {
-  public StringMap<?> getStringMap(final String body) {
-    Gson gson = new Gson();
-    final StringMap<?> map = gson.fromJson(body, new TypeToken<StringMap<?>>() {}.getType());
-    if (map.get("d") instanceof StringMap<?>) {
-      return (StringMap<?>) map.get("d");
-    } else {
-      return map;
+public class TecEdmInfo {
+  private final Edm edm;
+
+  public TecEdmInfo(final Edm edm) {
+    this.edm = edm;
+  }
+
+  public EdmEntityType getTypeEtAllTypes() {
+    try {
+      return edm
+          .getEntityContainer(TechnicalScenarioEdmProvider.ENTITY_CONTAINER_1)
+          .getEntitySet(TechnicalScenarioEdmProvider.ES_ALL_TYPES)
+          .getEntityType();
+    } catch (final EdmException e) {
+      fail("Error in test setup" + e.getLocalizedMessage());
     }
+    return null;
   }
 }

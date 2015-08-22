@@ -44,8 +44,8 @@ import org.apache.olingo.odata2.api.commons.ODataHttpMethod;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.testutil.fit.AbstractFitTest;
 import org.apache.olingo.odata2.testutil.helper.StringHelper;
-import org.apache.olingo.odata2.testutil.server.ServletType;
 import org.junit.Ignore;
+import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 /**
@@ -53,14 +53,14 @@ import org.junit.runners.Parameterized;
  * 
  */
 @Ignore("no test methods")
-//@RunWith(Parameterized.class)
+@RunWith(Parameterized.class)
 public class AbstractRefTest extends AbstractFitTest {
 
   private static final Logger LOG = Logger.getLogger(AbstractRefTest.class);
 
-  public AbstractRefTest(final ServletType servletType, String modelPackage) {
-    super(servletType);
-    LOG.trace("Test servlet " + servletType + " with model " + modelPackage);
+  public AbstractRefTest(String modelPackage) {
+    super();
+    LOG.trace("Test servlet with model " + modelPackage);
   }
 
   protected static final String IMAGE_JPEG = "image/jpeg";
@@ -78,19 +78,12 @@ public class AbstractRefTest extends AbstractFitTest {
   @Parameterized.Parameters
   public static List<Object[]> modelPackage() {
     // If desired this can be made dependent on runtime variables
-    String[] modelPackages = new String[]{MODEL_PACKAGE, MODEL_PACKAGE_JPA};
-    ServletType[] servletTypes = new ServletType[]{ServletType.ODATA_SERVLET, ServletType.JAXRS_SERVLET};
-    Object[][] a = new Object[modelPackages.length * servletTypes.length][2];
+//    String[] modelPackages = new String[]{MODEL_PACKAGE, MODEL_PACKAGE_JPA};
+    Object[][] modelPackages = new String[2][1];//{MODEL_PACKAGE, MODEL_PACKAGE_JPA};
+    modelPackages[0][0] = MODEL_PACKAGE;
+    modelPackages[1][0] = MODEL_PACKAGE_JPA;
 
-    int count = 0;
-    for (String modelPackage : modelPackages) {
-      for (ServletType servletType : servletTypes) {
-        a[count][0] = servletType;
-        a[count++][1] = modelPackage;
-      }
-    }
-
-    return Arrays.asList(a);
+    return Arrays.asList(modelPackages);
   }
 
   protected HttpResponse callUri(

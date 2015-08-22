@@ -16,26 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.ref.jpa;
+package org.apache.olingo.odata2.testutil.helper;
 
-import org.junit.Ignore;
+import java.net.URI;
 
-import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
-import com.google.gson.reflect.TypeToken;
+import org.apache.http.annotation.NotThreadSafe;
+import org.apache.http.client.methods.HttpRequestBase;
 
-/**
- *  
- */
-@Ignore("no test methods")
-public class AbstractRefJsonTest extends AbstractRefTest {
-  public StringMap<?> getStringMap(final String body) {
-    Gson gson = new Gson();
-    final StringMap<?> map = gson.fromJson(body, new TypeToken<StringMap<?>>() {}.getType());
-    if (map.get("d") instanceof StringMap<?>) {
-      return (StringMap<?>) map.get("d");
-    } else {
-      return map;
-    }
+@NotThreadSafe
+public class HttpMerge extends HttpRequestBase {
+
+  public final static String METHOD_NAME = "MERGE";
+
+  public HttpMerge() {
+    super();
   }
+
+  public HttpMerge(final URI uri) {
+    super();
+    setURI(uri);
+  }
+
+  /**
+   * @throws IllegalArgumentException if the uri is invalid.
+   */
+  public HttpMerge(final String uri) {
+    super();
+    setURI(URI.create(uri));
+  }
+
+  @Override
+  public String getMethod() {
+    return METHOD_NAME;
+  }
+
 }

@@ -83,15 +83,25 @@ language governing permissions and limitations under the License. -->
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.olingo</groupId>
-      <artifactId>olingo-odata2-testutil</artifactId>
-      <version>${version.olingo}</version>
+      <groupId>de.mirb.olingo</groupId>
+      <artifactId>janos-testutil</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.persistence</groupId>
       <artifactId>javax.persistence</artifactId>
       <version>${version.javax.persistence}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${version.junit}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>${version.mockito}</version>
     </dependency>
   </dependencies>
 </project>

@@ -16,26 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.ref.jpa;
+package org.apache.olingo.odata2.testutil.fit;
 
-import org.junit.Ignore;
+import org.apache.olingo.odata2.api.ODataCallback;
+import org.apache.olingo.odata2.api.ODataDebugCallback;
 
-import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
-import com.google.gson.reflect.TypeToken;
+public class DebugCallbackFactoryTrue extends FitStaticServiceFactory {
 
-/**
- *  
- */
-@Ignore("no test methods")
-public class AbstractRefJsonTest extends AbstractRefTest {
-  public StringMap<?> getStringMap(final String body) {
-    Gson gson = new Gson();
-    final StringMap<?> map = gson.fromJson(body, new TypeToken<StringMap<?>>() {}.getType());
-    if (map.get("d") instanceof StringMap<?>) {
-      return (StringMap<?>) map.get("d");
-    } else {
-      return map;
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T extends ODataCallback> T getCallback(final Class<? extends ODataCallback> callbackInterface) {
+    if (callbackInterface.isAssignableFrom(FitErrorCallback.class)) {
+      return (T) new FitErrorCallback();
+    } else if (callbackInterface.isAssignableFrom(ODataDebugCallback.class)) {
+      return (T) new ODataDebugCallback() {
+        @Override
+        public boolean isDebugEnabled() {
+          return true;
+        }
+      };
     }
+    return null;
   }
 }
