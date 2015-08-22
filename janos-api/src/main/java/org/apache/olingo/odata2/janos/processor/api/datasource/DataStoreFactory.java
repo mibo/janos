@@ -22,7 +22,7 @@ import java.util.Map;
  *
  */
 public interface DataStoreFactory {
-  static final String KEEP_PERSISTENT = "KEEP_PERSISTENT";
+  String KEEP_PERSISTENT = "KEEP_PERSISTENT";
   
   void setDefaultProperty(String name, String value);
   DataStore<?> createDataStore(Class<?> clz) throws DataStoreException;

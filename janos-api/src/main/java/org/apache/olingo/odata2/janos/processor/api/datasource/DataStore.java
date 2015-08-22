@@ -50,7 +50,7 @@ public interface DataStore<T> {
    * Before object (keys) are compared it is validated that both object instance are NOT null
    * and that both are from the same class as this {@link DataStore} (see {@link #getDataTypeClass()}).
    * For the equal check on {@link #getDataTypeClass()} instances without validation see
-   * {@link #isKeyEqual(Object, Object)}.
+   * {@link #isKeyEqualC(Object, Object)}.
    *
    * @param first first instance to check for key equal
    * @param second second instance to check for key equal

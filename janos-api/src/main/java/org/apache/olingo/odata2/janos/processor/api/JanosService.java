@@ -77,7 +77,7 @@ public abstract class JanosService {
      * for model definition and data access.
      * @throws ODataException if an error during initialization occurs
      */
-    public JanosServiceBuilder createFor(String modelPackage) throws ODataException;
+    JanosServiceBuilder createFor(String modelPackage) throws ODataException;
 
     /**
      * Create an {@link ODataService} which is based on an EDM and Processor which are using the annotations from
@@ -88,15 +88,15 @@ public abstract class JanosService {
      * for model definition and data access.
      * @throws ODataException if an error during initialization occurs
      */
-    public JanosServiceBuilder createFor(Collection<Class<?>> annotatedClasses) throws ODataException;
+    JanosServiceBuilder createFor(Collection<Class<?>> annotatedClasses) throws ODataException;
 
-    public JanosServiceBuilder with(DataStoreFactory dataStore);
+    JanosServiceBuilder with(DataStoreFactory dataStore);
 
-    public JanosServiceBuilder with(ValueAccess valueAccess);
+    JanosServiceBuilder with(ValueAccess valueAccess);
 
-    public JanosServiceBuilder with(DataSource dataSource);
+    JanosServiceBuilder with(DataSource dataSource);
 
-    public ODataService build() throws ODataException;
+    ODataService build() throws ODataException;
   }
 
   /**

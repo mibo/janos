@@ -175,7 +175,7 @@ public interface DataSource {
   /**
    * Container to store binary data (as byte array) and the associated MIME type.
    */
-  public class BinaryData {
+  class BinaryData {
     private final byte[] data;
     private final String mimeType;
 
