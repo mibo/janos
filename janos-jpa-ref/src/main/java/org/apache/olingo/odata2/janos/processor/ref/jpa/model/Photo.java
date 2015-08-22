@@ -31,6 +31,7 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 
 /**
  *  
@@ -38,6 +39,7 @@ import javax.persistence.Id;
 @Entity
 @EdmEntityType(name = "Photo", namespace = ModelSharedConstants.NAMESPACE_1)
 @EdmEntitySet(name = "Photos")
+@IdClass(PhotoId.class)
 public class Photo {
   @Id
   @EdmKey
