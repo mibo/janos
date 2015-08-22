@@ -132,7 +132,7 @@ public class ListsProcessor extends DataSourceProcessor {
   @Override
   public ODataResponse readEntitySet(final GetEntitySetUriInfo uriInfo, final String contentType)
       throws ODataException {
-    ArrayList<Object> data = new ArrayList<Object>();
+    ArrayList<Object> data = new ArrayList<>();
     try {
       data.addAll((List<?>) retrieveData(
           uriInfo.getStartEntitySet(),
@@ -183,7 +183,7 @@ public class ListsProcessor extends DataSourceProcessor {
     }
 
     final EdmEntityType entityType = entitySet.getEntityType();
-    List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> values = new ArrayList<>();
     for (final Object entryData : data) {
       values.add(getStructuralTypeValueMap(entryData, entityType));
     }
@@ -218,7 +218,7 @@ public class ListsProcessor extends DataSourceProcessor {
   @Override
   public ODataResponse countEntitySet(final GetEntitySetCountUriInfo uriInfo, final String contentType)
       throws ODataException {
-    ArrayList<Object> data = new ArrayList<Object>();
+    ArrayList<Object> data = new ArrayList<>();
     try {
       data.addAll((List<?>) retrieveData(
           uriInfo.getStartEntitySet(),
@@ -246,7 +246,7 @@ public class ListsProcessor extends DataSourceProcessor {
   @Override
   public ODataResponse readEntityLinks(final GetEntitySetLinksUriInfo uriInfo, final String contentType)
       throws ODataException {
-    ArrayList<Object> data = new ArrayList<Object>();
+    ArrayList<Object> data = new ArrayList<>();
     try {
       data.addAll((List<?>) retrieveData(
           uriInfo.getStartEntitySet(),
@@ -270,9 +270,9 @@ public class ListsProcessor extends DataSourceProcessor {
 
     final EdmEntitySet entitySet = uriInfo.getTargetEntitySet();
 
-    List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> values = new ArrayList<>();
     for (final Object entryData : data) {
-      Map<String, Object> entryValues = new HashMap<String, Object>();
+      Map<String, Object> entryValues = new HashMap<>();
       for (final EdmProperty property : entitySet.getEntityType().getKeyProperties()) {
         entryValues.put(property.getName(), valueAccess.getPropertyValue(entryData, property));
       }
@@ -438,7 +438,7 @@ public class ListsProcessor extends DataSourceProcessor {
 
     final EdmEntitySet entitySet = uriInfo.getTargetEntitySet();
 
-    Map<String, Object> values = new HashMap<String, Object>();
+    Map<String, Object> values = new HashMap<>();
     for (final EdmProperty property : entitySet.getEntityType().getKeyProperties()) {
       values.put(property.getName(), valueAccess.getPropertyValue(data, property));
     }
@@ -816,7 +816,7 @@ public class ListsProcessor extends DataSourceProcessor {
       value = type == EdmSimpleTypeKind.Binary.getEdmSimpleTypeInstance() ?
           ((BinaryData) data).getData() : data;
     } else if (functionImport.getReturnType().getMultiplicity() == EdmMultiplicity.MANY) {
-      List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
+      List<Map<String, Object>> values = new ArrayList<>();
       for (final Object typeData : (List<?>) data) {
         values.add(getStructuralTypeValueMap(typeData, (EdmStructuralType) type));
       }
@@ -866,7 +866,7 @@ public class ListsProcessor extends DataSourceProcessor {
   }
 
   private static Map<String, Object> mapKey(final List<KeyPredicate> keys) throws EdmException {
-    Map<String, Object> keyMap = new HashMap<String, Object>();
+    Map<String, Object> keyMap = new HashMap<>();
     for (final KeyPredicate key : keys) {
       final EdmProperty property = key.getProperty();
       final EdmSimpleType type = (EdmSimpleType) property.getType();
@@ -881,7 +881,7 @@ public class ListsProcessor extends DataSourceProcessor {
     if (functionImportParameters == null) {
       return Collections.emptyMap();
     } else {
-      Map<String, Object> parameterMap = new HashMap<String, Object>();
+      Map<String, Object> parameterMap = new HashMap<>();
       for (final String parameterName : functionImportParameters.keySet()) {
         final EdmLiteral literal = functionImportParameters.get(parameterName);
         final EdmSimpleType type = literal.getType();
@@ -945,7 +945,7 @@ public class ListsProcessor extends DataSourceProcessor {
       return null;
     } else {
       final WriteCallback callback = new WriteCallback(data);
-      Map<String, ODataCallback> callbacks = new HashMap<String, ODataCallback>();
+      Map<String, ODataCallback> callbacks = new HashMap<>();
       for (final String name : navigationPropertyNames) {
         callbacks.put(name, callback);
       }
@@ -966,7 +966,7 @@ public class ListsProcessor extends DataSourceProcessor {
       try {
         final EdmEntityType entityType =
             context.getSourceEntitySet().getRelatedEntitySet(context.getNavigationProperty()).getEntityType();
-        List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> values = new ArrayList<>();
         Object relatedData = null;
         try {
           relatedData = readRelatedData(context);
@@ -1049,7 +1049,7 @@ public class ListsProcessor extends DataSourceProcessor {
   }
 
   private <T> ODataResponse writeEntry(final EdmEntitySet entitySet, final ExpandSelectTreeNode expandSelectTree,
-      final T data, final String contentType) throws ODataException, EntityProviderException {
+      final T data, final String contentType) throws ODataException {
     final EdmEntityType entityType = entitySet.getEntityType();
     final Map<String, Object> values = getStructuralTypeValueMap(data, entityType);
 
@@ -1400,7 +1400,7 @@ public class ListsProcessor extends DataSourceProcessor {
       final PropertyExpression propertyExpression = (PropertyExpression) memberExpression.getProperty();
       final EdmProperty memberProperty = (EdmProperty) propertyExpression.getEdmProperty();
       final EdmSimpleType memberType = (EdmSimpleType) memberExpression.getEdmType();
-      List<EdmProperty> propertyPath = new ArrayList<EdmProperty>();
+      List<EdmProperty> propertyPath = new ArrayList<>();
       CommonExpression currentExpression = memberExpression;
       while (currentExpression != null) {
         final PropertyExpression currentPropertyExpression =
@@ -1528,7 +1528,7 @@ public class ListsProcessor extends DataSourceProcessor {
     ODataContext context = getContext();
     final int timingHandle = context.startRuntimeMeasurement(getClass().getSimpleName(), "getStructuralTypeValueMap");
 
-    Map<String, Object> valueMap = new HashMap<String, Object>();
+    Map<String, Object> valueMap = new HashMap<>();
 
     EdmMapping mapping = type.getMapping();
     if (mapping != null) {
@@ -1561,7 +1561,7 @@ public class ListsProcessor extends DataSourceProcessor {
     ODataContext context = getContext();
     final int timingHandle = context.startRuntimeMeasurement(getClass().getSimpleName(), "getStructuralTypeTypeMap");
 
-    Map<String, Object> typeMap = new HashMap<String, Object>();
+    Map<String, Object> typeMap = new HashMap<>();
     for (final String propertyName : type.getPropertyNames()) {
       final EdmProperty property = (EdmProperty) type.getProperty(propertyName);
       if (property.isSimple()) {
@@ -1628,10 +1628,7 @@ public class ListsProcessor extends DataSourceProcessor {
   private Object createInstance(final Class<?> complexClass) throws ODataException {
     try {
       return complexClass.newInstance();
-    } catch (InstantiationException e) {
-      throw new ODataException("Unable to create instance for complex data class '"
-          + complexClass + "'.", e);
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       throw new ODataException("Unable to create instance for complex data class '"
           + complexClass + "'.", e);
     }
@@ -1641,7 +1638,7 @@ public class ListsProcessor extends DataSourceProcessor {
   public ODataResponse executeBatch(final BatchHandler handler, final String contentType, final InputStream content)
       throws ODataException {
     ODataResponse batchResponse;
-    List<BatchResponsePart> batchResponseParts = new ArrayList<BatchResponsePart>();
+    List<BatchResponsePart> batchResponseParts = new ArrayList<>();
     PathInfo pathInfo = getContext().getPathInfo();
     EntityProviderBatchProperties batchProperties = EntityProviderBatchProperties.init().pathInfo(pathInfo).build();
     List<BatchRequestPart> batchParts = EntityProvider.parseBatchRequest(contentType, content, batchProperties);
@@ -1655,12 +1652,12 @@ public class ListsProcessor extends DataSourceProcessor {
   @Override
   public BatchResponsePart executeChangeSet(final BatchHandler handler, final List<ODataRequest> requests)
       throws ODataException {
-    List<ODataResponse> responses = new ArrayList<ODataResponse>();
+    List<ODataResponse> responses = new ArrayList<>();
     for (ODataRequest request : requests) {
       ODataResponse response = handler.handleRequest(request);
       if (response.getStatus().getStatusCode() >= HttpStatusCodes.BAD_REQUEST.getStatusCode()) {
         // Rollback
-        List<ODataResponse> errorResponses = new ArrayList<ODataResponse>(1);
+        List<ODataResponse> errorResponses = new ArrayList<>(1);
         errorResponses.add(response);
         return BatchResponsePart.responses(errorResponses).changeSet(false).build();
       }

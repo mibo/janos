@@ -46,7 +46,7 @@ public class AnnotationDataSource implements DataSource {
 
   private static final AnnotationHelper ANNOTATION_HELPER = new AnnotationHelper();
 
-  private final Map<String, DataStore<Object>> dataStores = new HashMap<String, DataStore<Object>>();
+  private final Map<String, DataStore<Object>> dataStores = new HashMap<>();
   private final DataStoreFactory dataStoreFactory;
 
   public AnnotationDataSource(final Collection<Class<?>> annotatedClasses, final DataStoreFactory dataStoreFactory)
@@ -100,7 +100,7 @@ public class AnnotationDataSource implements DataSource {
 
     DataStore<Object> holder = getDataStore(entitySet);
     if (holder != null) {
-      return new ArrayList<Object>(holder.read());
+      return new ArrayList<>(holder.read());
     }
 
     throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -174,7 +174,7 @@ public class AnnotationDataSource implements DataSource {
       return Collections.emptyList();
     }
     
-    List<Object> resultData = new ArrayList<Object>();
+    List<Object> resultData = new ArrayList<>();
     for (Object targetInstance : targetStore.read()) {
       if (navigationInstance instanceof Collection) {
         Map<String, Object> keyName2Value = 
@@ -371,7 +371,7 @@ public class AnnotationDataSource implements DataSource {
       Collection<Object> collection = (Collection<Object>) ANNOTATION_HELPER.getValueForField(
           instance, field.getName(), EdmNavigationProperty.class);
       if (collection == null) {
-        collection = new ArrayList<Object>();
+        collection = new ArrayList<>();
         setValue(instance, field, collection);
       }
       collection.add(value);
@@ -408,10 +408,7 @@ public class AnnotationDataSource implements DataSource {
       Object value = field.get(instance);
       field.setAccessible(access);
       return value;
-    } catch (IllegalArgumentException e) {
-      throw new AnnotationRuntimeException("Error for getting value of field '"
-          + field + "' at instance '" + instance + "'.", e);
-    } catch (IllegalAccessException e) {
+    } catch (IllegalArgumentException | IllegalAccessException e) {
       throw new AnnotationRuntimeException("Error for getting value of field '"
           + field + "' at instance '" + instance + "'.", e);
     }
@@ -423,10 +420,7 @@ public class AnnotationDataSource implements DataSource {
       field.setAccessible(true);
       field.set(instance, value);
       field.setAccessible(access);
-    } catch (IllegalArgumentException e) {
-      throw new AnnotationRuntimeException("Error for setting value of field: '"
-          + field + "' at instance: '" + instance + "'.", e);
-    } catch (IllegalAccessException e) {
+    } catch (IllegalArgumentException | IllegalAccessException e) {
       throw new AnnotationRuntimeException("Error for setting value of field: '"
           + field + "' at instance: '" + instance + "'.", e);
     }

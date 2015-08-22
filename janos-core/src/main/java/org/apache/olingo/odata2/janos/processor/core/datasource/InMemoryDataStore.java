@@ -45,14 +45,14 @@ public class InMemoryDataStore<T> implements DataStore<T> {
   private final KeyAccess keyAccess;
 
   private static class InMemoryDataStoreHolder {
-    private static final Map<Class<?>, InMemoryDataStore<?>> c2ds = new HashMap<Class<?>, InMemoryDataStore<?>>();
+    private static final Map<Class<?>, InMemoryDataStore<?>> c2ds = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     static synchronized InMemoryDataStore<?> getInstance(final Class<?> clz, final boolean createNewInstance)
         throws DataStoreException {
       InMemoryDataStore<?> ds = c2ds.get(clz);
       if (createNewInstance || ds == null) {
-        ds = new InMemoryDataStore<Object>((Class<Object>) clz);
+        ds = new InMemoryDataStore<>((Class<Object>) clz);
         c2ds.put(clz, ds);
       }
       return ds;
@@ -77,7 +77,7 @@ public class InMemoryDataStore<T> implements DataStore<T> {
   }
 
   private InMemoryDataStore(final Class<T> clz) throws DataStoreException {
-    this(new HashMap<KeyElement, T>(), clz);
+    this(new HashMap<>(), clz);
   }
 
   @Override
@@ -94,9 +94,7 @@ public class InMemoryDataStore<T> implements DataStore<T> {
   public T createInstance() {
     try {
       return dataTypeClass.newInstance();
-    } catch (InstantiationException e) {
-      throw new AnnotationRuntimeException("Unable to create instance of class '" + dataTypeClass + "'.", e);
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       throw new AnnotationRuntimeException("Unable to create instance of class '" + dataTypeClass + "'.", e);
     }
   }
@@ -194,7 +192,7 @@ public class InMemoryDataStore<T> implements DataStore<T> {
     private final List<Object> keyValues;
 
     public KeyElement(final int size) {
-      keyValues = new ArrayList<Object>(size);
+      keyValues = new ArrayList<>(size);
     }
 
     private void addValue(final Object keyValue) {

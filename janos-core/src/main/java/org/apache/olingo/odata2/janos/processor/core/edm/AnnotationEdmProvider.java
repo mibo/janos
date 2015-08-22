@@ -80,14 +80,14 @@ public class AnnotationEdmProvider extends EdmProvider {
   private static final AnnotationHelper ANNOTATION_HELPER = new AnnotationHelper();
 
   private final List<Class<?>> annotatedClasses;
-  private final Map<String, EntityContainer> name2Container = new HashMap<String, EntityContainer>();
-  private final Map<String, ContainerBuilder> containerName2ContainerBuilder = new HashMap<String, ContainerBuilder>();
-  private final Map<String, Schema> namespace2Schema = new HashMap<String, Schema>();
+  private final Map<String, EntityContainer> name2Container = new HashMap<>();
+  private final Map<String, ContainerBuilder> containerName2ContainerBuilder = new HashMap<>();
+  private final Map<String, Schema> namespace2Schema = new HashMap<>();
   private EntityContainer defaultContainer;
 
   public AnnotationEdmProvider(final Collection<Class<?>> annotatedClasses) throws ODataException {
 
-    this.annotatedClasses = new ArrayList<Class<?>>(annotatedClasses.size());
+    this.annotatedClasses = new ArrayList<>(annotatedClasses.size());
     for (Class<?> aClass : annotatedClasses) {
       if (ANNOTATION_HELPER.isEdmAnnotated(aClass)) {
         this.annotatedClasses.add(aClass);
@@ -235,13 +235,13 @@ public class AnnotationEdmProvider extends EdmProvider {
 
   @Override
   public List<Schema> getSchemas() throws ODataException {
-    return new ArrayList<Schema>(namespace2Schema.values());
+    return new ArrayList<>(namespace2Schema.values());
   }
 
   //
   //
   //
-  private Map<String, SchemaBuilder> namespace2SchemaBuilder = new HashMap<String, SchemaBuilder>();
+  private Map<String, SchemaBuilder> namespace2SchemaBuilder = new HashMap<>();
 
   private void updateSchema(final Class<?> aClass) {
     EdmEntityType et = aClass.getAnnotation(EdmEntityType.class);
@@ -337,10 +337,10 @@ public class AnnotationEdmProvider extends EdmProvider {
     private boolean isAbstract = false;
     private boolean isMediaResource = false;
     private FullQualifiedName baseEntityType = null;
-    private final List<PropertyRef> keyProperties = new ArrayList<PropertyRef>();
-    private final List<Property> properties = new ArrayList<Property>();
-    private final List<NavigationProperty> navProperties = new ArrayList<NavigationProperty>();
-    private final List<Association> associations = new ArrayList<Association>();
+    private final List<PropertyRef> keyProperties = new ArrayList<>();
+    private final List<Property> properties = new ArrayList<>();
+    private final List<NavigationProperty> navProperties = new ArrayList<>();
+    private final List<Association> associations = new ArrayList<>();
 
     public TypeBuilder(final FullQualifiedName fqn) {
       namespace = fqn.getNamespace();
@@ -635,13 +635,13 @@ public class AnnotationEdmProvider extends EdmProvider {
 
     final private String namespace;
     // private String alias;
-    private final List<Using> usings = new ArrayList<Using>();
-    private final List<EntityType> entityTypes = new ArrayList<EntityType>();
-    private final List<ComplexType> complexTypes = new ArrayList<ComplexType>();
-    private final Map<String, Association> name2Associations = new HashMap<String, Association>();
-    private final List<EntityContainer> entityContainers = new ArrayList<EntityContainer>();
-    private final List<AnnotationAttribute> annotationAttributes = new ArrayList<AnnotationAttribute>();
-    private final List<AnnotationElement> annotationElements = new ArrayList<AnnotationElement>();
+    private final List<Using> usings = new ArrayList<>();
+    private final List<EntityType> entityTypes = new ArrayList<>();
+    private final List<ComplexType> complexTypes = new ArrayList<>();
+    private final Map<String, Association> name2Associations = new HashMap<>();
+    private final List<EntityContainer> entityContainers = new ArrayList<>();
+    private final List<AnnotationAttribute> annotationAttributes = new ArrayList<>();
+    private final List<AnnotationElement> annotationElements = new ArrayList<>();
 
     private SchemaBuilder(final String namespace) {
       this.namespace = namespace;
@@ -703,7 +703,7 @@ public class AnnotationEdmProvider extends EdmProvider {
       s.setUsings(usings);
       s.setEntityTypes(entityTypes);
       s.setComplexTypes(complexTypes);
-      s.setAssociations(new ArrayList<Association>(name2Associations.values()));
+      s.setAssociations(new ArrayList<>(name2Associations.values()));
       s.setEntityContainers(entityContainers);
       s.setAnnotationAttributes(annotationAttributes);
       s.setAnnotationElements(annotationElements);
@@ -717,9 +717,9 @@ public class AnnotationEdmProvider extends EdmProvider {
     final private String name;
     final private String namespace;
     private boolean defaultContainer = true;
-    private final List<EntitySet> entitySets = new ArrayList<EntitySet>();
-    private final List<AssociationSet> associationSets = new ArrayList<AssociationSet>();
-    private final List<FunctionImport> functionImports = new ArrayList<FunctionImport>();
+    private final List<EntitySet> entitySets = new ArrayList<>();
+    private final List<AssociationSet> associationSets = new ArrayList<>();
+    private final List<FunctionImport> functionImports = new ArrayList<>();
 
     // private Documentation documentation;
 

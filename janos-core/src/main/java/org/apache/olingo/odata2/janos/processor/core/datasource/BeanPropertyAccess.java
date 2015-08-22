@@ -93,15 +93,8 @@ public class BeanPropertyAccess implements ValueAccess {
       if (dataObject != null) {
         try {
           dataObject = dataObject.getClass().getMethod(method).invoke(dataObject);
-        } catch (SecurityException e) {
-          throw new ODataNotFoundException(ODataHttpException.COMMON, e);
-        } catch (NoSuchMethodException e) {
-          throw new ODataNotFoundException(ODataHttpException.COMMON, e);
-        } catch (IllegalArgumentException e) {
-          throw new ODataNotFoundException(ODataHttpException.COMMON, e);
-        } catch (IllegalAccessException e) {
-          throw new ODataNotFoundException(ODataHttpException.COMMON, e);
-        } catch (InvocationTargetException e) {
+        } catch (SecurityException | NoSuchMethodException | IllegalAccessException
+            | IllegalArgumentException | InvocationTargetException e) {
           throw new ODataNotFoundException(ODataHttpException.COMMON, e);
         }
       }
@@ -127,7 +120,7 @@ public class BeanPropertyAccess implements ValueAccess {
             } else if (type.equals(boolean.class)) {
               method.invoke(data, false);
             } else {
-              method.invoke(data, value);
+              method.invoke(data, new Object[]{null});
             }
           } else {
             method.invoke(data, value);
@@ -138,13 +131,7 @@ public class BeanPropertyAccess implements ValueAccess {
       if (!found) {
         throw new ODataNotFoundException(null);
       }
-    } catch (SecurityException e) {
-      throw new ODataNotFoundException(null, e);
-    } catch (IllegalArgumentException e) {
-      throw new ODataNotFoundException(null, e);
-    } catch (IllegalAccessException e) {
-      throw new ODataNotFoundException(null, e);
-    } catch (InvocationTargetException e) {
+    } catch (SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
       throw new ODataNotFoundException(null, e);
     }
   }
@@ -175,9 +162,7 @@ public class BeanPropertyAccess implements ValueAccess {
             type = Double.class;
           }
         }
-      } catch (final SecurityException e) {
-        throw new ODataNotFoundException(ODataHttpException.COMMON, e);
-      } catch (final NoSuchMethodException e) {
+      } catch (final SecurityException | NoSuchMethodException e) {
         throw new ODataNotFoundException(ODataHttpException.COMMON, e);
       }
     }

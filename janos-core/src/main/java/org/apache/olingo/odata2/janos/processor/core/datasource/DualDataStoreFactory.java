@@ -29,7 +29,7 @@ import javax.persistence.Entity;
  */
 public class DualDataStoreFactory implements DataStoreFactory {
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties = new HashMap<>();
   
   @Override
   public DataStore<?> createDataStore(Class<?> clz) throws DataStoreException {
