@@ -45,15 +45,9 @@ import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
 public class AnnotationDataSource implements DataSource {
 
   private static final AnnotationHelper ANNOTATION_HELPER = new AnnotationHelper();
-  private static final String DEFAULT_PERSISTENCE = Boolean.TRUE.toString();
 
   private final Map<String, DataStore<Object>> dataStores = new HashMap<String, DataStore<Object>>();
   private final DataStoreFactory dataStoreFactory;
-
-  public AnnotationDataSource(final Collection<Class<?>> annotatedClasses) throws ODataException {
-    this(annotatedClasses, new DualDataStoreFactory());
-    dataStoreFactory.setDefaultProperty(DataStoreFactory.KEEP_PERSISTENT, DEFAULT_PERSISTENCE);
-  }
 
   public AnnotationDataSource(final Collection<Class<?>> annotatedClasses, final DataStoreFactory dataStoreFactory)
       throws ODataException {
@@ -62,12 +56,7 @@ public class AnnotationDataSource implements DataSource {
     init(annotatedClasses);
   }
 
-  public AnnotationDataSource(final String packageToScan) throws ODataException {
-    this(packageToScan, new DualDataStoreFactory());
-    dataStoreFactory.setDefaultProperty(DataStoreFactory.KEEP_PERSISTENT, DEFAULT_PERSISTENCE);
-  }
-
-  public AnnotationDataSource(final String packageToScan, final DataStoreFactory dataStoreFactory) 
+  public AnnotationDataSource(final String packageToScan, final DataStoreFactory dataStoreFactory)
           throws ODataException {
     this.dataStoreFactory = dataStoreFactory;
 

@@ -28,6 +28,7 @@ import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.ListsProcessor;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationDataSource;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationValueAccess;
+import org.apache.olingo.odata2.janos.processor.core.datasource.DualDataStoreFactory;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
@@ -39,6 +40,7 @@ import org.apache.olingo.odata2.api.rt.RuntimeDelegate;
  * in combination with Annotation-Support-Classes for EdmProvider, DataSource and ValueAccess.
  */
 public class JanosServiceBuilderImpl implements JanosServiceBuilder {
+  private static final String DEFAULT_PERSISTENCE = Boolean.TRUE.toString();
   private EdmProvider edmProvider;
   private DataSource dataSource;
   private ValueAccess valueAccess;
@@ -82,10 +84,10 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
   public ODataService build() throws ODataException {
     if(!annotatedClasses.isEmpty()) {
       edmProvider = new AnnotationEdmProvider(annotatedClasses);
-      dataSource = new AnnotationDataSource(annotatedClasses);
+      dataSource = new AnnotationDataSource(annotatedClasses, grantDataStoreFactory());
     } else if(modelPackage != null) {
       edmProvider = new AnnotationEdmProvider(modelPackage);
-      dataSource = new AnnotationDataSource(modelPackage);
+      dataSource = new AnnotationDataSource(modelPackage, grantDataStoreFactory());
     } else {
       throw new RuntimeException();
     }
@@ -99,4 +101,11 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
         new ListsProcessor(dataSource, valueAccess));
   }
 
+  private DataStoreFactory grantDataStoreFactory() {
+    if(dataStoreFactory == null) {
+      dataStoreFactory = new DualDataStoreFactory();
+      dataStoreFactory.setDefaultProperty(DataStoreFactory.KEEP_PERSISTENT, DEFAULT_PERSISTENCE);
+    }
+    return dataStoreFactory;
+  }
 }

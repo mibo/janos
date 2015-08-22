@@ -15,6 +15,7 @@
  */
 package org.apache.olingo.odata2.janos.processor.core;
 
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreFactory;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationDataSource;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
@@ -33,10 +34,11 @@ public class ListsProcessorTest {
   private ListsProcessor listsProcessor;
   private DataSource mockedDataSource = Mockito.mock(DataSource.class);
   private ValueAccess mockedValueAccess = Mockito.mock(ValueAccess.class);
+  private DataStoreFactory mockedDataStoreFactory = Mockito.mock(DataStoreFactory.class);
 
   @Test
   public void init() throws ODataException {
-    DataSource dataSource = new AnnotationDataSource(Building.class.getPackage().getName());
+    DataSource dataSource = new AnnotationDataSource(Building.class.getPackage().getName(), mockedDataStoreFactory);
     ValueAccess valueAccess = new AnnotationValueAccess();
     ListsProcessor lp = new ListsProcessor(dataSource, valueAccess);
 

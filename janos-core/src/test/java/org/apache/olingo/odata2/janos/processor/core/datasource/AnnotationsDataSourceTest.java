@@ -92,31 +92,31 @@ public class AnnotationsDataSourceTest {
 
   @Test
   public void initFromPackage() throws Exception {
-    AnnotationDataSource ds = new AnnotationDataSource(Building.class.getPackage().getName());
+    AnnotationDataSource ds = new AnnotationDataSource(Building.class.getPackage().getName(), dataStoreFactory);
     Assert.assertNotNull(ds);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void initFromNotExistingPackage() throws Exception {
-    AnnotationDataSource ds = new AnnotationDataSource("does.not.exist");
+    AnnotationDataSource ds = new AnnotationDataSource("does.not.exist", dataStoreFactory);
     Assert.assertNotNull(ds);
   }
 
   @Test
   public void initFromPackageWithoutAnnotatedClasses() throws Exception {
-    AnnotationDataSource ds = new AnnotationDataSource(this.getClass().getPackage().getName());
+    AnnotationDataSource ds = new AnnotationDataSource(this.getClass().getPackage().getName(), dataStoreFactory);
     Assert.assertNotNull(ds);
   }
 
   @Test
   public void initFromClassCollectionEntitySets() throws Exception {
-    AnnotationDataSource ds = new AnnotationDataSource(ANNOTATED_ENTITY_SET_CLASSES);
+    AnnotationDataSource ds = new AnnotationDataSource(ANNOTATED_ENTITY_SET_CLASSES, dataStoreFactory);
     Assert.assertNotNull(ds);
   }
 
   @Test
   public void initFromClassCollectionModel() throws Exception {
-    AnnotationDataSource ds = new AnnotationDataSource(ANNOTATED_MODEL_CLASSES);
+    AnnotationDataSource ds = new AnnotationDataSource(ANNOTATED_MODEL_CLASSES, dataStoreFactory);
     Assert.assertNotNull(ds);
   }
 
@@ -125,7 +125,7 @@ public class AnnotationsDataSourceTest {
     Set<Class<?>> annotatedClassesAndMore = new HashSet<Class<?>>(ANNOTATED_ENTITY_SET_CLASSES);
     annotatedClassesAndMore.add(String.class);
     annotatedClassesAndMore.add(Object.class);
-    AnnotationDataSource ds = new AnnotationDataSource(annotatedClassesAndMore);
+    AnnotationDataSource ds = new AnnotationDataSource(annotatedClassesAndMore, dataStoreFactory);
     Assert.assertNotNull(ds);
   }
 
@@ -170,7 +170,7 @@ public class AnnotationsDataSourceTest {
   public void multiThreadedSyncCreateReadTest() throws Exception {
     Collection<Class<?>> ac = new ArrayList<Class<?>>();
     ac.add(SimpleEntity.class);
-    final AnnotationDataSource localDs = new AnnotationDataSource(SimpleEntity.class.getPackage().getName());
+    final AnnotationDataSource localDs = new AnnotationDataSource(SimpleEntity.class.getPackage().getName(), dataStoreFactory);
     final AnnotationEdmProvider localProvider = new AnnotationEdmProvider(ac);
     final EdmEntitySet edmEntitySet = createMockedEdmEntitySet(localProvider, "SimpleEntitySet");
     final CountDownLatch latch;
