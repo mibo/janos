@@ -4,9 +4,9 @@
  * file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -16,27 +16,43 @@ package org.apache.olingo.odata2.janos.processor.core.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URI;
+import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
+import java.util.UUID;
 
 import org.apache.olingo.odata2.api.annotation.edm.EdmComplexType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
 import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
+import org.apache.olingo.odata2.api.annotation.edm.EdmFacets;
+import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
+import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
 import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty.Multiplicity;
 import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
+import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 import org.apache.olingo.odata2.api.edm.EdmLiteralKind;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
 import org.apache.olingo.odata2.api.edm.EdmSimpleTypeException;
 import org.apache.olingo.odata2.api.edm.EdmSimpleTypeKind;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
+import org.apache.olingo.odata2.api.edm.provider.Facets;
+import org.apache.olingo.odata2.api.edm.provider.FunctionImportParameter;
+import org.apache.olingo.odata2.api.edm.provider.ReturnType;
 import org.apache.olingo.odata2.api.exception.ODataException;
 
 /**
@@ -48,7 +64,7 @@ public class AnnotationHelper {
 
   /**
    * Compare keys of both instances.
-   * 
+   *
    * @param firstInstance
    * @param secondInstance
    * @return
@@ -73,7 +89,7 @@ public class AnnotationHelper {
 
   /**
    * Compare keys of instance with key values in map.
-   * 
+   *
    * @param instance
    * @param keyName2Value
    * @return
@@ -131,7 +147,7 @@ public class AnnotationHelper {
   /**
    * Returns <code>NULL</code> if given class is not annotated. If annotated the set entity type name is returned and if
    * no name is set the default name is generated from the simple class name.
-   * 
+   *
    * @param annotatedClass
    * @return
    */
@@ -143,7 +159,7 @@ public class AnnotationHelper {
    * Returns <code>NULL</code> if given class is not annotated.
    * If annotated the entity set name is returned and if
    * no name is set a default name is generated based on the simple class name.
-   * 
+   *
    * @param annotatedClass
    * @return
    */
@@ -202,8 +218,8 @@ public class AnnotationHelper {
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param <T> must be EdmEntityType or EdmComplexType annotation
    * @param annotatedClass
    * @param typeAnnotation
@@ -236,7 +252,7 @@ public class AnnotationHelper {
 
   /**
    * Get the set property name from an EdmProperty or EdmNavigationProperty annotation.
-   * 
+   *
    * @param field
    * @return
    */
@@ -321,7 +337,7 @@ public class AnnotationHelper {
    * Set key fields based on values in map.
    * If an key field is not available or <code>NULL</code> in the map
    * it will be not set as <code>NULL</code> at the instance object.
-   * 
+   *
    * @param instance
    * @param keys
    * @return
@@ -598,7 +614,7 @@ public class AnnotationHelper {
   private Map<String, Object> getValueForAnnotatedFields(final Object instance, final Class<?> resultClass,
       final Class<? extends Annotation> annotation, final boolean inherited) {
     Field[] fields = resultClass.getDeclaredFields();
-    Map<String, Object> fieldName2Value = new HashMap<String, Object>();
+    Map<String, Object> fieldName2Value = new HashMap<>();
 
     for (Field field : fields) {
       if (field.getAnnotation(annotation) != null) {
@@ -625,6 +641,126 @@ public class AnnotationHelper {
       return property.name();
     }
   }
+
+  /**
+   * Returns <code>NULL</code> if given method is not annotated.
+   * If annotated the function import name is returned and if
+   * no name is set a default name is generated based on the method name.
+   *
+   * @param annotatedMethod
+   * @return
+   */
+  public String extractFunctionImportName(final Method annotatedMethod) {
+    EdmFunctionImport functionImport = annotatedMethod.getAnnotation(EdmFunctionImport.class);
+    if (functionImport == null) {
+      return null;
+    }
+
+    String name = functionImport.name();
+    if (name == null || name.isEmpty()) {
+      name = annotatedMethod.getName();
+    }
+    return name;
+  }
+
+  public ArrayList<FunctionImportParameter> extractFunctionImportParameters(final Method method) {
+    ArrayList<FunctionImportParameter> functionImportParameters = new ArrayList<>();
+    Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+    Class<?>[] parameterTypes = method.getParameterTypes();
+    for (int i = 0; i < parameterTypes.length; i++) {
+      Class<?> parameterType = parameterTypes[i];
+      Annotation[] annotations = parameterAnnotations[i];
+      for (Annotation annotation : annotations) {
+        if (annotation.annotationType().equals(EdmFunctionImportParameter.class)) {
+          FunctionImportParameter fip = new FunctionImportParameter();
+          EdmFunctionImportParameter fipAnnotation = (EdmFunctionImportParameter)annotation;
+          // Set facets
+          if (fipAnnotation.facets() != null) {
+            EdmFacets edmFacets = fipAnnotation.facets();
+            Facets facets = new Facets();
+            // Data which is not available though it should be?
+            //            facets.setCollation(collation);
+            //            facets.setConcurrencyMode(concurrencyMode);
+            //            facets.setDefaultValue(defaultValue);
+            //            facets.setFixedLength(fixedLength);
+            facets.setMaxLength(edmFacets.maxLength());
+            facets.setNullable(edmFacets.nullable());
+            facets.setPrecision(edmFacets.precision());
+            facets.setScale(edmFacets.scale());
+            // Data which is not available though it should be?
+            //            facets.setUnicode(unicode);
+            fip.setFacets(facets);
+          }
+          // Set name
+          fip.setName(fipAnnotation.name());
+          // Set type
+          EdmType edmType;
+          EdmSimpleTypeKind edmSimpleTypeKind;
+          if (fipAnnotation.type() != null && !fipAnnotation.type().equals(EdmType.NULL)) {
+            edmSimpleTypeKind = mapTypeKind(fipAnnotation.type());
+          } else {
+            edmType = mapType(parameterType);
+            edmSimpleTypeKind = mapTypeKind(edmType);
+          }
+          fip.setType(edmSimpleTypeKind);
+          // Add function import parameter
+          functionImportParameters.add(fip);
+        }
+      }
+
+    }
+
+    return functionImportParameters;
+  }
+
+  public ReturnType extractReturnType(final Method annotatedMethod) {
+    EdmFunctionImport functionImport = annotatedMethod.getAnnotation(EdmFunctionImport.class);
+    ReturnType returnType = new ReturnType();
+    if (functionImport.returnType().isCollection()) {
+      returnType.setMultiplicity(EdmMultiplicity.MANY);
+    } else {
+      returnType.setMultiplicity(EdmMultiplicity.ZERO_TO_ONE);
+    }
+
+    switch (functionImport.returnType().type()) {
+      case SIMPLE:
+        EdmType edmType = mapType(annotatedMethod.getReturnType());
+        EdmSimpleTypeKind edmSimpleTypeKind = mapTypeKind(edmType);
+        returnType.setTypeName(edmSimpleTypeKind.getFullQualifiedName());
+        break;
+      case ENTITY:
+      case COMPLEX:
+        Class<?> annotatedClazz;
+        if (functionImport.returnType().isCollection()) {
+          ParameterizedType parameterizedType = (ParameterizedType) annotatedMethod.getGenericReturnType();
+          annotatedClazz = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+        } else {
+          annotatedClazz = annotatedMethod.getReturnType();
+        }
+        returnType.setTypeName(extractComplexTypeFqn(annotatedClazz));
+        break;
+      default:
+        throw new UnsupportedOperationException("Not yet supported return type type '" + functionImport.returnType().type() + "'.");
+    }
+    return returnType;
+  }
+
+  public String extractEntitySetName(final Method annotatedMethod) {
+    EdmFunctionImport functionImport = annotatedMethod.getAnnotation(EdmFunctionImport.class);
+    if (functionImport.entitySet() != null && !functionImport.entitySet().isEmpty()) {
+      return functionImport.entitySet();
+    }
+    return null;
+  }
+
+  public String extractHttpMethod(final Method annotatedMethod) {
+    EdmFunctionImport functionImport = annotatedMethod.getAnnotation(EdmFunctionImport.class);
+    if (functionImport.httpMethod() != null) {
+      return functionImport.httpMethod().name();
+    }
+    return null;
+  }
+
 
   public void setValueForAnnotatedField(final Object instance, final Class<? extends Annotation> annotation,
       final Object value)
@@ -668,7 +804,7 @@ public class AnnotationHelper {
   }
 
   /**
-   * 
+   *
    * @param resultClass
    * @param annotation
    * @param inherited
@@ -681,7 +817,7 @@ public class AnnotationHelper {
     }
 
     Field[] fields = resultClass.getDeclaredFields();
-    List<Field> annotatedFields = new ArrayList<Field>();
+    List<Field> annotatedFields = new ArrayList<>();
 
     for (Field field : fields) {
       if (field.getAnnotation(annotation) != null) {
@@ -727,9 +863,7 @@ public class AnnotationHelper {
       Object value = field.get(instance);
       field.setAccessible(access);
       return value;
-    } catch (IllegalArgumentException ex) { // should never happen
-      throw new AnnotationRuntimeException(ex);
-    } catch (IllegalAccessException ex) { // should never happen
+    } catch (IllegalArgumentException | IllegalAccessException ex) { // should never happen
       throw new AnnotationRuntimeException(ex);
     }
   }
@@ -746,9 +880,7 @@ public class AnnotationHelper {
       field.setAccessible(true);
       field.set(instance, usedValue);
       field.setAccessible(access);
-    } catch (IllegalArgumentException ex) { // should never happen
-      throw new AnnotationRuntimeException(ex);
-    } catch (IllegalAccessException ex) { // should never happen
+    } catch (IllegalArgumentException | IllegalAccessException ex) { // should never happen
       throw new AnnotationRuntimeException(ex);
     }
   }
@@ -784,10 +916,21 @@ public class AnnotationHelper {
     if (clazz == null) {
       return false;
     } else {
+      // TODO: mibo: do next checks only if first was not true
       final boolean isEntity = null != clazz.getAnnotation(EdmEntityType.class);
       final boolean isEntitySet = null != clazz.getAnnotation(EdmEntitySet.class);
       final boolean isComplexEntity = null != clazz.getAnnotation(EdmComplexType.class);
-      return isEntity || isComplexEntity || isEntitySet;
+
+      boolean hasFunctionImport = false;
+      Method[] methods = clazz.getMethods();
+      for (Method method : methods) {
+        if (method.getAnnotation(EdmFunctionImport.class) != null) {
+          hasFunctionImport = true;
+          break;
+        }
+      }
+
+      return isEntity || isEntitySet || isComplexEntity || hasFunctionImport;
     }
   }
 
@@ -848,6 +991,39 @@ public class AnnotationHelper {
     }
   }
 
+  public EdmType mapType(final Class<?> type) {
+    if (type == String.class || type == URI.class || type == URL.class
+        || type.isEnum() || type == TimeZone.class || type == Locale.class  ) {
+      return EdmType.STRING;
+    } else if (type == boolean.class || type == Boolean.class) {
+      return EdmType.BOOLEAN;
+    } else if (type == byte.class || type == Byte.class) {
+      return EdmType.SBYTE;
+    } else if (type == short.class || type == Short.class) {
+      return EdmType.INT16;
+    } else if (type == int.class || type == Integer.class) {
+      return EdmType.INT32;
+    } else if (type == long.class || type == Long.class) {
+      return EdmType.INT64;
+    } else if (type == double.class || type == Double.class) {
+      return EdmType.DOUBLE;
+    } else if (type == float.class || type == Float.class) {
+      return EdmType.SINGLE;
+    } else if (type == BigInteger.class || type == BigDecimal.class) {
+      return EdmType.DECIMAL;
+    } else if (type == Byte[].class || type == byte[].class) {
+      return EdmType.BINARY;
+    } else if (type == java.util.Date.class || type == java.sql.Date.class || type == Timestamp.class) {
+      return EdmType.DATE_TIME;
+    } else if (type == Calendar.class) {
+      return EdmType.DATE_TIME_OFFSET;
+    } else if (type == UUID.class) {
+      return EdmType.GUID;
+    } else {
+      throw new UnsupportedOperationException("Not yet supported type '" + type + "'.");
+    }
+  }
+
   public EdmMultiplicity mapMultiplicity(final Multiplicity multiplicity) {
     switch (multiplicity) {
     case ZERO_OR_ONE:
@@ -862,7 +1038,7 @@ public class AnnotationHelper {
   }
 
   /**
-   * 
+   *
    */
   private static class EdmAnnotationException extends RuntimeException {
 

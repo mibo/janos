@@ -28,6 +28,7 @@ import org.apache.olingo.odata2.janos.processor.ref.model.Location;
 import org.apache.olingo.odata2.janos.processor.ref.model.Manager;
 import org.apache.olingo.odata2.janos.processor.ref.model.Photo;
 import org.apache.olingo.odata2.janos.processor.ref.model.RefBase;
+import org.apache.olingo.odata2.janos.processor.ref.model.RefFunctions;
 import org.apache.olingo.odata2.janos.processor.ref.model.ResourceHelper;
 import org.apache.olingo.odata2.janos.processor.ref.model.Room;
 import org.apache.olingo.odata2.janos.processor.ref.model.Team;
@@ -57,7 +58,7 @@ public class JanosRefServiceFactory extends ODataServiceFactory {
    * instances within the ODataApplication (ODataService)
    */
   private static class AnnotationInstances {
-    final static String MODEL_PACKAGE = "org.apache.olingo.odata2.janos.processor.ref.model";
+//    final static String MODEL_PACKAGE = "org.apache.olingo.odata2.janos.processor.ref.model";
     final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<Class<?>>();
     static {
       ANNOTATED_MODEL_CLASSES.add(Building.class);
@@ -69,6 +70,7 @@ public class JanosRefServiceFactory extends ODataServiceFactory {
       ANNOTATED_MODEL_CLASSES.add(RefBase.class);
       ANNOTATED_MODEL_CLASSES.add(Room.class);
       ANNOTATED_MODEL_CLASSES.add(Team.class);
+      ANNOTATED_MODEL_CLASSES.add(RefFunctions.class);
     }
     final static ODataService ANNOTATION_ODATA_SERVICE;
 
