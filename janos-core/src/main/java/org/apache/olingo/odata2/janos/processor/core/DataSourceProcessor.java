@@ -852,7 +852,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         null);
 
     if (data == null) {
-      throw new ODataNotFoundException(ODataHttpException.COMMON);
+      throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
     }
 
     Object value;
