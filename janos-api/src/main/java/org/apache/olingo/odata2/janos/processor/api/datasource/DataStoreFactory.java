@@ -25,6 +25,6 @@ public interface DataStoreFactory {
   String KEEP_PERSISTENT = "KEEP_PERSISTENT";
   
   void setDefaultProperty(String name, String value);
-  DataStore<?> createDataStore(Class<?> clz) throws DataStoreException;
-  DataStore<?> createDataStore(Class<?> clz, Map<String, String> properties) throws DataStoreException;
+  <T> DataStore<T> createDataStore(Class<T> clz) throws DataStoreException;
+  <T> DataStore<T> createDataStore(Class<T> clz, Map<String, String> properties) throws DataStoreException;
 }

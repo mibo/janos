@@ -32,12 +32,12 @@ public class DualDataStoreFactory implements DataStoreFactory {
   private final Map<String, String> properties = new HashMap<>();
   
   @Override
-  public DataStore<?> createDataStore(Class<?> clz) throws DataStoreException {
+  public <T> DataStore<T> createDataStore(Class<T> clz) throws DataStoreException {
     return createDataStore(clz, properties);
   }
 
   @Override
-  public DataStore<?> createDataStore(Class<?> clz, Map<String, String> properties) throws DataStoreException {
+  public <T> DataStore<T>  createDataStore(Class<T> clz, Map<String, String> properties) throws DataStoreException {
     boolean keepPersistent = Boolean.parseBoolean(properties.get(KEEP_PERSISTENT));
     return createInstance(clz, keepPersistent);
   }
@@ -47,7 +47,7 @@ public class DualDataStoreFactory implements DataStoreFactory {
     properties.put(name, value);
   }
   
-  public DataStore<?> createInstance(Class<?> clz, boolean keepPersistent) throws DataStoreException {
+  public <T> DataStore<T>  createInstance(Class<T> clz, boolean keepPersistent) throws DataStoreException {
     if(isJpaAnnotated(clz)) {
       String persistenceName = System.getProperty(JpaAnnotationDataStore.PERSISTENCE_NAME);
       if(persistenceName == null) {
