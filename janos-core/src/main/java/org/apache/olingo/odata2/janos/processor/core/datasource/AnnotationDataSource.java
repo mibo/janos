@@ -125,13 +125,6 @@ public class AnnotationDataSource implements DataSource {
   }
 
   @Override
-  public Object readData(final EdmFunctionImport function, final Map<String, Object> parameters,
-      final Map<String, Object> keys)
-      throws ODataNotImplementedException, ODataNotFoundException, EdmException, ODataApplicationException {
-    throw new ODataNotImplementedException(ODataNotImplementedException.COMMON);
-  }
-
-  @Override
   public Object readRelatedData(final EdmEntitySet sourceEntitySet, final Object sourceData,
       final EdmEntitySet targetEntitySet,
       final Map<String, Object> targetKeys)

@@ -885,6 +885,33 @@ public class AnnotationHelper {
     }
   }
 
+
+  public List<Method> getAnnotatedMethods(final Class<?> resultClass,
+                                           final Class<? extends Annotation> annotation,
+                                           final boolean inherited) {
+    if (resultClass == null) {
+      return null;
+    }
+
+    Method[] methods = resultClass.getDeclaredMethods();
+    List<Method> annotatedMethods = new ArrayList<>();
+
+    for (Method method: methods) {
+      if (method.getAnnotation(annotation) != null) {
+        annotatedMethods.add(method);
+      }
+    }
+
+    Class<?> superClass = resultClass.getSuperclass();
+    if (inherited && superClass != Object.class) {
+      List<Method> tmp = getAnnotatedMethods(superClass, annotation, true);
+      annotatedMethods.addAll(tmp);
+    }
+
+    return annotatedMethods;
+  }
+
+
   private Object convert(final Field field, final String propertyValue) {
     Class<?> fieldClass = field.getType();
     try {
@@ -920,18 +947,20 @@ public class AnnotationHelper {
       final boolean isEntity = null != clazz.getAnnotation(EdmEntityType.class);
       final boolean isEntitySet = null != clazz.getAnnotation(EdmEntitySet.class);
       final boolean isComplexEntity = null != clazz.getAnnotation(EdmComplexType.class);
-
-      boolean hasFunctionImport = false;
-      Method[] methods = clazz.getMethods();
-      for (Method method : methods) {
-        if (method.getAnnotation(EdmFunctionImport.class) != null) {
-          hasFunctionImport = true;
-          break;
-        }
-      }
+      final boolean hasFunctionImport = hasEdmFunction(clazz);
 
       return isEntity || isEntitySet || isComplexEntity || hasFunctionImport;
     }
+  }
+
+  public boolean hasEdmFunction(final Class<?> clazz) {
+    Method[] methods = clazz.getMethods();
+    for (Method method : methods) {
+      if (method.getAnnotation(EdmFunctionImport.class) != null) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public String getCanonicalName(final Field field) {

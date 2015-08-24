@@ -21,12 +21,15 @@ package org.apache.olingo.odata2.janos.processor.core.rt;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.JanosService.JanosServiceBuilder;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
-import org.apache.olingo.odata2.janos.processor.core.ListsProcessor;
+import org.apache.olingo.odata2.janos.processor.core.DataSourceProcessor;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationDataSource;
+import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationFunctionSource;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.datasource.DualDataStoreFactory;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
@@ -43,6 +46,7 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
   private static final String DEFAULT_PERSISTENCE = Boolean.TRUE.toString();
   private EdmProvider edmProvider;
   private DataSource dataSource;
+  private FunctionSource functionSource;
   private ValueAccess valueAccess;
   private DataStoreFactory dataStoreFactory;
   private String modelPackage;
@@ -81,15 +85,27 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
     return this;
   }
 
+  public JanosServiceBuilder with(FunctionSource functionSource) {
+    this.functionSource = functionSource;
+    return this;
+  }
+
   public ODataService build() throws ODataException {
+    if(dataStoreFactory == null) {
+      dataStoreFactory = new DualDataStoreFactory();
+      dataStoreFactory.setDefaultProperty(DataStoreFactory.KEEP_PERSISTENT, DEFAULT_PERSISTENCE);
+    }
+
     if(!annotatedClasses.isEmpty()) {
       edmProvider = new AnnotationEdmProvider(annotatedClasses);
-      dataSource = new AnnotationDataSource(annotatedClasses, grantDataStoreFactory());
+      dataSource = new AnnotationDataSource(annotatedClasses, dataStoreFactory);
+      functionSource = AnnotationFunctionSource.with(annotatedClasses).with(dataStoreFactory).build();
     } else if(modelPackage != null) {
       edmProvider = new AnnotationEdmProvider(modelPackage);
-      dataSource = new AnnotationDataSource(modelPackage, grantDataStoreFactory());
+      dataSource = new AnnotationDataSource(modelPackage, dataStoreFactory);
+      functionSource = AnnotationFunctionSource.with(modelPackage).with(dataStoreFactory).build();
     } else {
-      throw new RuntimeException();
+      throw new RuntimeException("Unable to build " + JanosService.class);
     }
 
     if(valueAccess == null) {
@@ -98,14 +114,6 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
 
     // Edm via Annotations and ListProcessor via AnnotationDS with AnnotationsValueAccess
     return RuntimeDelegate.createODataSingleProcessorService(edmProvider,
-        new ListsProcessor(dataSource, valueAccess));
-  }
-
-  private DataStoreFactory grantDataStoreFactory() {
-    if(dataStoreFactory == null) {
-      dataStoreFactory = new DualDataStoreFactory();
-      dataStoreFactory.setDefaultProperty(DataStoreFactory.KEEP_PERSISTENT, DEFAULT_PERSISTENCE);
-    }
-    return dataStoreFactory;
+        new DataSourceProcessor(dataSource, valueAccess, functionSource));
   }
 }
