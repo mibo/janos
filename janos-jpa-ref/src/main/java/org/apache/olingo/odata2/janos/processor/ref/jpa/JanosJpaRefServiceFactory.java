@@ -22,16 +22,7 @@ import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
 import org.apache.olingo.odata2.janos.processor.core.datasource.JpaAnnotationDataStore;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Building;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.City;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Employee;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Photo;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Room;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Location;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Manager;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.RefBase;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.ResourceHelper;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Team;
+import org.apache.olingo.odata2.janos.processor.ref.jpa.model.*;
 import org.apache.olingo.odata2.api.ODataCallback;
 import org.apache.olingo.odata2.api.ODataDebugCallback;
 import org.apache.olingo.odata2.api.ODataService;
@@ -69,13 +60,14 @@ public class JanosJpaRefServiceFactory extends ODataServiceFactory {
       ANNOTATED_MODEL_CLASSES.add(RefBase.class);
       ANNOTATED_MODEL_CLASSES.add(Room.class);
       ANNOTATED_MODEL_CLASSES.add(Team.class);
+      ANNOTATED_MODEL_CLASSES.add(RefFunctions.class);
     }
     final static ODataService ANNOTATION_ODATA_SERVICE;
 
     static {
       try {
         ANNOTATION_ODATA_SERVICE = JanosService.createFor(ANNOTATED_MODEL_CLASSES).build();
-        initializeSampleData();
+//        initializeSampleData();
       } catch (ODataApplicationException ex) {
         throw new RuntimeException("Exception during sample data generation.", ex);
       } catch (ODataException ex) {

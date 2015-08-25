@@ -84,7 +84,8 @@ public class JpaSampleDataGenerator {
         "    }}";
 
     String employeeUri = serviceUrl + "/Employees";
-    createEntity(employeeUri, firstEmployee, usedFormat);
+    String location = createEntity(employeeUri, firstEmployee, usedFormat);
+    updateEntity(location, firstEmployee, usedFormat);
 
     String teamAlpha = "{\"Name\": \"Team Alpha\",\"IsScrumTeam\": true\n}";
     String teamBeta = "{\"Name\": \"Team Beta\",\"IsScrumTeam\": false\n}";
@@ -111,17 +112,26 @@ public class JpaSampleDataGenerator {
     createEntity(buildingsUri, buildingGreenWithRooms, usedFormat);
   }
 
-  private void createEntity(String absoluteUri, String content, String contentType) {
+  private String createEntity(String absoluteUri, String content, String contentType) {
     try {
-      writeEntity(absoluteUri, content, contentType, HTTP_METHOD_POST);
+      return writeEntity(absoluteUri, content, contentType, HTTP_METHOD_POST);
     } catch (IOException | URISyntaxException e) {
       throw new RuntimeException("Exception during data source initialization generation.", e);
     }
   }
 
-  private void writeEntity(String absoluteUri, String content, String contentType, String httpMethod)
+  private void updateEntity(String absoluteUri, String content, String contentType) {
+    try {
+      writeEntity(absoluteUri, content, contentType, HTTP_METHOD_PUT);
+    } catch (IOException | URISyntaxException e) {
+      throw new RuntimeException("Exception during data source initialization generation.", e);
+    }
+  }
+
+  private String writeEntity(String absoluteUri, String content, String contentType, String httpMethod)
       throws IOException, URISyntaxException {
 
+    String location = null;
     print(httpMethod + " request on uri: " + absoluteUri + ":\n  " + content + "\n");
     //
     HttpURLConnection connection = initializeConnection(absoluteUri, contentType, httpMethod);
@@ -134,6 +144,7 @@ public class JpaSampleDataGenerator {
       // get the content as InputStream and de-serialize it into an ODataEntry object
       InputStream responseContent = connection.getInputStream();
       logRawContent(httpMethod + " response:\n  ", responseContent, "\n");
+      location = connection.getHeaderField("Location");
     } else if (statusCode == HttpStatusCodes.NO_CONTENT) {
       print("No content.");
     } else {
@@ -142,6 +153,7 @@ public class JpaSampleDataGenerator {
 
     //
     connection.disconnect();
+    return location;
   }
 
   private void print(String content) {

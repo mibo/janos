@@ -31,13 +31,7 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
 import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
 import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 /**
  *  
@@ -74,7 +68,8 @@ public class Employee {
   @EdmProperty(name = "EntryDate", type = EdmType.DATE_TIME,
       facets = @EdmFacets(nullable = true))
   private Calendar entryDate;
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL, optional = false)
+  @JoinColumn
   @EdmProperty(name = "Location", facets = @EdmFacets(nullable = false))
   private Location location;
 
