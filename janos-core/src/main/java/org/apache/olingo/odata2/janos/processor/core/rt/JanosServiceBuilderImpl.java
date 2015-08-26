@@ -24,14 +24,14 @@ import java.util.Collection;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.JanosService.JanosServiceBuilder;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
 import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.DataSourceProcessor;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationDataSource;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationFunctionSource;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationValueAccess;
-import org.apache.olingo.odata2.janos.processor.core.datasource.DualDataStoreFactory;
+import org.apache.olingo.odata2.janos.processor.core.datasource.DualDataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
@@ -48,7 +48,7 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
   private DataSource dataSource;
   private FunctionSource functionSource;
   private ValueAccess valueAccess;
-  private DataStoreFactory dataStoreFactory;
+  private DataStoreManager dataStoreManager;
   private String modelPackage;
   private Collection<Class<?>> annotatedClasses = new ArrayList<>();
 
@@ -70,8 +70,8 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
     return this;
   }
 
-  public JanosServiceBuilder with(DataStoreFactory dataStoreFactory) {
-    this.dataStoreFactory = dataStoreFactory;
+  public JanosServiceBuilder with(DataStoreManager dataStoreManager) {
+    this.dataStoreManager = dataStoreManager;
     return this;
   }
 
@@ -91,19 +91,19 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
   }
 
   public ODataService build() throws ODataException {
-    if(dataStoreFactory == null) {
-      dataStoreFactory = new DualDataStoreFactory();
-      dataStoreFactory.setDefaultProperty(DataStoreFactory.KEEP_PERSISTENT, DEFAULT_PERSISTENCE);
+    if(dataStoreManager == null) {
+      dataStoreManager = new DualDataStoreManager();
+      dataStoreManager.setDefaultProperty(DataStoreManager.KEEP_PERSISTENT, DEFAULT_PERSISTENCE);
     }
 
     if(!annotatedClasses.isEmpty()) {
       edmProvider = new AnnotationEdmProvider(annotatedClasses);
-      dataSource = new AnnotationDataSource(annotatedClasses, dataStoreFactory);
-      functionSource = AnnotationFunctionSource.with(annotatedClasses).with(dataStoreFactory).build();
+      dataSource = new AnnotationDataSource(annotatedClasses, dataStoreManager);
+      functionSource = AnnotationFunctionSource.with(annotatedClasses).with(dataStoreManager).build();
     } else if(modelPackage != null) {
       edmProvider = new AnnotationEdmProvider(modelPackage);
-      dataSource = new AnnotationDataSource(modelPackage, dataStoreFactory);
-      functionSource = AnnotationFunctionSource.with(modelPackage).with(dataStoreFactory).build();
+      dataSource = new AnnotationDataSource(modelPackage, dataStoreManager);
+      functionSource = AnnotationFunctionSource.with(modelPackage).with(dataStoreManager).build();
     } else {
       throw new RuntimeException("Unable to build " + JanosService.class);
     }

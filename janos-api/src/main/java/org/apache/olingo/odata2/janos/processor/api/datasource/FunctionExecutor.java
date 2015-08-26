@@ -23,5 +23,5 @@ package org.apache.olingo.odata2.janos.processor.api.datasource;
  */
 public interface FunctionExecutor {
 
-  void init(DataStoreFactory dataStore);
+  void init(DataStoreManager dataStore);
 }

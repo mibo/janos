@@ -6,7 +6,7 @@ import org.apache.olingo.odata2.api.edm.EdmException;
 import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
 import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
 import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionExecutor;
 import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
@@ -24,7 +24,7 @@ public class AnnotationFunctionSource implements FunctionSource {
 
   private AnnotationHelper annotationHelper = new AnnotationHelper();
   private Map<String, FunctionHolder> functionHolders = new HashMap<>();
-  private DataStoreFactory dataStoreFactory;
+  private DataStoreManager dataStoreManager;
 
   private AnnotationFunctionSource() { /* private ctor because of builder */ }
 
@@ -59,7 +59,7 @@ public class AnnotationFunctionSource implements FunctionSource {
       holder.executor = annotatedClass.newInstance();
       holder.functionImport = efi;
       holder.functionParameters = parameters;
-      holder.executor.init(dataStoreFactory);
+      holder.executor.init(dataStoreManager);
 
       functionHolders.put(name, holder);
     } catch (InstantiationException | IllegalAccessException e) {
@@ -165,8 +165,8 @@ public class AnnotationFunctionSource implements FunctionSource {
       return this;
     }
 
-    public AnnotationFunctionSourceBuilder with(DataStoreFactory dataStoreFactory) {
-      afs.dataStoreFactory = dataStoreFactory;
+    public AnnotationFunctionSourceBuilder with(DataStoreManager dataStoreManager) {
+      afs.dataStoreManager = dataStoreManager;
       return this;
     }
 

@@ -73,13 +73,13 @@ public class JpaSampleDataGenerator {
         "      \"__metadata\": {\n" +
         "        \"type\": \"RefScenario.c_Location\"\n" +
         "      },\n" +
-        "      \"Country\": \"Norge\",\n" +
+        "      \"Country\": \"Nörge\",\n" +
         "      \"City\": {\n" +
         "        \"__metadata\": {\n" +
         "          \"type\": \"RefScenario.c_City\"\n" +
         "        },\n" +
         "        \"PostalCode\": \"8392\",\n" +
-        "        \"CityName\": \"Ã„\"\n" +
+        "        \"CityName\": \"Northpole„\"\n" +
         "      }\n" +
         "    }}";
 

@@ -86,7 +86,7 @@ public class InMemoryDataStore<T> implements DataStore<T> {
   }
 
   @Override
-  public String getEntityTypeName() {
+  public String getName() {
     return ANNOTATION_HELPER.extractEntityTypeName(dataTypeClass);
   }
 

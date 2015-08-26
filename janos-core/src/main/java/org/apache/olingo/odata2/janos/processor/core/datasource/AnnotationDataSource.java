@@ -18,14 +18,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
@@ -35,7 +34,6 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceMimeType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
 import org.apache.olingo.odata2.api.edm.EdmEntitySet;
 import org.apache.olingo.odata2.api.edm.EdmException;
-import org.apache.olingo.odata2.api.edm.EdmFunctionImport;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
 import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 import org.apache.olingo.odata2.api.exception.ODataException;
@@ -46,19 +44,18 @@ public class AnnotationDataSource implements DataSource {
 
   private static final AnnotationHelper ANNOTATION_HELPER = new AnnotationHelper();
 
-  private final Map<String, DataStore<Object>> dataStores = new HashMap<>();
-  private final DataStoreFactory dataStoreFactory;
+  private final DataStoreManager dataStoreManager;
 
-  public AnnotationDataSource(final Collection<Class<?>> annotatedClasses, final DataStoreFactory dataStoreFactory)
+  public AnnotationDataSource(final Collection<Class<?>> annotatedClasses, final DataStoreManager dataStoreManager)
       throws ODataException {
-    this.dataStoreFactory = dataStoreFactory;
+    this.dataStoreManager = dataStoreManager;
     
     init(annotatedClasses);
   }
 
-  public AnnotationDataSource(final String packageToScan, final DataStoreFactory dataStoreFactory)
+  public AnnotationDataSource(final String packageToScan, final DataStoreManager dataStoreManager)
           throws ODataException {
-    this.dataStoreFactory = dataStoreFactory;
+    this.dataStoreManager = dataStoreManager;
 
     List<Class<?>> foundClasses = ClassHelper.loadClasses(packageToScan, new ClassHelper.ClassValidator() {
       @Override
@@ -76,8 +73,7 @@ public class AnnotationDataSource implements DataSource {
       for (Class<?> clz : annotatedClasses) {
         String entitySetName = ANNOTATION_HELPER.extractEntitySetName(clz);
         if(entitySetName != null) {
-          DataStore<Object> dhs = (DataStore<Object>) dataStoreFactory.createDataStore(clz);
-          dataStores.put(entitySetName, dhs);
+          dataStoreManager.grantDataStore(entitySetName, clz);
         } else if (!ANNOTATION_HELPER.isEdmAnnotated(clz)) {
           throw new ODataException("Found not annotated class during DataStore initilization of type: "
               + clz.getName());
@@ -89,9 +85,9 @@ public class AnnotationDataSource implements DataSource {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> DataStore<T> getDataStore(final Class<T> clazz) {
+  public <T> DataStore<T> getDataStore(final Class<T> clazz) throws DataStoreException {
     String entitySetName = ANNOTATION_HELPER.extractEntitySetName(clazz);
-    return (DataStore<T>) dataStores.get(entitySetName);
+    return dataStoreManager.getDataStore(entitySetName, clazz);
   }
 
   @Override
@@ -130,8 +126,8 @@ public class AnnotationDataSource implements DataSource {
       final Map<String, Object> targetKeys)
       throws ODataNotImplementedException, ODataNotFoundException, EdmException, ODataApplicationException {
 
-    DataStore<?> sourceStore = dataStores.get(sourceEntitySet.getName());
-    DataStore<?> targetStore = dataStores.get(targetEntitySet.getName());
+    DataStore<?> sourceStore = dataStoreManager.getDataStore(sourceEntitySet.getName());
+    DataStore<?> targetStore = dataStoreManager.getDataStore(targetEntitySet.getName());
 
     AnnotationHelper.AnnotatedNavInfo navInfo = ANNOTATION_HELPER.getCommonNavigationInfo(
         sourceStore.getDataTypeClass(), targetStore.getDataTypeClass());
@@ -320,8 +316,8 @@ public class AnnotationDataSource implements DataSource {
       final Map<String, Object> targetEntityValues)
       throws ODataNotImplementedException, ODataNotFoundException, EdmException, ODataApplicationException {
     // get common data
-    DataStore<Object> sourceStore = dataStores.get(sourceEntitySet.getName());
-    DataStore<Object> targetStore = dataStores.get(targetEntitySet.getName());
+    DataStore<Object> sourceStore = dataStoreManager.getDataStore(sourceEntitySet.getName());
+    DataStore<Object> targetStore = dataStoreManager.getDataStore(targetEntitySet.getName());
 
     AnnotationHelper.AnnotatedNavInfo commonNavInfo = ANNOTATION_HELPER.getCommonNavigationInfo(
         sourceStore.getDataTypeClass(), targetStore.getDataTypeClass());
@@ -387,7 +383,7 @@ public class AnnotationDataSource implements DataSource {
    */
   private DataStore<Object> getDataStore(final EdmEntitySet entitySet) throws EdmException {
     final String name = entitySet.getName();
-    DataStore<Object> dataStore = dataStores.get(name);
+    DataStore<Object> dataStore = dataStoreManager.getDataStore(name);
     if (dataStore == null) {
       throw new AnnotationRuntimeException("No DataStore found for entity set '" + entitySet + "'.");
     }

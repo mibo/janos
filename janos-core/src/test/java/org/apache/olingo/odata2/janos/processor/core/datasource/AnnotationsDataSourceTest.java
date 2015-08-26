@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
 import org.apache.olingo.odata2.janos.processor.core.model.Building;
 import org.apache.olingo.odata2.janos.processor.core.model.City;
@@ -81,11 +81,11 @@ public class AnnotationsDataSourceTest {
   private final AnnotationDataSource datasource;
   private final AnnotationEdmProvider edmProvider;
   private static final String DEFAULT_CONTAINER = ModelSharedConstants.CONTAINER_1;
-  private final DualDataStoreFactory dataStoreFactory;
+  private final DualDataStoreManager dataStoreFactory;
 
   public AnnotationsDataSourceTest() throws ODataException {
-    dataStoreFactory = new DualDataStoreFactory();
-    dataStoreFactory.setDefaultProperty(DataStoreFactory.KEEP_PERSISTENT, Boolean.FALSE.toString());
+    dataStoreFactory = new DualDataStoreManager();
+    dataStoreFactory.setDefaultProperty(DataStoreManager.KEEP_PERSISTENT, Boolean.FALSE.toString());
     datasource = new AnnotationDataSource(Building.class.getPackage().getName(), dataStoreFactory);
     edmProvider = new AnnotationEdmProvider(Building.class.getPackage().getName());
   }

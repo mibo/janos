@@ -5,7 +5,7 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
 import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
 import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionExecutor;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 
@@ -21,17 +21,17 @@ import static org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.*;
  */
 public class RefFunctions implements FunctionExecutor {
 
-  private DataStoreFactory dataStoreFactory;
+  private DataStoreManager dataStoreManager;
 
   @Override
-  public void init(DataStoreFactory dataStore) {
-    dataStoreFactory = dataStore;
+  public void init(DataStoreManager dataStore) {
+    dataStoreManager = dataStore;
   }
 
   @EdmFunctionImport(returnType = @ReturnType(type = ReturnType.Type.ENTITY))
   public City citySearch(@EdmFunctionImportParameter(name = "cityName", type = EdmType.STRING) String name) {
     try {
-      DataStore<Employee> ds = dataStoreFactory.createDataStore(Employee.class);
+      DataStore<Employee> ds = dataStoreManager.getDataStore("Employees", Employee.class);
       Collection<Employee> employees = ds.read();
       for (Employee employee : employees) {
         City city = employee.getLocation().getCity();

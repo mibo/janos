@@ -16,6 +16,7 @@ package org.apache.olingo.odata2.janos.processor.ref.jpa;
 
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
@@ -162,9 +163,17 @@ public class JanosJpaRefServiceFactory extends ODataServiceFactory {
     roomDs.create(createRoom("Huge yellow room", 120, 1, yellowBuilding));
 
     DataStore<Employee> employeeDataStore = getDataStore(Employee.class);
+    Iterator<Photo> iterator = photoDs.read().iterator();
+    Photo photo = iterator.next();
     employeeDataStore.create(createEmployee("first Employee",
-        new Location("Norge", "8392", "Ä"), 42, null,
-        photoDs.read().iterator().next().getImage(), photoDs.read().iterator().next().getImageType(),
+        new Location("Nörge", "8392", "Northpole"), 42, null,
+        photo.getImage(), photo.getImageType(),
+        "http://localhost/image/first.png",
+        null, teamDs.read().iterator().next(), roomDs.read().iterator().next()));
+    photo = iterator.next();
+    employeeDataStore.create(createEmployee("Second Employee",
+        new Location("Nörge", "8392", "Northpole"), 34, null,
+        photo.getImage(), photo.getImageType(),
         "http://localhost/image/first.png",
         null, teamDs.read().iterator().next(), roomDs.read().iterator().next()));
   }
