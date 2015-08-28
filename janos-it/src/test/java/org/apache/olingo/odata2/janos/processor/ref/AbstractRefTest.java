@@ -58,9 +58,11 @@ import org.junit.runners.Parameterized;
 public class AbstractRefTest extends AbstractFitTest {
 
   private static final Logger LOG = Logger.getLogger(AbstractRefTest.class);
+  private final String modelPackageUnderTest;
 
   public AbstractRefTest(String modelPackage) {
-    super();
+    super(modelPackage);
+    modelPackageUnderTest = modelPackage;
     LOG.trace("Test servlet with model " + modelPackage);
   }
 
@@ -73,7 +75,7 @@ public class AbstractRefTest extends AbstractFitTest {
 
   @Override
   protected ODataService createService() throws ODataException {
-    return JanosService.createFor(MODEL_PACKAGE).build();
+    return JanosService.createFor(modelPackageUnderTest).build();
   }
 
   @Parameterized.Parameters

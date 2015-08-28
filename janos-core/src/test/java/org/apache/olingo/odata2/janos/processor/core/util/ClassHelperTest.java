@@ -15,18 +15,17 @@
  */
 package org.apache.olingo.odata2.janos.processor.core.util;
 
-import java.io.File;
-import java.net.URL;
-import java.util.List;
-
 import junit.framework.Assert;
-
 import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.testutil.mock.AnnotatedEntity;
 import org.junit.Test;
+
+import java.io.File;
+import java.net.URL;
+import java.util.List;
 
 /**
  *

@@ -16,7 +16,6 @@
 package org.apache.olingo.odata2.janos.processor.core.datasource;
 
 import junit.framework.Assert;
-
 import org.apache.olingo.odata2.api.edm.EdmException;
 import org.apache.olingo.odata2.api.edm.EdmMapping;
 import org.apache.olingo.odata2.api.edm.EdmProperty;

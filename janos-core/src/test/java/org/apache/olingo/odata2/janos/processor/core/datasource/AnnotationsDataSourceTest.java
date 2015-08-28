@@ -15,35 +15,6 @@
  */
 package org.apache.olingo.odata2.janos.processor.core.datasource;
 
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
-import org.apache.olingo.odata2.janos.processor.core.model.Building;
-import org.apache.olingo.odata2.janos.processor.core.model.City;
-import org.apache.olingo.odata2.janos.processor.core.model.Employee;
-import org.apache.olingo.odata2.janos.processor.core.model.Location;
-import org.apache.olingo.odata2.janos.processor.core.model.Manager;
-import org.apache.olingo.odata2.janos.processor.core.model.ModelSharedConstants;
-import org.apache.olingo.odata2.janos.processor.core.model.Photo;
-import org.apache.olingo.odata2.janos.processor.core.model.RefBase;
-import org.apache.olingo.odata2.janos.processor.core.model.Room;
-import org.apache.olingo.odata2.janos.processor.core.model.Team;
-import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
-import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
 import org.apache.olingo.odata2.api.edm.EdmEntitySet;
@@ -52,10 +23,23 @@ import org.apache.olingo.odata2.api.edm.FullQualifiedName;
 import org.apache.olingo.odata2.api.edm.provider.EntitySet;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
+import org.apache.olingo.odata2.janos.processor.core.model.*;
+import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
+import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.nio.charset.Charset;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  *

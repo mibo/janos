@@ -18,18 +18,10 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.core.model;
 
+import org.apache.olingo.odata2.api.annotation.edm.*;
+
 import java.text.DateFormat;
 import java.util.Calendar;
-
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmFacets;
-import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
-import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceContent;
-import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceMimeType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 
 /**
  *  

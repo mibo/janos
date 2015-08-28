@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.sun.org.apache.bcel.internal.generic.BASTORE;
 import org.apache.log4j.Level;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.junit.Rule;
@@ -46,6 +47,10 @@ public abstract class BaseTest {
   protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private final Map<Class<?>, Level> disabledLoggings = new HashMap<Class<?>, Level>();
+
+  public BaseTest() {
+    disableLogging(this.getClass());
+  }
 
   /**
    * trace each junit error

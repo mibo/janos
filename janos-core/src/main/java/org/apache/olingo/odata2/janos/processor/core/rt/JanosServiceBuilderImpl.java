@@ -18,9 +18,10 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.core.rt;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
+import org.apache.olingo.odata2.api.ODataService;
+import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
+import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.api.rt.RuntimeDelegate;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.JanosService.JanosServiceBuilder;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
@@ -33,10 +34,9 @@ import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationFuncti
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.datasource.DualDataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
-import org.apache.olingo.odata2.api.ODataService;
-import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
-import org.apache.olingo.odata2.api.exception.ODataException;
-import org.apache.olingo.odata2.api.rt.RuntimeDelegate;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * AnnotationServiceFactoryInstance (ODataServiceFactory) implementation based on ListProcessor

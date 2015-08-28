@@ -15,15 +15,10 @@
  */
 package org.apache.olingo.odata2.janos.processor.core.model;
 
+import org.apache.olingo.odata2.api.annotation.edm.*;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.olingo.odata2.api.annotation.edm.EdmConcurrencyControl;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmFacets;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
 
 /**
  *

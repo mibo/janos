@@ -14,6 +14,22 @@
  */
 package org.apache.olingo.odata2.janos.processor.core.util;
 
+import org.apache.olingo.odata2.api.annotation.edm.EdmComplexType;
+import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
+import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
+import org.apache.olingo.odata2.api.annotation.edm.EdmFacets;
+import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
+import org.apache.olingo.odata2.api.annotation.edm.*;
+import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
+import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty.Multiplicity;
+import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
+import org.apache.olingo.odata2.api.annotation.edm.EdmType;
+import org.apache.olingo.odata2.api.edm.*;
+import org.apache.olingo.odata2.api.edm.provider.Facets;
+import org.apache.olingo.odata2.api.edm.provider.FunctionImportParameter;
+import org.apache.olingo.odata2.api.edm.provider.ReturnType;
+import org.apache.olingo.odata2.api.exception.ODataException;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -23,37 +39,7 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.UUID;
-
-import org.apache.olingo.odata2.api.annotation.edm.EdmComplexType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmFacets;
-import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
-import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
-import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty.Multiplicity;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmType;
-import org.apache.olingo.odata2.api.edm.EdmLiteralKind;
-import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
-import org.apache.olingo.odata2.api.edm.EdmSimpleTypeException;
-import org.apache.olingo.odata2.api.edm.EdmSimpleTypeKind;
-import org.apache.olingo.odata2.api.edm.FullQualifiedName;
-import org.apache.olingo.odata2.api.edm.provider.Facets;
-import org.apache.olingo.odata2.api.edm.provider.FunctionImportParameter;
-import org.apache.olingo.odata2.api.edm.provider.ReturnType;
-import org.apache.olingo.odata2.api.exception.ODataException;
+import java.util.*;
 
 /**
  *

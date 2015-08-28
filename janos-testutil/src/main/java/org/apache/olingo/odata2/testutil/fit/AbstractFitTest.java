@@ -50,6 +50,10 @@ public abstract class AbstractFitTest extends BaseTest {
     server = new TestServer(this.getClass().getSimpleName());
   }
 
+  public AbstractFitTest(String prefix) {
+    server = new TestServer(prefix + this.getClass().getSimpleName());
+  }
+
   protected URI getEndpoint() {
     return server.getEndpoint();
   }
@@ -86,6 +90,7 @@ public abstract class AbstractFitTest extends BaseTest {
     try {
       service = createService();
       server.startServer(service);
+
       JanosSampleDataGenerator.generateData(getEndpoint().toASCIIString());
 
     } catch (final ODataException e) {

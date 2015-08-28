@@ -20,9 +20,9 @@ import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
 
+import javax.persistence.Entity;
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.Entity;
 
 /**
  *

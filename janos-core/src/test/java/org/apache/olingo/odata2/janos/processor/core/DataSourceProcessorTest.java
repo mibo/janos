@@ -15,13 +15,13 @@
  */
 package org.apache.olingo.odata2.janos.processor.core;
 
+import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationDataSource;
 import org.apache.olingo.odata2.janos.processor.core.datasource.AnnotationValueAccess;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.model.Building;
-import org.apache.olingo.odata2.api.exception.ODataException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

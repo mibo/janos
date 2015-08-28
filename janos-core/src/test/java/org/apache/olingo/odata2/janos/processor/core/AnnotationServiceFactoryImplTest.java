@@ -15,22 +15,15 @@
  */
 package org.apache.olingo.odata2.janos.processor.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import junit.framework.Assert;
-
-import org.apache.olingo.odata2.janos.processor.core.model.Building;
-import org.apache.olingo.odata2.janos.processor.core.model.Employee;
-import org.apache.olingo.odata2.janos.processor.core.model.Manager;
-import org.apache.olingo.odata2.janos.processor.core.model.Photo;
-import org.apache.olingo.odata2.janos.processor.core.model.RefBase;
-import org.apache.olingo.odata2.janos.processor.core.model.Room;
-import org.apache.olingo.odata2.janos.processor.core.model.Team;
-import org.apache.olingo.odata2.janos.processor.core.rt.JanosServiceBuilderImpl;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.janos.processor.core.model.*;
+import org.apache.olingo.odata2.janos.processor.core.rt.JanosServiceBuilderImpl;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *

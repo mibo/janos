@@ -14,20 +14,6 @@
  */
 package org.apache.olingo.odata2.janos.processor.core.datasource;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
-import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
-import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceContent;
 import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceMimeType;
@@ -39,6 +25,16 @@ import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
 import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
+import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
+import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class AnnotationDataSource implements DataSource {
 
@@ -60,7 +56,7 @@ public class AnnotationDataSource implements DataSource {
     List<Class<?>> foundClasses = ClassHelper.loadClasses(packageToScan, new ClassHelper.ClassValidator() {
       @Override
       public boolean isClassValid(final Class<?> c) {
-        return null != c.getAnnotation(org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet.class);
+        return ANNOTATION_HELPER.isEdmAnnotated(c);
       }
     });
 
@@ -75,12 +71,12 @@ public class AnnotationDataSource implements DataSource {
         if(entitySetName != null) {
           dataStoreManager.grantDataStore(entitySetName, clz);
         } else if (!ANNOTATION_HELPER.isEdmAnnotated(clz)) {
-          throw new ODataException("Found not annotated class during DataStore initilization of type: "
+          throw new ODataException("Found not annotated class during DataStore initialization of type: "
               + clz.getName());
         }
       }
     } catch (DataStoreException e) {
-      throw new ODataException("Error in DataStore initilization with message: " + e.getMessage(), e);
+      throw new ODataException("Error in DataStore initialization with message: " + e.getMessage(), e);
     }
   }
 

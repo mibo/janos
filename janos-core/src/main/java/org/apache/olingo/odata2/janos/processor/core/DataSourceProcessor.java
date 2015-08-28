@@ -18,23 +18,6 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.core;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.apache.olingo.odata2.api.processor.ODataSingleProcessor;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
-import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionExecutor;
-import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.api.ODataCallback;
 import org.apache.olingo.odata2.api.batch.BatchHandler;
 import org.apache.olingo.odata2.api.batch.BatchRequestPart;
@@ -42,80 +25,27 @@ import org.apache.olingo.odata2.api.batch.BatchResponsePart;
 import org.apache.olingo.odata2.api.commons.HttpContentType;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.commons.InlineCount;
-import org.apache.olingo.odata2.api.edm.Edm;
-import org.apache.olingo.odata2.api.edm.EdmConcurrencyMode;
-import org.apache.olingo.odata2.api.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.edm.EdmException;
-import org.apache.olingo.odata2.api.edm.EdmFunctionImport;
-import org.apache.olingo.odata2.api.edm.EdmLiteral;
-import org.apache.olingo.odata2.api.edm.EdmLiteralKind;
-import org.apache.olingo.odata2.api.edm.EdmMapping;
-import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
-import org.apache.olingo.odata2.api.edm.EdmNavigationProperty;
-import org.apache.olingo.odata2.api.edm.EdmProperty;
-import org.apache.olingo.odata2.api.edm.EdmSimpleType;
-import org.apache.olingo.odata2.api.edm.EdmSimpleTypeException;
-import org.apache.olingo.odata2.api.edm.EdmSimpleTypeKind;
-import org.apache.olingo.odata2.api.edm.EdmStructuralType;
-import org.apache.olingo.odata2.api.edm.EdmType;
-import org.apache.olingo.odata2.api.edm.EdmTypeKind;
-import org.apache.olingo.odata2.api.edm.EdmTyped;
-import org.apache.olingo.odata2.api.ep.EntityProvider;
-import org.apache.olingo.odata2.api.ep.EntityProviderBatchProperties;
-import org.apache.olingo.odata2.api.ep.EntityProviderException;
-import org.apache.olingo.odata2.api.ep.EntityProviderReadProperties;
-import org.apache.olingo.odata2.api.ep.EntityProviderWriteProperties;
-import org.apache.olingo.odata2.api.ep.callback.OnWriteEntryContent;
-import org.apache.olingo.odata2.api.ep.callback.OnWriteFeedContent;
-import org.apache.olingo.odata2.api.ep.callback.WriteCallbackContext;
-import org.apache.olingo.odata2.api.ep.callback.WriteEntryCallbackContext;
-import org.apache.olingo.odata2.api.ep.callback.WriteEntryCallbackResult;
-import org.apache.olingo.odata2.api.ep.callback.WriteFeedCallbackContext;
-import org.apache.olingo.odata2.api.ep.callback.WriteFeedCallbackResult;
+import org.apache.olingo.odata2.api.edm.*;
+import org.apache.olingo.odata2.api.ep.*;
+import org.apache.olingo.odata2.api.ep.callback.*;
 import org.apache.olingo.odata2.api.ep.entry.ODataEntry;
 import org.apache.olingo.odata2.api.ep.feed.ODataFeed;
-import org.apache.olingo.odata2.api.exception.ODataApplicationException;
-import org.apache.olingo.odata2.api.exception.ODataBadRequestException;
-import org.apache.olingo.odata2.api.exception.ODataException;
-import org.apache.olingo.odata2.api.exception.ODataHttpException;
-import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
-import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
+import org.apache.olingo.odata2.api.exception.*;
 import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.apache.olingo.odata2.api.processor.ODataRequest;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
-import org.apache.olingo.odata2.api.uri.ExpandSelectTreeNode;
-import org.apache.olingo.odata2.api.uri.KeyPredicate;
-import org.apache.olingo.odata2.api.uri.NavigationSegment;
-import org.apache.olingo.odata2.api.uri.PathInfo;
-import org.apache.olingo.odata2.api.uri.UriParser;
-import org.apache.olingo.odata2.api.uri.expression.BinaryExpression;
-import org.apache.olingo.odata2.api.uri.expression.CommonExpression;
-import org.apache.olingo.odata2.api.uri.expression.ExpressionKind;
-import org.apache.olingo.odata2.api.uri.expression.FilterExpression;
-import org.apache.olingo.odata2.api.uri.expression.LiteralExpression;
-import org.apache.olingo.odata2.api.uri.expression.MemberExpression;
-import org.apache.olingo.odata2.api.uri.expression.MethodExpression;
-import org.apache.olingo.odata2.api.uri.expression.OrderByExpression;
-import org.apache.olingo.odata2.api.uri.expression.OrderExpression;
-import org.apache.olingo.odata2.api.uri.expression.PropertyExpression;
-import org.apache.olingo.odata2.api.uri.expression.SortOrder;
-import org.apache.olingo.odata2.api.uri.expression.UnaryExpression;
-import org.apache.olingo.odata2.api.uri.info.DeleteUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetComplexPropertyUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetEntityCountUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetEntityLinkCountUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetEntityLinkUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetEntitySetCountUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetEntitySetLinksCountUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetEntitySetLinksUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetEntitySetUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetEntityUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetFunctionImportUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetMediaResourceUriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetSimplePropertyUriInfo;
-import org.apache.olingo.odata2.api.uri.info.PostUriInfo;
-import org.apache.olingo.odata2.api.uri.info.PutMergePatchUriInfo;
+import org.apache.olingo.odata2.api.processor.ODataSingleProcessor;
+import org.apache.olingo.odata2.api.uri.*;
+import org.apache.olingo.odata2.api.uri.expression.*;
+import org.apache.olingo.odata2.api.uri.info.*;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
+import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionExecutor;
+import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionSource;
+import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
+
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * Implementation of the centralized parts of OData processing,
@@ -154,7 +84,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       @Override
       public Object executeFunction(EdmFunctionImport function, Map<String, Object> parameters, Map<String, Object> keys)
           throws ODataNotImplementedException, ODataNotFoundException, EdmException, ODataApplicationException {
-        return null;
+        throw new ODataNotImplementedException(ODataNotImplementedException.COMMON, "No FunctionExecutor defined.");
       }
     };
   }

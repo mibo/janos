@@ -18,62 +18,19 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.core.edm;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
-import org.apache.olingo.odata2.api.edm.provider.FunctionImportParameter;
-import org.apache.olingo.odata2.api.edm.provider.ReturnType;
-import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
-import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
-import org.apache.olingo.odata2.api.annotation.edm.EdmComplexType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmConcurrencyControl;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmFacets;
-import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
-import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceContent;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmType;
+import org.apache.olingo.odata2.api.annotation.edm.*;
 import org.apache.olingo.odata2.api.edm.EdmConcurrencyMode;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
-import org.apache.olingo.odata2.api.edm.provider.AnnotationAttribute;
-import org.apache.olingo.odata2.api.edm.provider.AnnotationElement;
-import org.apache.olingo.odata2.api.edm.provider.Association;
-import org.apache.olingo.odata2.api.edm.provider.AssociationEnd;
-import org.apache.olingo.odata2.api.edm.provider.AssociationSet;
-import org.apache.olingo.odata2.api.edm.provider.AssociationSetEnd;
-import org.apache.olingo.odata2.api.edm.provider.ComplexProperty;
-import org.apache.olingo.odata2.api.edm.provider.ComplexType;
-import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
-import org.apache.olingo.odata2.api.edm.provider.EntityContainer;
-import org.apache.olingo.odata2.api.edm.provider.EntityContainerInfo;
-import org.apache.olingo.odata2.api.edm.provider.EntitySet;
-import org.apache.olingo.odata2.api.edm.provider.EntityType;
-import org.apache.olingo.odata2.api.edm.provider.Facets;
-import org.apache.olingo.odata2.api.edm.provider.FunctionImport;
-import org.apache.olingo.odata2.api.edm.provider.Key;
-import org.apache.olingo.odata2.api.edm.provider.NavigationProperty;
-import org.apache.olingo.odata2.api.edm.provider.Property;
-import org.apache.olingo.odata2.api.edm.provider.PropertyRef;
-import org.apache.olingo.odata2.api.edm.provider.Schema;
-import org.apache.olingo.odata2.api.edm.provider.SimpleProperty;
-import org.apache.olingo.odata2.api.edm.provider.Using;
+import org.apache.olingo.odata2.api.edm.provider.*;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
+import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Provider for the entity data model used in the reference scenario
