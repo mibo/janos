@@ -27,6 +27,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.testutil.TestUtilRuntimeException;
+import org.apache.olingo.odata2.testutil.data.JanosSampleDataGenerator;
 import org.apache.olingo.odata2.testutil.server.ServerRuntimeException;
 import org.apache.olingo.odata2.testutil.server.TestServer;
 import org.junit.After;
@@ -47,6 +48,10 @@ public abstract class AbstractFitTest extends BaseTest {
 
   public AbstractFitTest() {
     server = new TestServer(this.getClass().getSimpleName());
+  }
+
+  public AbstractFitTest(String prefix) {
+    server = new TestServer(prefix + this.getClass().getSimpleName());
   }
 
   protected URI getEndpoint() {
@@ -85,6 +90,9 @@ public abstract class AbstractFitTest extends BaseTest {
     try {
       service = createService();
       server.startServer(service);
+
+      JanosSampleDataGenerator.generateData(getEndpoint().toASCIIString());
+
     } catch (final ODataException e) {
       throw new TestUtilRuntimeException(e);
     }

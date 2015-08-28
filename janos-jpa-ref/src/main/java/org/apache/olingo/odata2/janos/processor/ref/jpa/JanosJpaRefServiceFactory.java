@@ -16,22 +16,14 @@ package org.apache.olingo.odata2.janos.processor.ref.jpa;
 
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
 import org.apache.olingo.odata2.janos.processor.core.datasource.JpaAnnotationDataStore;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Building;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.City;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Employee;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Photo;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Room;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Location;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Manager;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.RefBase;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.ResourceHelper;
-import org.apache.olingo.odata2.janos.processor.ref.jpa.model.Team;
+import org.apache.olingo.odata2.janos.processor.ref.jpa.model.*;
 import org.apache.olingo.odata2.api.ODataCallback;
 import org.apache.olingo.odata2.api.ODataDebugCallback;
 import org.apache.olingo.odata2.api.ODataService;
@@ -69,13 +61,14 @@ public class JanosJpaRefServiceFactory extends ODataServiceFactory {
       ANNOTATED_MODEL_CLASSES.add(RefBase.class);
       ANNOTATED_MODEL_CLASSES.add(Room.class);
       ANNOTATED_MODEL_CLASSES.add(Team.class);
+      ANNOTATED_MODEL_CLASSES.add(RefFunctions.class);
     }
     final static ODataService ANNOTATION_ODATA_SERVICE;
 
     static {
       try {
         ANNOTATION_ODATA_SERVICE = JanosService.createFor(ANNOTATED_MODEL_CLASSES).build();
-        initializeSampleData();
+//        initializeSampleData();
       } catch (ODataApplicationException ex) {
         throw new RuntimeException("Exception during sample data generation.", ex);
       } catch (ODataException ex) {
@@ -170,9 +163,17 @@ public class JanosJpaRefServiceFactory extends ODataServiceFactory {
     roomDs.create(createRoom("Huge yellow room", 120, 1, yellowBuilding));
 
     DataStore<Employee> employeeDataStore = getDataStore(Employee.class);
+    Iterator<Photo> iterator = photoDs.read().iterator();
+    Photo photo = iterator.next();
     employeeDataStore.create(createEmployee("first Employee",
-        new Location("Norge", "8392", "Ä"), 42, null,
-        photoDs.read().iterator().next().getImage(), photoDs.read().iterator().next().getImageType(),
+        new Location("Nörge", "8392", "Northpole"), 42, null,
+        photo.getImage(), photo.getImageType(),
+        "http://localhost/image/first.png",
+        null, teamDs.read().iterator().next(), roomDs.read().iterator().next()));
+    photo = iterator.next();
+    employeeDataStore.create(createEmployee("Second Employee",
+        new Location("Nörge", "8392", "Northpole"), 34, null,
+        photo.getImage(), photo.getImageType(),
         "http://localhost/image/first.png",
         null, teamDs.read().iterator().next(), roomDs.read().iterator().next()));
   }

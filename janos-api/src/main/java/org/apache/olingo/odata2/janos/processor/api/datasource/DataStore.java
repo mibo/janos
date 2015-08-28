@@ -32,7 +32,7 @@ public interface DataStore<T> {
 
   Class<T> getDataTypeClass();
 
-  String getEntityTypeName();
+  String getName();
 
   /**
    * Are the key values equal for both instances.

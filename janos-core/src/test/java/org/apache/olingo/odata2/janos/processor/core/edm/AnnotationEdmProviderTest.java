@@ -15,28 +15,6 @@
  */
 package org.apache.olingo.odata2.janos.processor.core.edm;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.olingo.odata2.janos.processor.core.model.Building;
-import org.apache.olingo.odata2.janos.processor.core.model.City;
-import org.apache.olingo.odata2.janos.processor.core.model.Employee;
-import org.apache.olingo.odata2.janos.processor.core.model.Location;
-import org.apache.olingo.odata2.janos.processor.core.model.Manager;
-import org.apache.olingo.odata2.janos.processor.core.model.ModelSharedConstants;
-import org.apache.olingo.odata2.janos.processor.core.model.Photo;
-import org.apache.olingo.odata2.janos.processor.core.model.RefBase;
-import org.apache.olingo.odata2.janos.processor.core.model.Room;
-import org.apache.olingo.odata2.janos.processor.core.model.Team;
 import org.apache.olingo.odata2.api.annotation.edm.EdmComplexType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
 import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
@@ -44,23 +22,17 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
 import org.apache.olingo.odata2.api.edm.EdmConcurrencyMode;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
-import org.apache.olingo.odata2.api.edm.provider.Association;
-import org.apache.olingo.odata2.api.edm.provider.AssociationEnd;
-import org.apache.olingo.odata2.api.edm.provider.AssociationSet;
-import org.apache.olingo.odata2.api.edm.provider.ComplexProperty;
-import org.apache.olingo.odata2.api.edm.provider.ComplexType;
-import org.apache.olingo.odata2.api.edm.provider.EntityContainer;
-import org.apache.olingo.odata2.api.edm.provider.EntityContainerInfo;
-import org.apache.olingo.odata2.api.edm.provider.EntitySet;
-import org.apache.olingo.odata2.api.edm.provider.EntityType;
-import org.apache.olingo.odata2.api.edm.provider.FunctionImport;
-import org.apache.olingo.odata2.api.edm.provider.Key;
-import org.apache.olingo.odata2.api.edm.provider.NavigationProperty;
-import org.apache.olingo.odata2.api.edm.provider.Property;
-import org.apache.olingo.odata2.api.edm.provider.PropertyRef;
-import org.apache.olingo.odata2.api.edm.provider.Schema;
+import org.apache.olingo.odata2.api.edm.provider.*;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.janos.processor.core.model.*;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  *

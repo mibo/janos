@@ -89,6 +89,10 @@ th, td { border: 1px solid; padding: 20px; }
  					<li><a href="ImScenario.svc/Photos(Name='Big%20picture',Type='JPEG')/$value"
                            target="_blank">Photos(Name='Big%20picture',Type='JPEG')/$value</a></li>
         </ul>
+        <h3>Functions</h3>
+        <ul>
+          <li><a href="ImScenario.svc/citySearch?cityName=%27pol%27" target="_blank">ImScenario.svc/citySearch?cityName=%27pol%27</a></li>
+        </ul>
 			</td>
 
       <td valign="top">
@@ -145,6 +149,10 @@ th, td { border: 1px solid; padding: 20px; }
                  target="_blank">Photos(Name='Small%20picture',Type='GIF')</a></li>
           <li><a href="JpaScenario.svc/Photos(Name='Big%20picture',Type='JPEG')/$value"
                  target="_blank">Photos(Name='Big%20picture',Type='JPEG')/$value</a></li>
+        </ul>
+        <h3>Functions</h3>
+        <ul>
+          <li><a href="JpaScenario.svc/citySearch?cityName=%27pol%27" target="_blank">JpaScenario.svc/citySearch?cityName=%27pol%27</a></li>
         </ul>
       </td>
     </tr>

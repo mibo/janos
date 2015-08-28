@@ -18,28 +18,60 @@ package org.apache.olingo.odata2.janos.processor.core.datasource;
 
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
 
+import javax.persistence.Entity;
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.Entity;
 
 /**
  *
  */
-public class DualDataStoreFactory implements DataStoreFactory {
+public class DualDataStoreManager implements DataStoreManager {
 
   private final Map<String, String> properties = new HashMap<>();
-  
+
+  private final Map<String, DataStore<Object>> dataStores = new HashMap<>();
+
+
   @Override
-  public DataStore<?> createDataStore(Class<?> clz) throws DataStoreException {
+  public <T> DataStore<T> createDataStore(Class<T> clz) throws DataStoreException {
     return createDataStore(clz, properties);
   }
 
   @Override
-  public DataStore<?> createDataStore(Class<?> clz, Map<String, String> properties) throws DataStoreException {
+  public <T> DataStore<T> createDataStore(Class<T> clz, Map<String, String> properties) throws DataStoreException {
     boolean keepPersistent = Boolean.parseBoolean(properties.get(KEEP_PERSISTENT));
     return createInstance(clz, keepPersistent);
+  }
+
+  @Override
+  public <T> DataStore<T> grantDataStore(String name, Class<T> clz) throws DataStoreException {
+    return grantDataStore(name, clz, properties);
+  }
+
+  @Override
+  public <T> DataStore<T> grantDataStore(String name, Class<T> clz, Map<String, String> properties) throws DataStoreException {
+    DataStore<T> ds = getDataStore(name, clz);
+    if(ds == null) {
+      ds = createDataStore(clz);
+      dataStores.put(name, (DataStore<Object>) ds);
+    }
+    return ds;
+  }
+
+  @Override
+  public DataStore<Object> getDataStore(String name) {
+    return dataStores.get(name);
+  }
+
+  @Override
+  public <T> DataStore<T> getDataStore(String name, Class<T> clz) throws DataStoreException {
+    DataStore<?> ds = getDataStore(name);
+    if(ds != null && clz != ds.getDataTypeClass()) {
+      throw new DataStoreException("Unable to cast required class.");
+    }
+    return (DataStore<T>) ds;
   }
 
   @Override
@@ -47,7 +79,7 @@ public class DualDataStoreFactory implements DataStoreFactory {
     properties.put(name, value);
   }
   
-  public DataStore<?> createInstance(Class<?> clz, boolean keepPersistent) throws DataStoreException {
+  public <T> DataStore<T>  createInstance(Class<T> clz, boolean keepPersistent) throws DataStoreException {
     if(isJpaAnnotated(clz)) {
       String persistenceName = System.getProperty(JpaAnnotationDataStore.PERSISTENCE_NAME);
       if(persistenceName == null) {

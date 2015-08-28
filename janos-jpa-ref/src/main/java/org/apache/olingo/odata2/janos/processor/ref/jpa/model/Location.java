@@ -21,11 +21,7 @@ package org.apache.olingo.odata2.janos.processor.ref.jpa.model;
 import org.apache.olingo.odata2.api.annotation.edm.EdmComplexType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 /**
  *  
@@ -38,7 +34,7 @@ public class Location {
   private String id;
   @EdmProperty
   private String country;
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @EdmProperty
   private City city;
 

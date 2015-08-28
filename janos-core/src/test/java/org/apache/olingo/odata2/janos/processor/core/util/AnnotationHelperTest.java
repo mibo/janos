@@ -15,22 +15,17 @@
  */
 package org.apache.olingo.odata2.janos.processor.core.util;
 
+import junit.framework.Assert;
+import org.apache.olingo.odata2.api.annotation.edm.*;
+import org.apache.olingo.odata2.api.edm.FullQualifiedName;
+import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.janos.processor.core.model.Location;
+import org.junit.Test;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import junit.framework.Assert;
-
-import org.apache.olingo.odata2.janos.processor.core.model.Location;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmType;
-import org.apache.olingo.odata2.api.edm.FullQualifiedName;
-import org.apache.olingo.odata2.api.exception.ODataException;
-import org.junit.Test;
 
 /**
  *

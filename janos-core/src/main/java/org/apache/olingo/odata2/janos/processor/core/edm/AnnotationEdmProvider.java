@@ -18,58 +18,19 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.core.edm;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
-import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
-import org.apache.olingo.odata2.api.annotation.edm.EdmComplexType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmConcurrencyControl;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmFacets;
-import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
-import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceContent;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmType;
+import org.apache.olingo.odata2.api.annotation.edm.*;
 import org.apache.olingo.odata2.api.edm.EdmConcurrencyMode;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
-import org.apache.olingo.odata2.api.edm.provider.AnnotationAttribute;
-import org.apache.olingo.odata2.api.edm.provider.AnnotationElement;
-import org.apache.olingo.odata2.api.edm.provider.Association;
-import org.apache.olingo.odata2.api.edm.provider.AssociationEnd;
-import org.apache.olingo.odata2.api.edm.provider.AssociationSet;
-import org.apache.olingo.odata2.api.edm.provider.AssociationSetEnd;
-import org.apache.olingo.odata2.api.edm.provider.ComplexProperty;
-import org.apache.olingo.odata2.api.edm.provider.ComplexType;
-import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
-import org.apache.olingo.odata2.api.edm.provider.EntityContainer;
-import org.apache.olingo.odata2.api.edm.provider.EntityContainerInfo;
-import org.apache.olingo.odata2.api.edm.provider.EntitySet;
-import org.apache.olingo.odata2.api.edm.provider.EntityType;
-import org.apache.olingo.odata2.api.edm.provider.Facets;
-import org.apache.olingo.odata2.api.edm.provider.FunctionImport;
-import org.apache.olingo.odata2.api.edm.provider.Key;
-import org.apache.olingo.odata2.api.edm.provider.NavigationProperty;
-import org.apache.olingo.odata2.api.edm.provider.Property;
-import org.apache.olingo.odata2.api.edm.provider.PropertyRef;
-import org.apache.olingo.odata2.api.edm.provider.Schema;
-import org.apache.olingo.odata2.api.edm.provider.SimpleProperty;
-import org.apache.olingo.odata2.api.edm.provider.Using;
+import org.apache.olingo.odata2.api.edm.provider.*;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
+import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Provider for the entity data model used in the reference scenario
@@ -295,6 +256,52 @@ public class AnnotationEdmProvider extends EdmProvider {
         builder.addEntitySet(createEntitySet(typeName, aClass));
       }
     }
+
+    Method[] methods = aClass.getMethods();
+    for (Method method : methods) {
+      EdmFunctionImport functionImport = method.getAnnotation(EdmFunctionImport.class);
+      if (functionImport != null) {
+        String containerName = ANNOTATION_HELPER.extractContainerName(aClass);
+        ContainerBuilder builder = containerName2ContainerBuilder.get(containerName);
+        if (builder == null) {
+          String namespace = ANNOTATION_HELPER.generateNamespace(aClass);
+          builder = ContainerBuilder.init(namespace, containerName);
+          containerName2ContainerBuilder.put(containerName, builder);
+        }
+        builder.addFunctionImport(createFunctionImport(method));
+      }
+    }
+  }
+
+  private FunctionImport createFunctionImport(final Method method) {
+    String entitySetName = ANNOTATION_HELPER.extractEntitySetName(method);
+    String httpMethod = ANNOTATION_HELPER.extractHttpMethod(method);
+    String functionImportName = ANNOTATION_HELPER.extractFunctionImportName(method);
+    ArrayList<FunctionImportParameter> functionImportParameters = ANNOTATION_HELPER.extractFunctionImportParameters(method);
+    ReturnType returnType = ANNOTATION_HELPER.extractReturnType(method);
+
+    FunctionImport fi = new FunctionImport();
+    // Data which is not available though it should be?
+    //    fi.setAnnotationAttributes(annotationAttributes);
+    //    fi.setAnnotationElements(annotationElements);
+    //    fi.setDocumentation(documentation);
+    if (entitySetName != null && !entitySetName.isEmpty()) {
+      fi.setEntitySet(entitySetName);
+    }
+    if (httpMethod != null && !httpMethod.isEmpty()) {
+      fi.setHttpMethod(httpMethod);
+    }
+    // Data which is not available though it should be?
+    //    fi.setMapping(mapping);
+    fi.setName(functionImportName);
+    if (functionImportParameters != null && !functionImportParameters.isEmpty()) {
+      fi.setParameters(functionImportParameters);
+    }
+    if (returnType != null) {
+      fi.setReturnType(returnType);
+    }
+
+    return fi;
   }
 
   private EntitySet createEntitySet(final FullQualifiedName typeName, final Class<?> entitySetClass) {
@@ -366,7 +373,7 @@ public class AnnotationEdmProvider extends EdmProvider {
       for (Field field : fields) {
         EdmProperty ep = field.getAnnotation(EdmProperty.class);
         if (ep != null) {
-          properties.add(createProperty(ep, field));
+          properties.add(createProperty(ep, field, namespace));
           EdmKey eti = field.getAnnotation(EdmKey.class);
           if (eti != null) {
             keyProperties.add(createKeyProperty(ep, field));
@@ -450,9 +457,9 @@ public class AnnotationEdmProvider extends EdmProvider {
       return keyProperty.setName(entityName);
     }
 
-    private Property createProperty(final EdmProperty ep, final Field field) {
+    private Property createProperty(final EdmProperty ep, final Field field, final String defaultNamespace) {
       if (isAnnotatedEntity(field.getType())) {
-        return createComplexProperty(field);
+        return createComplexProperty(field, defaultNamespace);
       } else {
         return createSimpleProperty(ep, field);
       }
@@ -465,7 +472,7 @@ public class AnnotationEdmProvider extends EdmProvider {
       //
       EdmType type = ep.type();
       if (type == EdmType.NULL) {
-        type = getEdmType(field.getType());
+        type = ANNOTATION_HELPER.mapType(field.getType());
       }
       sp.setType(ANNOTATION_HELPER.mapTypeKind(type));
       sp.setFacets(createFacets(ep.facets(), field.getAnnotation(EdmConcurrencyControl.class)));
@@ -489,16 +496,19 @@ public class AnnotationEdmProvider extends EdmProvider {
       return resultFacets;
     }
 
-    private Property createComplexProperty(final Field field) {
+    private Property createComplexProperty(final Field field, final String defaultNamespace) {
       ComplexProperty cp = new ComplexProperty();
       // settings from property
       String entityName = ANNOTATION_HELPER.getPropertyName(field);
       cp.setName(entityName);
 
       // settings from related complex entity
-      FullQualifiedName fqn = ANNOTATION_HELPER.extractComplexTypeFqn(field.getType());
-      cp.setType(fqn);
-
+      EdmComplexType ece = field.getType().getAnnotation(EdmComplexType.class);
+      String complexEntityNamespace = ece.namespace();
+      if (complexEntityNamespace.isEmpty()) {
+        complexEntityNamespace = defaultNamespace;
+      }
+      cp.setType(new FullQualifiedName(complexEntityNamespace, ANNOTATION_HELPER.extractComplexTypeName(field.getType())))  ;
       return cp;
     }
 
@@ -516,69 +526,37 @@ public class AnnotationEdmProvider extends EdmProvider {
       return navProp;
     }
 
-    // private EdmSimpleTypeKind getEdmSimpleType(Class<?> type) {
-    // if (type == String.class) {
-    // return EdmType.String;
-    // } else if (type == boolean.class || type == Boolean.class) {
-    // return EdmType.Boolean;
-    // } else if (type == byte.class || type == Byte.class) {
-    // return EdmType.SByte;
-    // } else if (type == short.class || type == Short.class) {
-    // return EdmType.Int16;
-    // } else if (type == int.class || type == Integer.class) {
-    // return EdmType.Int32;
-    // } else if (type == long.class || type == Long.class) {
-    // return EdmType.Int64;
-    // } else if (type == double.class || type == Double.class) {
-    // return EdmType.Double;
-    // } else if (type == float.class || type == Float.class) {
-    // return EdmType.Single;
-    // } else if (type == BigInteger.class || type == BigDecimal.class) {
-    // return EdmType.Decimal;
-    // } else if (type == Byte[].class || type == byte[].class) {
-    // return EdmType.Binary;
-    // } else if (type == Date.class) {
-    // return EdmType.DateTime;
-    // } else if (type == Calendar.class) {
-    // return EdmType.DateTimeOffset;
-    // } else if (type == UUID.class) {
-    // return EdmType.Guid;
-    // } else {
-    // throw new UnsupportedOperationException("Not yet supported type '" + type + "'.");
-    // }
-    // }
-
-    private EdmType getEdmType(final Class<?> type) {
-      if (type == String.class) {
-        return EdmType.STRING;
-      } else if (type == boolean.class || type == Boolean.class) {
-        return EdmType.BOOLEAN;
-      } else if (type == byte.class || type == Byte.class) {
-        return EdmType.SBYTE;
-      } else if (type == short.class || type == Short.class) {
-        return EdmType.INT16;
-      } else if (type == int.class || type == Integer.class) {
-        return EdmType.INT32;
-      } else if (type == long.class || type == Long.class) {
-        return EdmType.INT64;
-      } else if (type == double.class || type == Double.class) {
-        return EdmType.DOUBLE;
-      } else if (type == float.class || type == Float.class) {
-        return EdmType.SINGLE;
-      } else if (type == BigInteger.class || type == BigDecimal.class) {
-        return EdmType.DECIMAL;
-      } else if (type == Byte[].class || type == byte[].class) {
-        return EdmType.BINARY;
-      } else if (type == Date.class) {
-        return EdmType.DATE_TIME;
-      } else if (type == Calendar.class) {
-        return EdmType.DATE_TIME_OFFSET;
-      } else if (type == UUID.class) {
-        return EdmType.GUID;
-      } else {
-        throw new UnsupportedOperationException("Not yet supported type '" + type + "'.");
-      }
-    }
+//    private EdmType getEdmType(final Class<?> type) {
+//      if (type == String.class) {
+//        return EdmType.STRING;
+//      } else if (type == boolean.class || type == Boolean.class) {
+//        return EdmType.BOOLEAN;
+//      } else if (type == byte.class || type == Byte.class) {
+//        return EdmType.SBYTE;
+//      } else if (type == short.class || type == Short.class) {
+//        return EdmType.INT16;
+//      } else if (type == int.class || type == Integer.class) {
+//        return EdmType.INT32;
+//      } else if (type == long.class || type == Long.class) {
+//        return EdmType.INT64;
+//      } else if (type == double.class || type == Double.class) {
+//        return EdmType.DOUBLE;
+//      } else if (type == float.class || type == Float.class) {
+//        return EdmType.SINGLE;
+//      } else if (type == BigInteger.class || type == BigDecimal.class) {
+//        return EdmType.DECIMAL;
+//      } else if (type == Byte[].class || type == byte[].class) {
+//        return EdmType.BINARY;
+//      } else if (type == Date.class) {
+//        return EdmType.DATE_TIME;
+//      } else if (type == Calendar.class) {
+//        return EdmType.DATE_TIME_OFFSET;
+//      } else if (type == UUID.class) {
+//        return EdmType.GUID;
+//      } else {
+//        throw new UnsupportedOperationException("Not yet supported type '" + type + "'.");
+//      }
+//    }
 
     private Class<?> checkForBaseEntityClass(final Class<?> aClass) {
       Class<?> superClass = aClass.getSuperclass();
@@ -738,6 +716,11 @@ public class AnnotationEdmProvider extends EdmProvider {
 
     public ContainerBuilder addEntitySet(final EntitySet entitySet) {
       entitySets.add(entitySet);
+      return this;
+    }
+
+    public ContainerBuilder addFunctionImport(final FunctionImport functionImport) {
+      functionImports.add(functionImport);
       return this;
     }
 

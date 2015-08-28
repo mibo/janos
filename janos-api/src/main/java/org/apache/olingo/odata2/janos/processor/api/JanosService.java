@@ -21,7 +21,7 @@ package org.apache.olingo.odata2.janos.processor.api;
 import java.util.Collection;
 
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreFactory;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
 import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
@@ -90,7 +90,7 @@ public abstract class JanosService {
      */
     JanosServiceBuilder createFor(Collection<Class<?>> annotatedClasses) throws ODataException;
 
-    JanosServiceBuilder with(DataStoreFactory dataStore);
+    JanosServiceBuilder with(DataStoreManager dataStore);
 
     JanosServiceBuilder with(ValueAccess valueAccess);
 

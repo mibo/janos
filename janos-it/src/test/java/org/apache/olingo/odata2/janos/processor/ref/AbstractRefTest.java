@@ -42,6 +42,7 @@ import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.commons.ODataHttpMethod;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.testutil.data.JanosSampleDataGenerator;
 import org.apache.olingo.odata2.testutil.fit.AbstractFitTest;
 import org.apache.olingo.odata2.testutil.helper.StringHelper;
 import org.junit.Ignore;
@@ -57,9 +58,11 @@ import org.junit.runners.Parameterized;
 public class AbstractRefTest extends AbstractFitTest {
 
   private static final Logger LOG = Logger.getLogger(AbstractRefTest.class);
+  private final String modelPackageUnderTest;
 
   public AbstractRefTest(String modelPackage) {
-    super();
+    super(modelPackage);
+    modelPackageUnderTest = modelPackage;
     LOG.trace("Test servlet with model " + modelPackage);
   }
 
@@ -72,7 +75,7 @@ public class AbstractRefTest extends AbstractFitTest {
 
   @Override
   protected ODataService createService() throws ODataException {
-    return JanosService.createFor(MODEL_PACKAGE).build();
+    return JanosService.createFor(modelPackageUnderTest).build();
   }
 
   @Parameterized.Parameters

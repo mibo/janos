@@ -18,7 +18,7 @@
  * under the License.
  * ****************************************************************************
  */
-package org.apache.olingo.odata2.janos.processor.ref.jpa.util;
+package org.apache.olingo.odata2.testutil.data;
 
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ import java.net.URL;
 /**
  * Data generator for annotation sample service.
  */
-public class JpaSampleDataGenerator {
+public class JanosSampleDataGenerator {
   public static final String HTTP_METHOD_PUT = "PUT";
   public static final String HTTP_METHOD_POST = "POST";
 
@@ -43,7 +43,7 @@ public class JpaSampleDataGenerator {
 
   public static final String APPLICATION_JSON = "application/json";
 
-  private static final Logger LOG = LoggerFactory.getLogger(JpaSampleDataGenerator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(JanosSampleDataGenerator.class);
   private static final boolean PRINT_RAW_CONTENT = true;
 
   public static void main(String[] args) {
@@ -55,7 +55,7 @@ public class JpaSampleDataGenerator {
   }
 
   public static void generateData(String serviceUrl) {
-    JpaSampleDataGenerator app = new JpaSampleDataGenerator();
+    JanosSampleDataGenerator app = new JanosSampleDataGenerator();
     app.generateSampleData(serviceUrl);
   }
 

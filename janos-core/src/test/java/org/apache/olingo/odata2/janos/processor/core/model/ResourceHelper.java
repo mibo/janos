@@ -18,12 +18,11 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.core.model;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 /**
  *

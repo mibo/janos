@@ -18,21 +18,16 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.core.datasource;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
-import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -86,7 +81,7 @@ public class InMemoryDataStore<T> implements DataStore<T> {
   }
 
   @Override
-  public String getEntityTypeName() {
+  public String getName() {
     return ANNOTATION_HELPER.extractEntityTypeName(dataTypeClass);
   }
 

@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -16,32 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.core.model;
-
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty.Multiplicity;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.apache.olingo.odata2.janos.processor.api.datasource;
 
 /**
- *
+ * Created by mibo on 23.08.15.
  */
-@EdmEntityType(name = "Manager", namespace = ModelSharedConstants.NAMESPACE_1)
-@EdmEntitySet(name = "Managers")
-public class Manager extends Employee {
+public interface FunctionExecutor {
 
-  @EdmNavigationProperty(name = "nm_Employees", association = "ManagerEmployees",
-      toMultiplicity = Multiplicity.MANY)
-  private List<Employee> employees = new ArrayList<Employee>();
-
-  public Manager(final String id, final String name) {
-    super(id, name);
-  }
-
-  public List<Employee> getEmployees() {
-    return employees;
-  }
+  void init(DataStoreManager dataStore);
 }

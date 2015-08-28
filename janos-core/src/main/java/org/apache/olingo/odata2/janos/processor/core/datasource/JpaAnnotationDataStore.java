@@ -15,18 +15,14 @@
  */
 package org.apache.olingo.odata2.janos.processor.core.datasource;
 
-import java.util.Collection;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
-
+import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
-import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
+
+import javax.persistence.*;
+import java.util.Collection;
 
 /**
  *
@@ -61,7 +57,7 @@ public class JpaAnnotationDataStore<T> implements DataStore<T> {
   }
 
   @Override
-  public String getEntityTypeName() {
+  public String getName() {
     return ANNOTATION_HELPER.extractEntityTypeName(dataTypeClass);
   }
 

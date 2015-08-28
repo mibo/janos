@@ -63,23 +63,6 @@ public interface DataSource {
       ODataNotFoundException, EdmException, ODataApplicationException;
 
   /**
-   * <p>Retrieves data for the specified function import and key.</p>
-   * <p>This method is called also for function imports that have defined in
-   * their metadata an other HTTP method than <code>GET</code>.</p>
-   * @param function the requested {@link EdmFunctionImport}
-   * @param parameters the parameters of the function import
-   * as map of parameter names to parameter values
-   * @param keys the key of the returned entity set, as map of key names to key values,
-   * if the return type of the function import is a collection of entities
-   * (optional)
-   * @return the requested data object, either a list or a single object;
-   * if the function import's return type is of type <code>Binary</code>,
-   * the returned object(s) must be of type {@link BinaryData}
-   */
-  Object readData(EdmFunctionImport function, Map<String, Object> parameters, Map<String, Object> keys)
-      throws ODataNotImplementedException, ODataNotFoundException, EdmException, ODataApplicationException;
-
-  /**
    * <p>Retrieves related data for the specified source data, entity set, and key.</p>
    * <p>If the underlying association of the EDM is specified to have target
    * multiplicity '*' and no target key is given, this method returns a list of
