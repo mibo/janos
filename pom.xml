@@ -19,7 +19,7 @@
     <parent>
       <groupId>org.apache</groupId>
       <artifactId>apache</artifactId>
-      <version>13</version>
+      <version>16</version>
     </parent>
 
     <modules>
@@ -42,16 +42,20 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <version.olingo>2.0.4</version.olingo>
+    <!-- Plugin version -->
     <version.jetty-plugin>8.1.14.v20131031</version.jetty-plugin>
+    <version.bundle-plugin>2.5.3</version.bundle-plugin>
+    <!-- Core dependency versions -->
+    <version.olingo>2.0.4</version.olingo>
+    <version.javax.persistence>2.0.5</version.javax.persistence>
     <version.slf4j>1.7.1</version.slf4j>
     <version.log4j>1.2.17</version.log4j>
+    <!-- Test dependency versions -->
     <version.httpclient>4.2.3</version.httpclient>
     <version.httpcore>4.2.3</version.httpcore>
     <version.mockito>1.9.0</version.mockito>
     <version.junit>4.10</version.junit>
     <version.xmlunit>1.3</version.xmlunit>
-    <version.javax.persistence>2.0.5</version.javax.persistence>
   </properties>
 
   <build>
@@ -69,6 +73,11 @@
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${version.jetty-plugin}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>${version.bundle-plugin}</version>
       </plugin>
     </plugins>
   </build>
