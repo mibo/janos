@@ -27,13 +27,14 @@ import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
 import java.util.Map;
 
 /**
+ * A FunctionSource contains functionality to execute functions for
+ * given EdmFunctionImports.
+ *
  * Created by mibo on 23.08.15.
  */
 public interface FunctionSource {
 
-  FunctionExecutor getFunctionExecutor(String functionName);
-
-//  Object executeFunction(String functionName, Object... parameters);
+//  FunctionExecutor getFunctionExecutor(String functionName);
 
   /**
    * <p>Retrieves data for the specified function import and key.</p>

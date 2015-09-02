@@ -40,7 +40,6 @@ import org.apache.olingo.odata2.api.uri.expression.*;
 import org.apache.olingo.odata2.api.uri.info.*;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
-import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionExecutor;
 import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
 
@@ -76,11 +75,6 @@ public class DataSourceProcessor extends ODataSingleProcessor {
 
   private static FunctionSource createDefaultFunctionSource() {
     return new FunctionSource() {
-      @Override
-      public FunctionExecutor getFunctionExecutor(String functionName) {
-        return null;
-      }
-
       @Override
       public Object executeFunction(EdmFunctionImport function, Map<String, Object> parameters, Map<String, Object> keys)
           throws ODataNotImplementedException, ODataNotFoundException, EdmException, ODataApplicationException {
@@ -290,11 +284,9 @@ public class DataSourceProcessor extends ODataSingleProcessor {
 
     final ExpandSelectTreeNode expandSelectTreeNode =
         UriParser.createExpandSelectTree(uriInfo.getSelect(), uriInfo.getExpand());
-    ODataResponse odr =
-        ODataResponse.fromResponse(writeEntry(uriInfo.getTargetEntitySet(), expandSelectTreeNode, data, contentType))
-            .build();
 
-    return odr;
+    return ODataResponse.fromResponse(
+        writeEntry(uriInfo.getTargetEntitySet(), expandSelectTreeNode, data, contentType)).build();
   }
 
   @Override
@@ -1490,7 +1482,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
   private <T> Map<String, Object> getSimpleTypeValueMap(final T data, final List<EdmProperty> propertyPath)
       throws ODataException {
     final EdmProperty property = propertyPath.get(propertyPath.size() - 1);
-    Map<String, Object> valueWithMimeType = new HashMap<String, Object>();
+    Map<String, Object> valueWithMimeType = new HashMap<>();
     valueWithMimeType.put(property.getName(), getPropertyValue(data, propertyPath));
 
     handleMimeType(data, property.getMapping(), valueWithMimeType);

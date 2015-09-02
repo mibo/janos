@@ -15,9 +15,9 @@ import java.util.Locale;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.*;
 
 /**
+ * Reference Implementation for a FunctionExecutor
+ *
  * Created by mibo on 23.08.15.
- *
- *
  */
 public class RefFunctions implements FunctionExecutor {
 

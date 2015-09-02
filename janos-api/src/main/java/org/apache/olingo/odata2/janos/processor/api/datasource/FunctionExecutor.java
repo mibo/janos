@@ -19,9 +19,18 @@
 package org.apache.olingo.odata2.janos.processor.api.datasource;
 
 /**
+ * A FunctionExecutor defines a class which is used to execute a function and
+ * wants to get the DataStoreManager.
+ *
  * Created by mibo on 23.08.15.
  */
 public interface FunctionExecutor {
 
+  /**
+   * Init method must be called from a FunctionSource which prepare
+   * a class which has methods with @EdmFunctionImport annotation
+   *
+   * @param dataStore data store manager which is used by DataSources
+   */
   void init(DataStoreManager dataStore);
 }

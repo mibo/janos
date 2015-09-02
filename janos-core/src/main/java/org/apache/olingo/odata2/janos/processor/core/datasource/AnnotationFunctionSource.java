@@ -30,21 +30,15 @@ public class AnnotationFunctionSource implements FunctionSource {
 
   private void init(Collection<Class<?>> annotatedClasses) {
     for (Class<?> annotatedClass : annotatedClasses) {
-      if(FunctionExecutor.class.isAssignableFrom(annotatedClass)) {
-        init((Class<FunctionExecutor>) annotatedClass);
+      List<Method> methods = annotationHelper.getAnnotatedMethods(annotatedClass, EdmFunctionImport.class, false);
+
+      for (Method method : methods) {
+        initFunctionHolder(annotatedClass, method);
       }
     }
   }
 
-  private void init(Class<FunctionExecutor> annotatedClass) {
-    List<Method> methods = annotationHelper.getAnnotatedMethods(annotatedClass, EdmFunctionImport.class, false);
-
-    for (Method method : methods) {
-      initFunctionHolder(annotatedClass, method);
-    }
-  }
-
-  private void initFunctionHolder(Class<FunctionExecutor> annotatedClass, Method method) {
+  private void initFunctionHolder(Class<?> annotatedClass, Method method) {
     try {
       EdmFunctionImport efi = method.getAnnotation(EdmFunctionImport.class);
       String name = efi.name();
@@ -59,13 +53,20 @@ public class AnnotationFunctionSource implements FunctionSource {
       holder.executor = annotatedClass.newInstance();
       holder.functionImport = efi;
       holder.functionParameters = parameters;
-      holder.executor.init(dataStoreManager);
+      //
+      callInitMethods(holder.executor);
 
       functionHolders.put(name, holder);
     } catch (InstantiationException | IllegalAccessException e) {
       e.printStackTrace();
     }
 
+  }
+
+  private void callInitMethods(Object functionInstance) {
+    if(functionInstance instanceof FunctionExecutor) {
+      ((FunctionExecutor) functionInstance).init(dataStoreManager);
+    }
   }
 
   private LinkedHashMap<String, EdmFunctionImportParameter> extractParameters(Parameter[] parameters) {
@@ -77,14 +78,14 @@ public class AnnotationFunctionSource implements FunctionSource {
     return result;
   }
 
-  @Override
-  public FunctionExecutor getFunctionExecutor(String functionName) {
-    FunctionHolder holder =  functionHolders.get(functionName);
-    if(holder == null) {
-      return null;
-    }
-    return holder.executor;
-  }
+//  @Override
+//  public FunctionExecutor getFunctionExecutor(String functionName) {
+//    FunctionHolder holder = functionHolders.get(functionName);
+//    if(holder == null) {
+//      return null;
+//    }
+//    return holder.executor;
+//  }
 
   @Override
   public Object executeFunction(org.apache.olingo.odata2.api.edm.EdmFunctionImport function,
@@ -115,7 +116,7 @@ public class AnnotationFunctionSource implements FunctionSource {
 
 
   static class FunctionHolder {
-    FunctionExecutor executor;
+    Object executor;
     Method method;
     EdmFunctionImport functionImport;
     LinkedHashMap<String, EdmFunctionImportParameter> functionParameters;
