@@ -18,16 +18,15 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.api.datasource;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.olingo.odata2.api.edm.EdmEntitySet;
 import org.apache.olingo.odata2.api.edm.EdmException;
-import org.apache.olingo.odata2.api.edm.EdmFunctionImport;
 import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
 import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>This interface is intended to make it easier to implement an OData

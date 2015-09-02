@@ -18,11 +18,6 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.testutil.fit;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import com.sun.org.apache.bcel.internal.generic.BASTORE;
 import org.apache.log4j.Level;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.junit.Rule;
@@ -31,6 +26,10 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Provides basic support for JUnit tests<br>

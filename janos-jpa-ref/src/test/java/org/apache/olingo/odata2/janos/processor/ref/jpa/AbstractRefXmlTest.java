@@ -18,13 +18,6 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref.jpa;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.http.HttpResponse;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.edm.Edm;
@@ -34,6 +27,13 @@ import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 
 /**
  * Abstract base class for tests employing the reference scenario reading or writing XML.

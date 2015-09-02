@@ -18,19 +18,14 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref.jpa.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
+import org.apache.olingo.odata2.api.annotation.edm.*;
 import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty.Multiplicity;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 *  

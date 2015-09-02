@@ -18,19 +18,12 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.testutil.helper;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.util.Random;
-
 import org.apache.http.HttpEntity;
 import org.apache.olingo.odata2.testutil.TestUtilRuntimeException;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.Random;
 
 /**
  *  

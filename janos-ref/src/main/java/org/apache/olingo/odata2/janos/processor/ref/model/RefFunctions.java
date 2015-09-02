@@ -12,7 +12,7 @@ import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeExcep
 import java.util.Collection;
 import java.util.Locale;
 
-import static org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.*;
+import static org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType;
 
 /**
  * Reference Implementation for a FunctionExecutor

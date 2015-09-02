@@ -18,7 +18,12 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.testutil.fit;
 
-import static org.junit.Assert.assertNotNull;
+import org.apache.olingo.odata2.api.ODataCallback;
+import org.apache.olingo.odata2.api.ODataService;
+import org.apache.olingo.odata2.api.ODataServiceFactory;
+import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.api.processor.ODataContext;
+import org.apache.olingo.odata2.testutil.server.TestServer;
 
 import java.net.URI;
 import java.util.Collections;
@@ -26,12 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.olingo.odata2.api.ODataCallback;
-import org.apache.olingo.odata2.api.ODataService;
-import org.apache.olingo.odata2.api.ODataServiceFactory;
-import org.apache.olingo.odata2.api.exception.ODataException;
-import org.apache.olingo.odata2.api.processor.ODataContext;
-import org.apache.olingo.odata2.testutil.server.TestServer;
+import static org.junit.Assert.assertNotNull;
 
 /**
  *  

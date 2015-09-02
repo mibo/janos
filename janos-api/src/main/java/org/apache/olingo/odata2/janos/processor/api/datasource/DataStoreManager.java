@@ -41,6 +41,7 @@ public interface DataStoreManager {
    * @throws DataStoreException
    */
   <T> DataStore<T> createDataStore(Class<T> clz) throws DataStoreException;
+
   /**
    * Create a DataStore without managing (keeping a reference to it).
    *
@@ -48,9 +49,10 @@ public interface DataStoreManager {
    * @param <T> type of class for which the DataStore is created
    * @param properties properties for creation
    * @return the created (and not managed) DataStore
-   * @throws DataStoreException
+   * @throws DataStoreException if something goes wrong
    */
   <T> DataStore<T> createDataStore(Class<T> clz, Map<String, String> properties) throws DataStoreException;
+
   /**
    * Create a DataStore and managing it (keeping a reference to it).
    * If a DataStore with given name already exists this will be returned.
@@ -59,9 +61,10 @@ public interface DataStoreManager {
    * @param clz class for which the DataStore is created
    * @param <T> type of class for which the DataStore is created
    * @return the created (and managed) DataStore
-   * @throws DataStoreException
+   * @throws DataStoreException if something goes wrong
    */
   <T> DataStore<T> grantDataStore(String name, Class<T> clz) throws DataStoreException;
+
   /**
    * Create a DataStore and managing it (keeping a reference to it).
    * If a DataStore with given name already exists this will be returned.
@@ -71,9 +74,10 @@ public interface DataStoreManager {
    * @param <T> type of class for which the DataStore is created
    * @param properties properties for creation
    * @return the created (and managed) DataStore
-   * @throws DataStoreException
+   * @throws DataStoreException if something goes wrong
    */
   <T> DataStore<T> grantDataStore(String name, Class<T> clz, Map<String, String> properties) throws DataStoreException;
+
   /**
    * Get a reference to an already existing (managed) DataStore.
    *
@@ -81,15 +85,15 @@ public interface DataStoreManager {
    * @param name name of the DataStore which is requested
    * @param clz class for which the DataStore is created
    * @return the created (and managed) DataStore or <code>NULL</code> if no according DataStore exists
-   * @throws DataStoreException
+   * @throws DataStoreException if something goes wrong
    */
   <T> DataStore<T> getDataStore(String name, Class<T> clz) throws DataStoreException;
+
   /**
    * Get a reference to an already existing (managed) DataStore.
    *
    * @param name name of the DataStore which is requested
    * @return the created (and managed) DataStore or <code>NULL</code> if no according DataStore exists
-   * @throws DataStoreException
    */
   DataStore<Object> getDataStore(String name);
 }

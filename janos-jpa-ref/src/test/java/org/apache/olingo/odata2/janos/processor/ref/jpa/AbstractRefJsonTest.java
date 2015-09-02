@@ -18,11 +18,10 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref.jpa;
 
-import org.junit.Ignore;
-
 import com.google.gson.Gson;
 import com.google.gson.internal.StringMap;
 import com.google.gson.reflect.TypeToken;
+import org.junit.Ignore;
 
 /**
  *  

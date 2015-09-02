@@ -15,8 +15,9 @@
  */
 package org.apache.olingo.odata2.janos.processor.api.datasource;
 
-import java.util.Locale;
 import org.apache.olingo.odata2.api.exception.ODataApplicationException;
+
+import java.util.Locale;
 
 /**
  *

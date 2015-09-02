@@ -18,11 +18,11 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.testutil.fit;
 
-import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
 
 import java.net.URL;
 
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
 
 public class Log4JConfigurationTest {
 

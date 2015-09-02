@@ -18,10 +18,6 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.testutil.fit;
 
-import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.olingo.odata2.api.ODataService;
@@ -32,8 +28,8 @@ import org.apache.olingo.odata2.testutil.server.ServerRuntimeException;
 import org.apache.olingo.odata2.testutil.server.TestServer;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+
+import java.net.URI;
 
 /**
  *  

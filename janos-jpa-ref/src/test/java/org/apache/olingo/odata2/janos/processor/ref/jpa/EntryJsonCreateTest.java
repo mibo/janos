@@ -18,19 +18,16 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref.jpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.UUID;
-
+import com.google.gson.internal.StringMap;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.olingo.odata2.api.commons.HttpContentType;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.junit.Test;
 
-import com.google.gson.internal.StringMap;
+import java.util.UUID;
+
+import static org.junit.Assert.*;
 
 /**
  *  

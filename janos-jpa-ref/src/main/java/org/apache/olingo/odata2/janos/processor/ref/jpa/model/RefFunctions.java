@@ -1,6 +1,5 @@
 package org.apache.olingo.odata2.janos.processor.ref.jpa.model;
 
-import org.apache.log4j.spi.LoggerFactory;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
 import org.apache.olingo.odata2.api.annotation.edm.EdmType;
@@ -12,7 +11,6 @@ import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeExcep
 
 import java.util.Collection;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 import static org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType;
 

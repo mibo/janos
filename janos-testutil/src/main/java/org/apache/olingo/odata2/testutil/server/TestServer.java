@@ -18,12 +18,6 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.testutil.server;
 
-import java.net.BindException;
-import java.net.InetSocketAddress;
-import java.net.URI;
-
-import javax.servlet.http.HttpServlet;
-
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.ODataServiceFactory;
 import org.apache.olingo.odata2.testutil.fit.FitStaticServiceFactory;
@@ -32,6 +26,11 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServlet;
+import java.net.BindException;
+import java.net.InetSocketAddress;
+import java.net.URI;
 
 /**
  *  

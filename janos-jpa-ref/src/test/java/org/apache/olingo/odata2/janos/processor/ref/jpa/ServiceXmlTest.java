@@ -18,11 +18,6 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref.jpa;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
-import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
-
-import java.io.IOException;
-
 import org.apache.http.HttpResponse;
 import org.apache.olingo.odata2.api.commons.HttpContentType;
 import org.apache.olingo.odata2.api.commons.HttpHeaders;
@@ -30,6 +25,11 @@ import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+
+import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
+import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 
 /**
  * Tests employing the reference scenario reading the service document in XML format

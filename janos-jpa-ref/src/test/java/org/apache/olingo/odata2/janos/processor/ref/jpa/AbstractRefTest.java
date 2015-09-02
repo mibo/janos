@@ -18,31 +18,23 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref.jpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.net.URI;
-
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
-import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.commons.ODataHttpMethod;
 import org.apache.olingo.odata2.api.exception.ODataException;
-import org.apache.olingo.odata2.testutil.data.JanosSampleDataGenerator;
+import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.testutil.fit.AbstractFitTest;
 import org.apache.olingo.odata2.testutil.helper.StringHelper;
 import org.junit.Ignore;
+
+import java.net.URI;
+
+import static org.junit.Assert.*;
 
 /**
  * Abstract base class for tests employing the reference scenario.

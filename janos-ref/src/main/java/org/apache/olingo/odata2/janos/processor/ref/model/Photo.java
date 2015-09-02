@@ -18,16 +18,9 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref.model;
 
-import java.util.Arrays;
+import org.apache.olingo.odata2.api.annotation.edm.*;
 
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
-import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceContent;
-import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceMimeType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceSource;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmType;
+import java.util.Arrays;
 
 /**
  *  

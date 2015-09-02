@@ -14,25 +14,6 @@
  */
 package org.apache.olingo.odata2.janos.processor.ref;
 
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.apache.olingo.odata2.janos.processor.api.JanosService;
-import org.apache.olingo.odata2.janos.processor.core.datasource.InMemoryDataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.janos.processor.ref.model.Building;
-import org.apache.olingo.odata2.janos.processor.ref.model.City;
-import org.apache.olingo.odata2.janos.processor.ref.model.Employee;
-import org.apache.olingo.odata2.janos.processor.ref.model.Location;
-import org.apache.olingo.odata2.janos.processor.ref.model.Manager;
-import org.apache.olingo.odata2.janos.processor.ref.model.Photo;
-import org.apache.olingo.odata2.janos.processor.ref.model.RefBase;
-import org.apache.olingo.odata2.janos.processor.ref.model.RefFunctions;
-import org.apache.olingo.odata2.janos.processor.ref.model.ResourceHelper;
-import org.apache.olingo.odata2.janos.processor.ref.model.Room;
-import org.apache.olingo.odata2.janos.processor.ref.model.Team;
 import org.apache.olingo.odata2.api.ODataCallback;
 import org.apache.olingo.odata2.api.ODataDebugCallback;
 import org.apache.olingo.odata2.api.ODataService;
@@ -45,8 +26,17 @@ import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.apache.olingo.odata2.api.processor.ODataErrorCallback;
 import org.apache.olingo.odata2.api.processor.ODataErrorContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
+import org.apache.olingo.odata2.janos.processor.api.JanosService;
+import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
+import org.apache.olingo.odata2.janos.processor.core.datasource.InMemoryDataStore;
+import org.apache.olingo.odata2.janos.processor.ref.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * ODataServiceFactory implementation based on ListProcessor

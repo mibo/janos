@@ -18,13 +18,7 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import junit.framework.Assert;
-
 import org.apache.http.HttpResponse;
 import org.apache.olingo.odata2.api.commons.HttpContentType;
 import org.apache.olingo.odata2.api.commons.HttpHeaders;
@@ -33,6 +27,11 @@ import org.apache.olingo.odata2.api.edm.Edm;
 import org.custommonkey.xmlunit.SimpleNamespaceContext;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 
 /**
  * Tests employing the reference scenario reading the service document in JSON format.
