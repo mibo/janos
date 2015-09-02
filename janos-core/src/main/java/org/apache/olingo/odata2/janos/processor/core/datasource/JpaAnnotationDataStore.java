@@ -112,8 +112,8 @@ public class JpaAnnotationDataStore<T> implements DataStore<T> {
   }
 
   @Override
-  public T read(T obj) {
-    Object key = ANNOTATION_HELPER.getValueForField(obj, EdmKey.class);
+  public T read(T object) {
+    Object key = ANNOTATION_HELPER.getValueForField(object, EdmKey.class);
     return this.entityManager.find(dataTypeClass, key);
   }
 

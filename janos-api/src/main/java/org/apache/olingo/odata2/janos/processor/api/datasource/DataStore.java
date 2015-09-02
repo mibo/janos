@@ -24,33 +24,75 @@ import java.util.Collection;
  */
 public interface DataStore<T> {
 
-  T create(final T object) throws DataStoreException;
-
-  T createInstance();
-
-  T delete(final T object);
-
+  /**
+   * Get class of objects which can be stored by this DataStore instance.
+   *
+   * @return class of objects which can be stored by this DataStore instance.
+   */
   Class<T> getDataTypeClass();
 
+  /**
+   * Get name of this DataStore instance.
+   *
+   * @return name of this DataStore instance.
+   */
   String getName();
 
   /**
-   * Are the key values equal for both instances.
-   * If all compared key values are <code>null</code> this also means equal.
+   * Create a new object instance of the object type which can be stored by this DataStore instance.
    *
-   * @param first first instance to check for key equal
-   * @param second second instance to check for key equal
-   * @return <code>true</code> if object instance have equal keys set.
+   * @return new object instance
    */
-//  boolean isKeyEqual(final T first, final T second);
+  T createInstance();
+
+  /**
+   * Store given object as new object in the DataStore
+   *
+   * @param object new object to be stored
+   * @return the stored object
+   * @throws DataStoreException
+   */
+  T create(final T object) throws DataStoreException;
+
+  /**
+   * Read object which is key equal to given object (based on #isKeyEqualChecked method).
+   * If no according object can be found <code>null</code> is returned
+   *
+   * @param object object with key fields set
+   * @return according object or <code>null</code>
+   */
+  T read(final T object);
+
+  /**
+   * Read all object of this DataStore.
+   *
+   * @return all object of this DataStore.
+   */
+  Collection<T> read();
+
+  /**
+   * Update object which is key equal to given object (based on #isKeyEqualChecked method).
+   * If no according object can be found <code>null</code> is returned and nothing is updated.
+   *
+   * @param object object with key fields set
+   * @return according object or <code>null</code>
+   */
+  T update(final T object);
+
+  /**
+   * Delete object which is key equal to given object (based on #isKeyEqualChecked method).
+   * If no according object can be found <code>null</code> is returned and nothing is updated.
+   *
+   * @param object object with key fields set
+   * @return according object or <code>null</code>
+   */
+  T delete(final T object);
 
   /**
    * Are the key values equal for both instances.
    * If all compared key values are <code>null</code> this also means equal.
    * Before object (keys) are compared it is validated that both object instance are NOT null
    * and that both are from the same class as this {@link DataStore} (see {@link #getDataTypeClass()}).
-   * For the equal check on {@link #getDataTypeClass()} instances without validation see
-   * {@link #isKeyEqualC(Object, Object)}.
    *
    * @param first first instance to check for key equal
    * @param second second instance to check for key equal
@@ -58,9 +100,4 @@ public interface DataStore<T> {
    */
   boolean isKeyEqualChecked(Object first, Object second) throws DataStoreException;
 
-  T read(final T obj);
-
-  Collection<T> read();
-
-  T update(final T object);
 }

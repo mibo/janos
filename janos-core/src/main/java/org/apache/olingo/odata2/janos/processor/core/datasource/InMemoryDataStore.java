@@ -95,8 +95,8 @@ public class InMemoryDataStore<T> implements DataStore<T> {
   }
 
   @Override
-  public T read(final T obj) {
-    KeyElement objKeys = getKeys(obj);
+  public T read(final T object) {
+    KeyElement objKeys = getKeys(object);
     return dataStore.get(objKeys);
   }
 

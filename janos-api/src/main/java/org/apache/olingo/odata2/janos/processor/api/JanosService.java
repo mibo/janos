@@ -90,12 +90,31 @@ public abstract class JanosService {
      */
     JanosServiceBuilder createFor(Collection<Class<?>> annotatedClasses) throws ODataException;
 
+    /**
+     * Sets the DataStoreManager used by the JanosService (ODataService)
+     * @param dataStore DataStoreManager to be used
+     * @return this builder (fluent builder)
+     */
     JanosServiceBuilder with(DataStoreManager dataStore);
 
+    /**
+     * Sets the ValueAccess used by the JanosService (ODataService)
+     * @param valueAccess ValueAccess to be used
+     * @return this builder (fluent builder)
+     */
     JanosServiceBuilder with(ValueAccess valueAccess);
 
+    /**
+     * Sets the DataSource used by the JanosService (ODataService)
+     * @param dataSource DataSource to be used
+     * @return this builder (fluent builder)
+     */
     JanosServiceBuilder with(DataSource dataSource);
 
+    /**
+     * Finish building and build/create the configured JanosService (ODataService)
+     * @return an instance of a JanosService (ODataService)
+     */
     ODataService build() throws ODataException;
   }
 
