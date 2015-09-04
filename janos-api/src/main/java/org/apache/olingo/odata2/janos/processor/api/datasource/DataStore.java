@@ -63,12 +63,18 @@ public interface DataStore<T> {
    */
   T read(final T object);
 
+//  ReadResult<T> readOptimized(final T object);
+
   /**
    * Read all object of this DataStore.
    *
    * @return all object of this DataStore.
    */
   Collection<T> read();
+
+  ReadResult<T> read(ReadOptions readOptions);
+
+//  ReadResult<Collection<T>> readOptimzied();
 
   /**
    * Update object which is key equal to given object (based on #isKeyEqualChecked method).

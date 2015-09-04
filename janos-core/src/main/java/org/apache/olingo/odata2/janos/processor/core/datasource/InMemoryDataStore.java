@@ -21,6 +21,8 @@ package org.apache.olingo.odata2.janos.processor.core.datasource;
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
+import org.apache.olingo.odata2.janos.processor.api.datasource.ReadOptions;
+import org.apache.olingo.odata2.janos.processor.api.datasource.ReadResult;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
@@ -103,6 +105,11 @@ public class InMemoryDataStore<T> implements DataStore<T> {
   @Override
   public Collection<T> read() {
     return Collections.unmodifiableCollection(dataStore.values());
+  }
+
+  @Override
+  public ReadResult<T> read(ReadOptions readOptions) {
+    return GenericReadResult.forResult(dataStore.values()).build();
   }
 
   @Override

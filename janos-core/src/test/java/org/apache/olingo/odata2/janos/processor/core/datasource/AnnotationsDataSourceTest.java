@@ -27,6 +27,7 @@ import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.api.datasource.ReadResult;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
 import org.apache.olingo.odata2.janos.processor.core.model.*;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
@@ -373,7 +374,7 @@ public class AnnotationsDataSourceTest {
     Mockito.when(unknownEntitySet.getName()).thenReturn("UnknownEntity");
 
     // execute
-    datasource.readData(unknownEntitySet);
+    datasource.readData(unknownEntitySet, GenericReadOptions.none());
   }
 
   @Test
@@ -393,11 +394,11 @@ public class AnnotationsDataSourceTest {
     }
 
     // execute
-    Object relatedData = datasource.readData(roomsEntitySet);
+    ReadResult relatedData = datasource.readData(roomsEntitySet, GenericReadOptions.none());
 
     // validate
     @SuppressWarnings("unchecked")
-    Collection<Room> relatedRooms = (Collection<Room>) relatedData;
+    Collection<Room> relatedRooms = (Collection<Room>) relatedData.getResult();
     Assert.assertEquals(roomsCount, relatedRooms.size());
     for (Room room : relatedRooms) {
       Assert.assertNotNull(room.getId());
@@ -729,7 +730,7 @@ public class AnnotationsDataSourceTest {
     Mockito.when(edmEntityType.getName()).thenReturn(entityType.getName());
 
     //
-    datasource.readData(edmEntitySet);
+    datasource.readData(edmEntitySet, GenericReadOptions.none());
   }
 
   @Test

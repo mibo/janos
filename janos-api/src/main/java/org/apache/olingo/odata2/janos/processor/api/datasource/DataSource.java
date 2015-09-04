@@ -49,8 +49,8 @@ public interface DataSource {
    * @param entitySet the requested {@link EdmEntitySet}
    * @return the requested data list
    */
-  List<?> readData(EdmEntitySet entitySet) throws ODataNotImplementedException, ODataNotFoundException, EdmException,
-      ODataApplicationException;
+  ReadResult<?> readData(EdmEntitySet entitySet, ReadOptions readOptions)
+      throws ODataNotImplementedException, ODataNotFoundException, EdmException, ODataApplicationException;
 
   /**
    * Retrieves a single data object for the specified entity set and key.

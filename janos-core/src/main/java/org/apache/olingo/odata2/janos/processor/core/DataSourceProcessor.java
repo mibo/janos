@@ -41,7 +41,9 @@ import org.apache.olingo.odata2.api.uri.info.*;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
 import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionSource;
+import org.apache.olingo.odata2.janos.processor.api.datasource.ReadOptions;
 import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
+import org.apache.olingo.odata2.janos.processor.core.datasource.GenericReadOptions;
 
 import java.io.InputStream;
 import java.util.*;
@@ -859,8 +861,16 @@ public class DataSourceProcessor extends ODataSingleProcessor {
   }
 
   private Object retrieveData(final EdmEntitySet startEntitySet, final List<KeyPredicate> keyPredicates,
+                              final EdmFunctionImport functionImport, final Map<String, Object> functionImportParameters,
+                              final List<NavigationSegment> navigationSegments) throws ODataException {
+    return retrieveData(startEntitySet, keyPredicates, functionImport,
+        functionImportParameters, navigationSegments, GenericReadOptions.none());
+  }
+
+  private Object retrieveData(final EdmEntitySet startEntitySet, final List<KeyPredicate> keyPredicates,
       final EdmFunctionImport functionImport, final Map<String, Object> functionImportParameters,
-      final List<NavigationSegment> navigationSegments) throws ODataException {
+      final List<NavigationSegment> navigationSegments, final ReadOptions readOptions)
+        throws ODataException {
     Object data;
     final Map<String, Object> keys = mapKey(keyPredicates);
 
@@ -870,7 +880,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     try {
       data = functionImport == null ?
           keys.isEmpty() ?
-              dataSource.readData(startEntitySet) : dataSource.readData(startEntitySet, keys) :
+              dataSource.readData(startEntitySet, readOptions) : dataSource.readData(startEntitySet, keys) :
           functionSource.executeFunction(functionImport, functionImportParameters, keys);
 
       EdmEntitySet currentEntitySet =

@@ -25,10 +25,7 @@ import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
 import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.api.datasource.*;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
@@ -87,12 +84,12 @@ public class AnnotationDataSource implements DataSource {
   }
 
   @Override
-  public List<?> readData(final EdmEntitySet entitySet) throws ODataNotImplementedException,
+  public ReadResult<?> readData(final EdmEntitySet entitySet, ReadOptions readOptions) throws ODataNotImplementedException,
       ODataNotFoundException, EdmException, ODataApplicationException {
 
     DataStore<Object> holder = getDataStore(entitySet);
     if (holder != null) {
-      return new ArrayList<>(holder.read());
+      return holder.read(readOptions);
     }
 
     throw new ODataNotFoundException(ODataNotFoundException.ENTITY);

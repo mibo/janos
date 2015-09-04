@@ -18,6 +18,8 @@ package org.apache.olingo.odata2.janos.processor.core.datasource;
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
+import org.apache.olingo.odata2.janos.processor.api.datasource.ReadOptions;
+import org.apache.olingo.odata2.janos.processor.api.datasource.ReadResult;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 
@@ -121,6 +123,12 @@ public class JpaAnnotationDataStore<T> implements DataStore<T> {
   public Collection<T> read() {
     Query query = entityManager.createQuery("SELECT t FROM " + dataTypeClass.getSimpleName() + " t");
     return query.getResultList();
+  }
+
+  @Override
+  public ReadResult<T> read(ReadOptions readOptions) {
+    Query query = entityManager.createQuery("SELECT t FROM " + dataTypeClass.getSimpleName() + " t");
+    return GenericReadResult.forResult(query.getResultList()).build();
   }
 
   @Override
