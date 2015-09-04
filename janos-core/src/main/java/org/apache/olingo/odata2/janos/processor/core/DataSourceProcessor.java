@@ -38,12 +38,11 @@ import org.apache.olingo.odata2.api.processor.ODataSingleProcessor;
 import org.apache.olingo.odata2.api.uri.*;
 import org.apache.olingo.odata2.api.uri.expression.*;
 import org.apache.olingo.odata2.api.uri.info.*;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.datasource.*;
 import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
-import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.ReadOptions;
-import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
+import org.apache.olingo.odata2.janos.processor.api.datasource.ReadResult;
 import org.apache.olingo.odata2.janos.processor.core.datasource.GenericReadOptions;
+import org.apache.olingo.odata2.janos.processor.core.datasource.GenericReadResult;
 
 import java.io.InputStream;
 import java.util.*;
@@ -104,12 +103,8 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       throws ODataException {
     ArrayList<Object> data = new ArrayList<>();
     try {
-      data.addAll((List<?>) retrieveData(
-          uriInfo.getStartEntitySet(),
-          uriInfo.getKeyPredicates(),
-          uriInfo.getFunctionImport(),
-          mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-          uriInfo.getNavigationSegments()));
+      ReadResult result = (ReadResult) retrieveData(uriInfo);
+      data.addAll(result.getResult());
     } catch (final ODataNotFoundException e) {
       data.clear();
     }
@@ -861,27 +856,25 @@ public class DataSourceProcessor extends ODataSingleProcessor {
   }
 
   private Object retrieveData(final EdmEntitySet startEntitySet, final List<KeyPredicate> keyPredicates,
-                              final EdmFunctionImport functionImport, final Map<String, Object> functionImportParameters,
-                              final List<NavigationSegment> navigationSegments) throws ODataException {
-    return retrieveData(startEntitySet, keyPredicates, functionImport,
-        functionImportParameters, navigationSegments, GenericReadOptions.none());
-  }
-
-  private Object retrieveData(final EdmEntitySet startEntitySet, final List<KeyPredicate> keyPredicates,
       final EdmFunctionImport functionImport, final Map<String, Object> functionImportParameters,
-      final List<NavigationSegment> navigationSegments, final ReadOptions readOptions)
+      final List<NavigationSegment> navigationSegments)
         throws ODataException {
-    Object data;
     final Map<String, Object> keys = mapKey(keyPredicates);
 
     ODataContext context = getContext();
     final int timingHandle = context.startRuntimeMeasurement(getClass().getSimpleName(), "retrieveData");
 
     try {
-      data = functionImport == null ?
-          keys.isEmpty() ?
-              dataSource.readData(startEntitySet, readOptions) : dataSource.readData(startEntitySet, keys) :
-          functionSource.executeFunction(functionImport, functionImportParameters, keys);
+      Object data;
+      if(functionImport == null) {
+        if(keys.isEmpty()) {
+          data = dataSource.readData(startEntitySet, GenericReadOptions.none());
+        } else {
+          data = dataSource.readData(startEntitySet, keys);
+        }
+      } else {
+        data = functionSource.executeFunction(functionImport, functionImportParameters, keys);
+      }
 
       EdmEntitySet currentEntitySet =
           functionImport == null ? startEntitySet : functionImport.getEntitySet();
@@ -893,10 +886,50 @@ public class DataSourceProcessor extends ODataSingleProcessor {
             mapKey(navigationSegment.getKeyPredicates()));
         currentEntitySet = navigationSegment.getEntitySet();
       }
+      return data;
     } finally {
       context.stopRuntimeMeasurement(timingHandle);
     }
-    return data;
+  }
+
+
+  private ReadResult<?> retrieveData(final GetEntitySetUriInfo uriInfo)
+      throws ODataException {
+    ReadResult<?> data;
+    final EdmEntitySet startEntitySet = uriInfo.getStartEntitySet();
+    ODataContext context = getContext();
+    final int timingHandle = context.startRuntimeMeasurement(getClass().getSimpleName(), "retrieveData");
+
+    try {
+      ReadOptions readOptions = GenericReadOptions.start()
+          .filter(uriInfo.getFilter())
+          .order(uriInfo.getOrderBy())
+          .skip(uriInfo.getSkipToken(), uriInfo.getSkip())
+          .top(uriInfo.getTop()).build();
+
+      data = dataSource.readData(startEntitySet, readOptions);
+
+      EdmEntitySet currentEntitySet = startEntitySet;
+      List<NavigationSegment> navigationSegments = uriInfo.getNavigationSegments();
+      Object innerData = data.getResult();
+      for (NavigationSegment navigationSegment : navigationSegments) {
+        // TODO: mibo_150904: Add read options
+        innerData = dataSource.readRelatedData(
+            currentEntitySet,
+            innerData,
+            navigationSegment.getEntitySet(),
+            mapKey(navigationSegment.getKeyPredicates()));
+        currentEntitySet = navigationSegment.getEntitySet();
+      }
+      if(innerData instanceof ReadResult) {
+        return (ReadResult<?>) innerData;
+      }
+      ArrayList list = new ArrayList();
+      list.add(innerData);
+      return (ReadResult<?>) GenericReadResult.forResult(list);
+    } finally {
+      context.stopRuntimeMeasurement(timingHandle);
+    }
   }
 
   private <T> String constructETag(final EdmEntitySet entitySet, final T data) throws ODataException {
