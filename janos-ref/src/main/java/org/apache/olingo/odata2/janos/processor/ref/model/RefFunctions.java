@@ -3,10 +3,10 @@ package org.apache.olingo.odata2.janos.processor.ref.model;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
 import org.apache.olingo.odata2.api.annotation.edm.EdmType;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionExecutor;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStore;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreException;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionExecutor;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 
 import java.util.Collection;

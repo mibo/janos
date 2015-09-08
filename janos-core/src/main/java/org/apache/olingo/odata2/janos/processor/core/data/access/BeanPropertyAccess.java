@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.core.datasource;
+package org.apache.olingo.odata2.janos.processor.core.data.access;
 
 import org.apache.olingo.odata2.api.edm.EdmException;
 import org.apache.olingo.odata2.api.edm.EdmMapping;
@@ -25,7 +25,7 @@ import org.apache.olingo.odata2.api.edm.EdmSimpleTypeKind;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.exception.ODataHttpException;
 import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
+import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

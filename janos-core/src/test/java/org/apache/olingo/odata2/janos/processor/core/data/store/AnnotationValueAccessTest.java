@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.olingo.odata2.janos.processor.core.datasource;
+package org.apache.olingo.odata2.janos.processor.core.data.store;
 
 import junit.framework.Assert;
 import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
@@ -22,6 +22,7 @@ import org.apache.olingo.odata2.api.edm.EdmMapping;
 import org.apache.olingo.odata2.api.edm.EdmProperty;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
+import org.apache.olingo.odata2.janos.processor.core.data.access.AnnotationValueAccess;
 import org.junit.Test;
 import org.mockito.Mockito;
 

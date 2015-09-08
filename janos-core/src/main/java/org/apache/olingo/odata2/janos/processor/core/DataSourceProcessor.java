@@ -38,11 +38,12 @@ import org.apache.olingo.odata2.api.processor.ODataSingleProcessor;
 import org.apache.olingo.odata2.api.uri.*;
 import org.apache.olingo.odata2.api.uri.expression.*;
 import org.apache.olingo.odata2.api.uri.info.*;
-import org.apache.olingo.odata2.janos.processor.api.datasource.*;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
-import org.apache.olingo.odata2.janos.processor.api.datasource.ReadResult;
-import org.apache.olingo.odata2.janos.processor.core.datasource.GenericReadOptions;
-import org.apache.olingo.odata2.janos.processor.core.datasource.GenericReadResult;
+import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionSource;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
+import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
+import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource.BinaryData;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
 
 import java.io.InputStream;
 import java.util.*;
@@ -868,7 +869,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       Object data;
       if(functionImport == null) {
         if(keys.isEmpty()) {
-          data = dataSource.readData(startEntitySet, GenericReadOptions.none());
+          data = dataSource.readData(startEntitySet, ReadOptions.none());
         } else {
           data = dataSource.readData(startEntitySet, keys);
         }
@@ -901,7 +902,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     final int timingHandle = context.startRuntimeMeasurement(getClass().getSimpleName(), "retrieveData");
 
     try {
-      ReadOptions readOptions = GenericReadOptions.start()
+      ReadOptions readOptions = ReadOptions.start()
           .filter(uriInfo.getFilter())
           .order(uriInfo.getOrderBy())
           .skip(uriInfo.getSkipToken(), uriInfo.getSkip())
@@ -926,7 +927,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       }
       ArrayList list = new ArrayList();
       list.add(innerData);
-      return (ReadResult<?>) GenericReadResult.forResult(list);
+      return (ReadResult<?>) ReadResult.forResult(list).build();
     } finally {
       context.stopRuntimeMeasurement(timingHandle);
     }

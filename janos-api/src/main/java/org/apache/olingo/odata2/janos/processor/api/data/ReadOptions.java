@@ -1,15 +1,14 @@
-package org.apache.olingo.odata2.janos.processor.core.datasource;
+package org.apache.olingo.odata2.janos.processor.api.data;
 
 import org.apache.olingo.odata2.api.uri.expression.FilterExpression;
 import org.apache.olingo.odata2.api.uri.expression.OrderByExpression;
-import org.apache.olingo.odata2.janos.processor.api.datasource.ReadOptions;
 
 /**
  * Optimized read options.
  *
  * Created by michael on 04.09.15.
  */
-public class GenericReadOptions implements ReadOptions {
+public final class ReadOptions  {
   private FilterExpression filter;
   private OrderByExpression orderBy;
   private String skipToken;
@@ -17,7 +16,7 @@ public class GenericReadOptions implements ReadOptions {
   private Integer top;
 
   public static ReadOptions none() {
-    return new GenericReadOptions();
+    return new ReadOptions();
   }
 
   public static Builder start() {
@@ -61,9 +60,9 @@ public class GenericReadOptions implements ReadOptions {
   }
 
   public static class Builder {
-    private GenericReadOptions options = new GenericReadOptions();
+    private ReadOptions options = new ReadOptions();
 
-    public GenericReadOptions build() {
+    public ReadOptions build() {
       return options;
     }
 

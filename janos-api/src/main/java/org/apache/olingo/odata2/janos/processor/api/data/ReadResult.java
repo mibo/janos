@@ -1,6 +1,4 @@
-package org.apache.olingo.odata2.janos.processor.core.datasource;
-
-import org.apache.olingo.odata2.janos.processor.api.datasource.ReadResult;
+package org.apache.olingo.odata2.janos.processor.api.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,38 +7,33 @@ import java.util.Collections;
 /**
  * Created by mibo on 04.09.15.
  */
-public final class GenericReadResult<T> implements ReadResult<T> {
+public final class ReadResult<T> {
   private final Collection<T> result;
   private boolean appliedSkip = false;
   private boolean appliedTop = false;
   private boolean appliedOrder = false;
   private boolean appliedFilter = false;
 
-  private GenericReadResult(Collection<T> result) {
+  private ReadResult(Collection<T> result) {
     this.result = new ArrayList<>(result);
   }
 
-  @Override
   public Collection<T> getResult() {
     return Collections.unmodifiableCollection(result);
   }
 
-  @Override
   public boolean appliedSkip() {
     return appliedSkip;
   }
 
-  @Override
   public boolean appliedTop() {
     return appliedTop;
   }
 
-  @Override
   public boolean appliedOrder() {
     return appliedOrder;
   }
 
-  @Override
   public boolean appliedFilter() {
     return appliedFilter;
   }
@@ -50,9 +43,9 @@ public final class GenericReadResult<T> implements ReadResult<T> {
   }
 
   public static class Builder<T> {
-    private final GenericReadResult<T> readResult;
+    private final ReadResult<T> readResult;
     public Builder(Collection<T> result) {
-      readResult = new GenericReadResult<>(result);
+      readResult = new ReadResult<>(result);
     }
     public Builder<T> top() {
       readResult.appliedTop = true;
@@ -70,7 +63,7 @@ public final class GenericReadResult<T> implements ReadResult<T> {
       readResult.appliedOrder = true;
       return this;
     }
-    public GenericReadResult<T> build() {
+    public ReadResult<T> build() {
       return readResult;
     }
   }

@@ -12,7 +12,7 @@
  * specific language governing permissions and limitations under the License.
  ***************************************************************************** 
  */
-package org.apache.olingo.odata2.janos.processor.core.datasource;
+package org.apache.olingo.odata2.janos.processor.core.data.source;
 
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.api.annotation.edm.EdmMediaResourceContent;
@@ -25,7 +25,10 @@ import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
 import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.*;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
+import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.data.store.*;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;

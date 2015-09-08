@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package org.apache.olingo.odata2.janos.processor.api.datasource;
+package org.apache.olingo.odata2.janos.processor.api.data.store;
+
+import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
 
 import java.util.Collection;
 

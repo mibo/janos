@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.olingo.odata2.janos.processor.core.datasource;
+package org.apache.olingo.odata2.janos.processor.core.data.store;
 
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
 import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
@@ -23,11 +23,13 @@ import org.apache.olingo.odata2.api.edm.FullQualifiedName;
 import org.apache.olingo.odata2.api.edm.provider.EntitySet;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource.BinaryData;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.api.datasource.ReadResult;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
+import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource.BinaryData;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStore;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
+import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationDataSource;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
 import org.apache.olingo.odata2.janos.processor.core.model.*;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
@@ -374,7 +376,7 @@ public class AnnotationsDataSourceTest {
     Mockito.when(unknownEntitySet.getName()).thenReturn("UnknownEntity");
 
     // execute
-    datasource.readData(unknownEntitySet, GenericReadOptions.none());
+    datasource.readData(unknownEntitySet, ReadOptions.none());
   }
 
   @Test
@@ -394,7 +396,7 @@ public class AnnotationsDataSourceTest {
     }
 
     // execute
-    ReadResult relatedData = datasource.readData(roomsEntitySet, GenericReadOptions.none());
+    ReadResult relatedData = datasource.readData(roomsEntitySet, ReadOptions.none());
 
     // validate
     @SuppressWarnings("unchecked")
@@ -730,7 +732,7 @@ public class AnnotationsDataSourceTest {
     Mockito.when(edmEntityType.getName()).thenReturn(entityType.getName());
 
     //
-    datasource.readData(edmEntitySet, GenericReadOptions.none());
+    datasource.readData(edmEntitySet, ReadOptions.none());
   }
 
   @Test
