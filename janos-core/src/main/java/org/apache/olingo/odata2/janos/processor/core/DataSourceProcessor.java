@@ -925,9 +925,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       if(innerData instanceof ReadResult) {
         return (ReadResult<?>) innerData;
       }
-      ArrayList list = new ArrayList();
-      list.add(innerData);
-      return (ReadResult<?>) ReadResult.forResult(list).build();
+      return (ReadResult<?>) ReadResult.forResult((Collection)innerData).build();
     } finally {
       context.stopRuntimeMeasurement(timingHandle);
     }

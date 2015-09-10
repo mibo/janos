@@ -8,7 +8,7 @@ import org.apache.olingo.odata2.api.uri.expression.OrderByExpression;
  *
  * Created by michael on 04.09.15.
  */
-public final class ReadOptions  {
+public final class ReadOptions {
   private FilterExpression filter;
   private OrderByExpression orderBy;
   private String skipToken;
