@@ -22,7 +22,8 @@ import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
 import java.util.Collection;
 
 /**
- *
+ * The interface Data store.
+ * @param <T>  the type parameter
  * @author michael
  */
 public interface DataStore<T> {
@@ -53,7 +54,7 @@ public interface DataStore<T> {
    *
    * @param object new object to be stored
    * @return the stored object
-   * @throws DataStoreException
+   * @throws DataStoreException the data store exception
    */
   T create(final T object) throws DataStoreException;
 
@@ -75,6 +76,12 @@ public interface DataStore<T> {
    */
   Collection<T> read();
 
+  /**
+   * Read read result.
+   *
+   * @param readOptions the read options
+   * @return the read result
+   */
   ReadResult<T> read(ReadOptions readOptions);
 
 //  ReadResult<Collection<T>> readOptimzied();
@@ -105,7 +112,8 @@ public interface DataStore<T> {
    *
    * @param first first instance to check for key equal
    * @param second second instance to check for key equal
-   * @return <code>true</code> if object instance have equal keys set.
+   * @return  <code>true</code> if object instance have equal keys set.
+   * @throws DataStoreException the data store exception
    */
   boolean isKeyEqualChecked(Object first, Object second) throws DataStoreException;
 

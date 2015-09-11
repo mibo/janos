@@ -6,6 +6,7 @@ import java.util.Collections;
 
 /**
  * Created by mibo on 04.09.15.
+ * @param <T>  the type parameter
  */
 public final class ReadResult<T> {
   private final Collection<T> result;
@@ -18,51 +19,123 @@ public final class ReadResult<T> {
     this.result = new ArrayList<>(result);
   }
 
+  /**
+   * Gets result.
+   *
+   * @return the result
+   */
   public Collection<T> getResult() {
     return Collections.unmodifiableCollection(result);
   }
 
+  /**
+   * Applied skip.
+   *
+   * @return the boolean
+   */
   public boolean appliedSkip() {
     return appliedSkip;
   }
 
+  /**
+   * Applied top.
+   *
+   * @return the boolean
+   */
   public boolean appliedTop() {
     return appliedTop;
   }
 
+  /**
+   * Applied order.
+   *
+   * @return the boolean
+   */
   public boolean appliedOrder() {
     return appliedOrder;
   }
 
+  /**
+   * Applied filter.
+   *
+   * @return the boolean
+   */
   public boolean appliedFilter() {
     return appliedFilter;
   }
 
+  /**
+   * For result.
+   *
+   * @param <T>  the type parameter
+   * @param result the result
+   * @return the builder
+   */
   public static <T> Builder<T> forResult(Collection<T> result) {
     return new Builder<T>(result);
   }
 
+  /**
+   * The type Builder.
+   * @param <T>  the type parameter
+   */
   public static class Builder<T> {
     private final ReadResult<T> readResult;
+
+    /**
+     * Instantiates a new Builder.
+     *
+     * @param result the result
+     */
     public Builder(Collection<T> result) {
       readResult = new ReadResult<>(result);
     }
+
+    /**
+     * Top builder.
+     *
+     * @return the builder
+     */
     public Builder<T> top() {
       readResult.appliedTop = true;
       return this;
     }
+
+    /**
+     * Skip builder.
+     *
+     * @return the builder
+     */
     public Builder<T> skip() {
       readResult.appliedSkip = true;
       return this;
     }
+
+    /**
+     * Filter builder.
+     *
+     * @return the builder
+     */
     public Builder<T> filter() {
       readResult.appliedFilter = true;
       return this;
     }
+
+    /**
+     * Order builder.
+     *
+     * @return the builder
+     */
     public Builder<T> order() {
       readResult.appliedOrder = true;
       return this;
     }
+
+    /**
+     * Build read result.
+     *
+     * @return the read result
+     */
     public ReadResult<T> build() {
       return readResult;
     }
