@@ -75,6 +75,20 @@ public final class ReadResult<T> {
     return new Builder<T>(result);
   }
 
+  public static <T> Builder<T> fromResult(ReadResult<T> readResult, Collection<T> result) {
+    return new Builder<T>(result).apply(readResult);
+  }
+
+  /**
+   * For an empty result.
+   *
+   * @param <T>  the type parameter
+   * @return the empty read result
+   */
+  public static <T> ReadResult<T> empty() {
+    return new Builder<T>(Collections.emptyList()).build();
+  }
+
   /**
    * The type Builder.
    * @param <T>  the type parameter
@@ -90,6 +104,15 @@ public final class ReadResult<T> {
     public Builder(Collection<T> result) {
       readResult = new ReadResult<>(result);
     }
+
+    Builder<T> apply(ReadResult<T> result) {
+      readResult.appliedFilter = result.appliedFilter;
+      readResult.appliedOrder = result.appliedOrder;
+      readResult.appliedSkip = result.appliedSkip;
+      readResult.appliedTop = result.appliedTop;
+      return this;
+    }
+
 
     /**
      * Top builder.

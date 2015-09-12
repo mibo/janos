@@ -103,11 +103,13 @@ public class DataSourceProcessor extends ODataSingleProcessor {
   public ODataResponse readEntitySet(final GetEntitySetUriInfo uriInfo, final String contentType)
       throws ODataException {
     ArrayList<Object> data = new ArrayList<>();
+    ReadResult result;
     try {
-      ReadResult result = (ReadResult) retrieveData(uriInfo);
+      result = (ReadResult) retrieveData(uriInfo);
       data.addAll(result.getResult());
     } catch (final ODataNotFoundException e) {
       data.clear();
+      result = ReadResult.empty();
     }
 
     final EdmEntitySet entitySet = uriInfo.getTargetEntitySet();
@@ -120,7 +122,8 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getOrderBy(),
         uriInfo.getSkipToken(),
         uriInfo.getSkip(),
-        uriInfo.getTop());
+        uriInfo.getTop(),
+        result);
 
     ODataContext context = getContext();
     String nextLink = null;
@@ -925,7 +928,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       if(innerData instanceof ReadResult) {
         return (ReadResult<?>) innerData;
       }
-      return (ReadResult<?>) ReadResult.forResult((Collection)innerData).build();
+      return (ReadResult<?>) ReadResult.fromResult(data, (Collection)innerData).build();
     } finally {
       context.stopRuntimeMeasurement(timingHandle);
     }
@@ -1175,16 +1178,22 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     }
   }
 
-  private <T> Integer applySystemQueryOptions(final EdmEntitySet entitySet, final List<T> data,
+  private Integer applySystemQueryOptions(final EdmEntitySet entitySet, final List<Object> data,
+                                    final FilterExpression filter, final InlineCount inlineCount, final OrderByExpression orderBy,
+                                    final String skipToken, final Integer skip, final Integer top) throws ODataException {
+    return applySystemQueryOptions(entitySet, data, filter, inlineCount, orderBy, skipToken, skip, top, ReadResult.empty());
+  }
+
+  private Integer applySystemQueryOptions(final EdmEntitySet entitySet, final List<Object> data,
       final FilterExpression filter, final InlineCount inlineCount, final OrderByExpression orderBy,
-      final String skipToken, final Integer skip, final Integer top) throws ODataException {
+      final String skipToken, final Integer skip, final Integer top, final ReadResult readResult) throws ODataException {
     ODataContext context = getContext();
     final int timingHandle = context.startRuntimeMeasurement(getClass().getSimpleName(), "applySystemQueryOptions");
 
     if (filter != null) {
       // Remove all elements the filter does not apply for.
       // A for-each loop would not work with "remove", see Java documentation.
-      for (Iterator<T> iterator = data.iterator(); iterator.hasNext();) {
+      for (Iterator iterator = data.iterator(); iterator.hasNext();) {
         if (!appliesFilter(iterator.next(), filter)) {
           iterator.remove();
         }
@@ -1215,7 +1224,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       }
     }
 
-    if (top != null) {
+    if (!readResult.appliedTop() && top != null) {
       while (data.size() > top) {
         data.remove(top.intValue());
       }

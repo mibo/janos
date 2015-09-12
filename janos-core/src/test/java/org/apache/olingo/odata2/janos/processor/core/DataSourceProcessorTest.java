@@ -152,7 +152,7 @@ public class DataSourceProcessorTest {
     ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
     StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
     List parsedResults = JsonHelper.getResults(resultStream.asString());
-    Assert.assertEquals(5, parsedResults.size());
+    Assert.assertEquals(10, parsedResults.size());
   }
 
   private List<Room> createRooms(int startId, int amount) {
