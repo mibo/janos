@@ -38,12 +38,12 @@ import org.apache.olingo.odata2.api.processor.ODataSingleProcessor;
 import org.apache.olingo.odata2.api.uri.*;
 import org.apache.olingo.odata2.api.uri.expression.*;
 import org.apache.olingo.odata2.api.uri.info.*;
-import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
-import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
-import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource.BinaryData;
 import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
+import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
+import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource.BinaryData;
+import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionSource;
 
 import java.io.InputStream;
 import java.util.*;
@@ -114,16 +114,8 @@ public class DataSourceProcessor extends ODataSingleProcessor {
 
     final EdmEntitySet entitySet = uriInfo.getTargetEntitySet();
     final InlineCount inlineCountType = uriInfo.getInlineCount();
-    final Integer count = applySystemQueryOptions(
-        entitySet,
-        data,
-        uriInfo.getFilter(),
-        inlineCountType,
-        uriInfo.getOrderBy(),
-        uriInfo.getSkipToken(),
-        uriInfo.getSkip(),
-        uriInfo.getTop(),
-        result);
+    final Integer count = applySystemQueryOptions(entitySet, data,
+        new QueryOptionsHolder(uriInfo), result);
 
     ODataContext context = getContext();
     String nextLink = null;
@@ -201,13 +193,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
 
     applySystemQueryOptions(
         uriInfo.getTargetEntitySet(),
-        data,
-        uriInfo.getFilter(),
-        null,
-        null,
-        null,
-        uriInfo.getSkip(),
-        uriInfo.getTop());
+        data, new QueryOptionsHolder(uriInfo));
 
     return ODataResponse.fromResponse(EntityProvider.writeText(String.valueOf(data.size()))).build();
   }
@@ -230,12 +216,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     final Integer count = applySystemQueryOptions(
         uriInfo.getTargetEntitySet(),
         data,
-        uriInfo.getFilter(),
-        uriInfo.getInlineCount(),
-        null, // uriInfo.getOrderBy(),
-        uriInfo.getSkipToken(),
-        uriInfo.getSkip(),
-        uriInfo.getTop());
+        new QueryOptionsHolder(uriInfo));
 
     final EdmEntitySet entitySet = uriInfo.getTargetEntitySet();
 
@@ -928,7 +909,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       if(innerData instanceof ReadResult) {
         return (ReadResult<?>) innerData;
       }
-      return (ReadResult<?>) ReadResult.fromResult(data, (Collection)innerData).build();
+      return (ReadResult<?>) ReadResult.fromResult(data, (List)innerData).build();
     } finally {
       context.stopRuntimeMeasurement(timingHandle);
     }
@@ -1178,55 +1159,91 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     }
   }
 
-  private Integer applySystemQueryOptions(final EdmEntitySet entitySet, final List<Object> data,
-                                    final FilterExpression filter, final InlineCount inlineCount, final OrderByExpression orderBy,
-                                    final String skipToken, final Integer skip, final Integer top) throws ODataException {
-    return applySystemQueryOptions(entitySet, data, filter, inlineCount, orderBy, skipToken, skip, top, ReadResult.empty());
+  private class QueryOptionsHolder {
+    final FilterExpression filter;
+    final InlineCount inlineCount;
+    final OrderByExpression orderBy;
+    final String skipToken;
+    final Integer skip;
+    final Integer top;
+
+    public QueryOptionsHolder(GetEntitySetUriInfo uriInfo) {
+      this.filter = uriInfo.getFilter();
+      this.inlineCount = uriInfo.getInlineCount();
+      this.orderBy = uriInfo.getOrderBy();
+      this.skipToken = uriInfo.getSkipToken();
+      this.skip = uriInfo.getSkip();
+      this.top = uriInfo.getTop();
+    }
+    //GetEntitySetCountUriInfo
+    public QueryOptionsHolder(GetEntitySetCountUriInfo uriInfo) {
+      this.filter = uriInfo.getFilter();
+      this.inlineCount = null;
+      this.orderBy = null;
+      this.skipToken = null;
+      this.skip = uriInfo.getSkip();
+      this.top = uriInfo.getTop();
+    }
+    //GetEntitySetLinksUriInfo//
+    public QueryOptionsHolder(GetEntitySetLinksUriInfo uriInfo) {
+      this.filter = uriInfo.getFilter();
+      this.inlineCount = uriInfo.getInlineCount();
+      this.orderBy = null;
+      this.skipToken = uriInfo.getSkipToken();
+      this.skip = uriInfo.getSkip();
+      this.top = uriInfo.getTop();
+    }
   }
 
   private Integer applySystemQueryOptions(final EdmEntitySet entitySet, final List<Object> data,
-      final FilterExpression filter, final InlineCount inlineCount, final OrderByExpression orderBy,
-      final String skipToken, final Integer skip, final Integer top, final ReadResult readResult) throws ODataException {
+                                    final QueryOptionsHolder queryOptions) throws ODataException {
+    return applySystemQueryOptions(entitySet, data, queryOptions, ReadResult.empty());
+  }
+
+  private Integer applySystemQueryOptions(final EdmEntitySet entitySet, final List<Object> data,
+                                          final QueryOptionsHolder queryOptions, final ReadResult readResult)
+      throws ODataException {
+
     ODataContext context = getContext();
     final int timingHandle = context.startRuntimeMeasurement(getClass().getSimpleName(), "applySystemQueryOptions");
 
-    if (filter != null) {
+    if (!readResult.appliedFilter() && queryOptions.filter != null) {
       // Remove all elements the filter does not apply for.
       // A for-each loop would not work with "remove", see Java documentation.
       for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-        if (!appliesFilter(iterator.next(), filter)) {
+        if (!appliesFilter(iterator.next(), queryOptions.filter)) {
           iterator.remove();
         }
       }
     }
 
-    final Integer count = inlineCount == InlineCount.ALLPAGES ? data.size() : null;
+    final Integer count = queryOptions.inlineCount == InlineCount.ALLPAGES ? data.size() : null;
 
-    if (orderBy != null) {
-      sort(data, orderBy);
-    } else if (skipToken != null || skip != null || top != null) {
+    if (queryOptions.orderBy != null) {
+      sort(data, queryOptions.orderBy);
+    } else if (queryOptions.skipToken != null || queryOptions.skip != null || queryOptions.top != null) {
       sortInDefaultOrder(entitySet, data);
     }
 
-    if (skipToken != null) {
-      while (!data.isEmpty() && !getSkipToken(entitySet, data.get(0)).equals(skipToken)) {
+    if (queryOptions.skipToken != null) {
+      while (!data.isEmpty() && !getSkipToken(entitySet, data.get(0)).equals(queryOptions.skipToken)) {
         data.remove(0);
       }
     }
 
-    if (skip != null) {
-      if (skip >= data.size()) {
+    if (queryOptions.skip != null && queryOptions.skip > 0) {
+      if (queryOptions.skip >= data.size()) {
         data.clear();
       } else {
-        for (int i = 0; i < skip; i++) {
+        for (int i = 0; i < queryOptions.skip; i++) {
           data.remove(0);
         }
       }
     }
 
-    if (!readResult.appliedTop() && top != null) {
-      while (data.size() > top) {
-        data.remove(top.intValue());
+    if (!readResult.appliedTop() && queryOptions.top != null && queryOptions.top > 0) {
+      while (data.size() > queryOptions.top) {
+        data.remove(queryOptions.top.intValue());
       }
     }
 

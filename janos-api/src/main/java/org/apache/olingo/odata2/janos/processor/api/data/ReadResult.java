@@ -1,7 +1,7 @@
 package org.apache.olingo.odata2.janos.processor.api.data;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Collections;
 
 /**
@@ -9,13 +9,13 @@ import java.util.Collections;
  * @param <T>  the type parameter
  */
 public final class ReadResult<T> {
-  private final Collection<T> result;
+  private final List<T> result;
   private boolean appliedSkip = false;
   private boolean appliedTop = false;
   private boolean appliedOrder = false;
   private boolean appliedFilter = false;
 
-  private ReadResult(Collection<T> result) {
+  private ReadResult(List<T> result) {
     this.result = new ArrayList<>(result);
   }
 
@@ -24,8 +24,8 @@ public final class ReadResult<T> {
    *
    * @return the result
    */
-  public Collection<T> getResult() {
-    return Collections.unmodifiableCollection(result);
+  public List<T> getResult() {
+    return Collections.unmodifiableList(result);
   }
 
   /**
@@ -71,11 +71,11 @@ public final class ReadResult<T> {
    * @param result the result
    * @return the builder
    */
-  public static <T> Builder<T> forResult(Collection<T> result) {
+  public static <T> Builder<T> forResult(List<T> result) {
     return new Builder<T>(result);
   }
 
-  public static <T> Builder<T> fromResult(ReadResult<T> readResult, Collection<T> result) {
+  public static <T> Builder<T> fromResult(ReadResult<T> readResult, List<T> result) {
     return new Builder<T>(result).apply(readResult);
   }
 
@@ -101,7 +101,7 @@ public final class ReadResult<T> {
      *
      * @param result the result
      */
-    public Builder(Collection<T> result) {
+    public Builder(List<T> result) {
       readResult = new ReadResult<>(result);
     }
 

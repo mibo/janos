@@ -15,13 +15,17 @@
  */
 package org.apache.olingo.odata2.janos.processor.core;
 
+import com.google.gson.internal.StringMap;
 import org.apache.olingo.odata2.api.edm.Edm;
 import org.apache.olingo.odata2.api.edm.EdmEntitySet;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.api.uri.PathInfo;
+import org.apache.olingo.odata2.api.uri.UriInfo;
+import org.apache.olingo.odata2.api.uri.expression.OrderByExpression;
 import org.apache.olingo.odata2.api.uri.info.GetEntitySetUriInfo;
+import org.apache.olingo.odata2.core.uri.UriParserImpl;
 import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
 import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
 import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
@@ -111,17 +115,10 @@ public class DataSourceProcessorTest {
 
   @Test
   public void readTop() throws Exception {
-    Edm edm = EdmMock.createMockEdm();
-    GetEntitySetUriInfo uriInfo = Mockito.mock(GetEntitySetUriInfo.class);
+    GetEntitySetUriInfo uriInfo = createMockedUriInfo("Rooms");
     Mockito.when(uriInfo.getTop()).thenReturn(5);
-    EdmEntitySet rooms = EdmMock.getEntitySet(edm, "Rooms");
-    Mockito.when(uriInfo.getTargetEntitySet()).thenReturn(rooms);
-    ODataContext context = Mockito.mock(ODataContext.class);
-    PathInfo pathInfo = Mockito.mock(PathInfo.class);
-    Mockito.when(context.getPathInfo()).thenReturn(pathInfo);
-    dataSourceProcessor.setContext(context);
 
-    Collection<Room> results = createRooms(1, 10);
+    List<Room> results = createRooms(1, 10);
     ReadResult<Room> readResult = ReadResult.forResult(results).build();
     Mockito.when(mockedDataSource.readData(Mockito.any(EdmEntitySet.class), Mockito.any(ReadOptions.class)))
         .thenReturn((ReadResult) readResult);
@@ -134,17 +131,10 @@ public class DataSourceProcessorTest {
 
   @Test
   public void optimizedReadTop() throws Exception {
-    Edm edm = EdmMock.createMockEdm();
-    GetEntitySetUriInfo uriInfo = Mockito.mock(GetEntitySetUriInfo.class);
+    GetEntitySetUriInfo uriInfo = createMockedUriInfo("Rooms");
     Mockito.when(uriInfo.getTop()).thenReturn(5);
-    EdmEntitySet rooms = EdmMock.getEntitySet(edm, "Rooms");
-    Mockito.when(uriInfo.getTargetEntitySet()).thenReturn(rooms);
-    ODataContext context = Mockito.mock(ODataContext.class);
-    PathInfo pathInfo = Mockito.mock(PathInfo.class);
-    Mockito.when(context.getPathInfo()).thenReturn(pathInfo);
-    dataSourceProcessor.setContext(context);
 
-    Collection<Room> results = createRooms(1, 10);
+    List<Room> results = createRooms(1, 10);
     ReadResult<Room> readResult = ReadResult.forResult(results).top().build();
     Mockito.when(mockedDataSource.readData(Mockito.any(EdmEntitySet.class), Mockito.any(ReadOptions.class)))
         .thenReturn((ReadResult)readResult);
@@ -153,6 +143,64 @@ public class DataSourceProcessorTest {
     StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
     List parsedResults = JsonHelper.getResults(resultStream.asString());
     Assert.assertEquals(10, parsedResults.size());
+  }
+
+
+  @Test
+  public void readOrder() throws Exception {
+    GetEntitySetUriInfo uriInfo = createMockedUriInfo("Rooms");
+    Edm edm = EdmMock.createMockEdm();
+
+    OrderByExpression exp = UriParserImpl.parseOrderBy(edm, edm.getEntityType("RefScenario", "Room"), "Name");
+    Mockito.when(uriInfo.getOrderBy()).thenReturn(exp);
+
+    List<Room> results = createRooms(1, 10);
+    Collections.reverse(results);
+    ReadResult<Room> readResult = ReadResult.forResult(results).build();
+    Mockito.when(mockedDataSource.readData(Mockito.any(EdmEntitySet.class), Mockito.any(ReadOptions.class)))
+        .thenReturn((ReadResult)readResult);
+
+    ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
+
+    StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
+    List<StringMap<?>> parsedResults = JsonHelper.getResults(resultStream.asString());
+    Assert.assertEquals(10, parsedResults.size());
+    Assert.assertEquals("Room with id: 1", parsedResults.get(0).get("Name"));
+  }
+
+  @Test
+  public void optimizedReadOrder() throws Exception {
+    GetEntitySetUriInfo uriInfo = createMockedUriInfo("Rooms");
+    Edm edm = EdmMock.createMockEdm();
+
+    OrderByExpression exp = UriParserImpl.parseOrderBy(edm, edm.getEntityType("RefScenario", "Room"), "Name desc");
+    Mockito.when(uriInfo.getOrderBy()).thenReturn(exp);
+
+    List<Room> results = createRooms(1, 10);
+    Collections.reverse(results);
+    ReadResult<Room> readResult = ReadResult.forResult(results).order().build();
+    Mockito.when(mockedDataSource.readData(Mockito.any(EdmEntitySet.class), Mockito.any(ReadOptions.class)))
+        .thenReturn((ReadResult)readResult);
+
+    ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
+
+    StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
+    List<StringMap<?>> parsedResults = JsonHelper.getResults(resultStream.asString());
+    Assert.assertEquals(10, parsedResults.size());
+    Assert.assertEquals("Room with id: 9", parsedResults.get(0).get("Name"));
+  }
+
+
+  private UriInfo createMockedUriInfo(String entitySetName) throws ODataException {
+    Edm edm = EdmMock.createMockEdm();
+    UriInfo uriInfo = Mockito.mock(UriInfo.class);
+    EdmEntitySet rooms = EdmMock.getEntitySet(edm, entitySetName);
+    Mockito.when(uriInfo.getTargetEntitySet()).thenReturn(rooms);
+    ODataContext context = Mockito.mock(ODataContext.class);
+    PathInfo pathInfo = Mockito.mock(PathInfo.class);
+    Mockito.when(context.getPathInfo()).thenReturn(pathInfo);
+    dataSourceProcessor.setContext(context);
+    return uriInfo;
   }
 
   private List<Room> createRooms(int startId, int amount) {

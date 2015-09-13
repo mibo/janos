@@ -109,7 +109,7 @@ public class InMemoryDataStore<T> implements DataStore<T> {
 
   @Override
   public ReadResult<T> read(ReadOptions readOptions) {
-    return ReadResult.forResult(dataStore.values()).build();
+    return ReadResult.forResult(new ArrayList<>(dataStore.values())).build();
   }
 
   @Override
