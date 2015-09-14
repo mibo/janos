@@ -124,7 +124,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     // if there are further entities.
     // Almost all system query options in the current request must be carried
     // over to the URI for the "next" link, with the exception of $skiptoken
-    // and $skip.
+    // and $skipApplied.
     if (data.size() > SERVER_PAGING_SIZE) {
       if (uriInfo.getOrderBy() == null
           && uriInfo.getSkipToken() == null
@@ -172,7 +172,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     }
 
     return link.replaceAll("\\$skiptoken=.+?(?:&|$)", "")
-        .replaceAll("\\$skip=.+?(?:&|$)", "")
+        .replaceAll("\\$skipApplied=.+?(?:&|$)", "")
         .replaceFirst("(?:\\?|&)$", ""); // Remove potentially trailing "?" or "&" left over from remove actions
   }
 
@@ -1209,8 +1209,8 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     ODataContext context = getContext();
     final int timingHandle = context.startRuntimeMeasurement(getClass().getSimpleName(), "applySystemQueryOptions");
 
-    if (!readResult.appliedFilter() && queryOptions.filter != null) {
-      // Remove all elements the filter does not apply for.
+    if (!readResult.isFilterApplied() && queryOptions.filter != null) {
+      // Remove all elements the filterApplied does not apply for.
       // A for-each loop would not work with "remove", see Java documentation.
       for (Iterator iterator = data.iterator(); iterator.hasNext();) {
         if (!appliesFilter(iterator.next(), queryOptions.filter)) {
@@ -1221,29 +1221,31 @@ public class DataSourceProcessor extends ODataSingleProcessor {
 
     final Integer count = queryOptions.inlineCount == InlineCount.ALLPAGES ? data.size() : null;
 
-    if (queryOptions.orderBy != null) {
+    if (!readResult.isOrderApplied() && queryOptions.orderBy != null) {
       sort(data, queryOptions.orderBy);
     } else if (queryOptions.skipToken != null || queryOptions.skip != null || queryOptions.top != null) {
       sortInDefaultOrder(entitySet, data);
     }
 
-    if (queryOptions.skipToken != null) {
-      while (!data.isEmpty() && !getSkipToken(entitySet, data.get(0)).equals(queryOptions.skipToken)) {
-        data.remove(0);
-      }
-    }
-
-    if (queryOptions.skip != null && queryOptions.skip > 0) {
-      if (queryOptions.skip >= data.size()) {
-        data.clear();
-      } else {
-        for (int i = 0; i < queryOptions.skip; i++) {
+    if(!readResult.isSkipApplied()) {
+      if (queryOptions.skipToken != null) {
+        while (!data.isEmpty() && !getSkipToken(entitySet, data.get(0)).equals(queryOptions.skipToken)) {
           data.remove(0);
+        }
+      }
+
+      if (queryOptions.skip != null && queryOptions.skip > 0) {
+        if (queryOptions.skip >= data.size()) {
+          data.clear();
+        } else {
+          for (int i = 0; i < queryOptions.skip; i++) {
+            data.remove(0);
+          }
         }
       }
     }
 
-    if (!readResult.appliedTop() && queryOptions.top != null && queryOptions.top > 0) {
+    if (!readResult.isTopApplied() && queryOptions.top != null && queryOptions.top > 0) {
       while (data.size() > queryOptions.top) {
         data.remove(queryOptions.top.intValue());
       }

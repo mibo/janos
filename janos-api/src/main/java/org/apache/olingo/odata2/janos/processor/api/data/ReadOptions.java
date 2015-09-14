@@ -36,7 +36,7 @@ public final class ReadOptions {
   /**
    * Start builder.
    *
-   * @param filter the filter
+   * @param filter the filterApplied
    * @return the builder
    */
   public static Builder start(FilterExpression filter) {
@@ -46,7 +46,7 @@ public final class ReadOptions {
   /**
    * Start builder.
    *
-   * @param orderBy the order by
+   * @param orderBy the orderApplied by
    * @return the builder
    */
   public static Builder start(OrderByExpression orderBy) {
@@ -56,8 +56,8 @@ public final class ReadOptions {
   /**
    * Start builder.
    *
-   * @param skipToken the skip token
-   * @param skip the skip
+   * @param skipToken the skipApplied token
+   * @param skip the skipApplied
    * @return the builder
    */
   public static Builder start(String skipToken, Integer skip) {
@@ -67,7 +67,7 @@ public final class ReadOptions {
   /**
    * Start builder.
    *
-   * @param top the top
+   * @param top the topApplied
    * @return the builder
    */
   public static Builder start(Integer top) {
@@ -75,45 +75,45 @@ public final class ReadOptions {
   }
 
   /**
-   * Gets filter.
+   * Gets filterApplied.
    *
-   * @return the filter
+   * @return the filterApplied
    */
   public FilterExpression getFilter() {
     return filter;
   }
 
   /**
-   * Gets order by.
+   * Gets orderApplied by.
    *
-   * @return the order by
+   * @return the orderApplied by
    */
   public OrderByExpression getOrderBy() {
     return orderBy;
   }
 
   /**
-   * Gets skip.
+   * Gets skipApplied.
    *
-   * @return the skip
+   * @return the skipApplied
    */
   public Integer getSkip() {
     return skip;
   }
 
   /**
-   * Gets skip token.
+   * Gets skipApplied token.
    *
-   * @return the skip token
+   * @return the skipApplied token
    */
   public String getSkipToken() {
     return skipToken;
   }
 
   /**
-   * Gets top.
+   * Gets topApplied.
    *
-   * @return the top
+   * @return the topApplied
    */
   public Integer getTop() {
     return top;
@@ -137,7 +137,7 @@ public final class ReadOptions {
     /**
      * Filter builder.
      *
-     * @param filter the filter
+     * @param filter the filterApplied
      * @return the builder
      */
     public Builder filter(FilterExpression filter) {
@@ -148,7 +148,7 @@ public final class ReadOptions {
     /**
      * Order builder.
      *
-     * @param orderBy the order by
+     * @param orderBy the orderApplied by
      * @return the builder
      */
     public Builder order(OrderByExpression orderBy) {
@@ -159,8 +159,8 @@ public final class ReadOptions {
     /**
      * Skip builder.
      *
-     * @param skipToken the skip token
-     * @param skip the skip
+     * @param skipToken the skipApplied token
+     * @param skip the skipApplied
      * @return the builder
      */
     public Builder skip(String skipToken, Integer skip) {
@@ -172,7 +172,7 @@ public final class ReadOptions {
     /**
      * Top builder.
      *
-     * @param top the top
+     * @param top the topApplied
      * @return the builder
      */
     public Builder top(Integer top) {

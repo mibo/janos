@@ -29,38 +29,38 @@ public final class ReadResult<T> {
   }
 
   /**
-   * Applied skip.
+   * Applied skipApplied.
    *
    * @return the boolean
    */
-  public boolean appliedSkip() {
+  public boolean isSkipApplied() {
     return appliedSkip;
   }
 
   /**
-   * Applied top.
+   * Applied topApplied.
    *
    * @return the boolean
    */
-  public boolean appliedTop() {
+  public boolean isTopApplied() {
     return appliedTop;
   }
 
   /**
-   * Applied order.
+   * Applied orderApplied.
    *
    * @return the boolean
    */
-  public boolean appliedOrder() {
+  public boolean isOrderApplied() {
     return appliedOrder;
   }
 
   /**
-   * Applied filter.
+   * Applied filterApplied.
    *
    * @return the boolean
    */
-  public boolean appliedFilter() {
+  public boolean isFilterApplied() {
     return appliedFilter;
   }
 
@@ -115,41 +115,41 @@ public final class ReadResult<T> {
 
 
     /**
-     * Top builder.
+     * Set top to applied.
      *
      * @return the builder
      */
-    public Builder<T> top() {
+    public Builder<T> topApplied() {
       readResult.appliedTop = true;
       return this;
     }
 
     /**
-     * Skip builder.
+     * Set skip to applied.
      *
      * @return the builder
      */
-    public Builder<T> skip() {
+    public Builder<T> skipApplied() {
       readResult.appliedSkip = true;
       return this;
     }
 
     /**
-     * Filter builder.
+     * Set filter to applied.
      *
      * @return the builder
      */
-    public Builder<T> filter() {
+    public Builder<T> filterApplied() {
       readResult.appliedFilter = true;
       return this;
     }
 
     /**
-     * Order builder.
+     * Set order to applied.
      *
      * @return the builder
      */
-    public Builder<T> order() {
+    public Builder<T> orderApplied() {
       readResult.appliedOrder = true;
       return this;
     }
