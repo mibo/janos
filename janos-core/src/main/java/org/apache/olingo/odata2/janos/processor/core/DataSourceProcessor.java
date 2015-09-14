@@ -908,8 +908,10 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       }
       if(innerData instanceof ReadResult) {
         return (ReadResult<?>) innerData;
+      } else if(innerData instanceof Collection) {
+        return (ReadResult<?>) ReadResult.fromResult(data, (Collection) innerData).build();
       }
-      return (ReadResult<?>) ReadResult.fromResult(data, (List)innerData).build();
+      throw new ODataException("Found unexpected result type " + innerData.getClass());
     } finally {
       context.stopRuntimeMeasurement(timingHandle);
     }

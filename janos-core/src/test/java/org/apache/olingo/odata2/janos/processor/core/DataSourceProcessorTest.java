@@ -137,7 +137,7 @@ public class DataSourceProcessorTest {
     List<Room> results = createRooms(1, 10);
     ReadResult<Room> readResult = ReadResult.forResult(results).top().build();
     Mockito.when(mockedDataSource.readData(Mockito.any(EdmEntitySet.class), Mockito.any(ReadOptions.class)))
-        .thenReturn((ReadResult)readResult);
+        .thenReturn((ReadResult) readResult);
 
     ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
     StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
