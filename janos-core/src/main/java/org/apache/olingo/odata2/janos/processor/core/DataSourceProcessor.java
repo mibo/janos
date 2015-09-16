@@ -105,7 +105,12 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     ArrayList<Object> data = new ArrayList<>();
     ReadResult result;
     try {
-      result = (ReadResult) retrieveData(uriInfo);
+      result = retrieveData(uriInfo,
+          uriInfo.getStartEntitySet(),
+          uriInfo.getKeyPredicates(),
+          uriInfo.getFunctionImport(),
+          mapFunctionParameters(uriInfo.getFunctionImportParameters()),
+          uriInfo.getNavigationSegments());
       data.addAll(result.getResult());
     } catch (final ODataNotFoundException e) {
       data.clear();
@@ -181,7 +186,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       throws ODataException {
     ArrayList<Object> data = new ArrayList<>();
     try {
-      ReadResult<?> result = (ReadResult<?>) retrieveData(
+      ReadResult<?> result = retrieveData(
           uriInfo.getStartEntitySet(),
           uriInfo.getKeyPredicates(),
           uriInfo.getFunctionImport(),
@@ -204,12 +209,12 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       throws ODataException {
     ArrayList<Object> data = new ArrayList<>();
     try {
-      data.addAll((List<?>) retrieveData(
+      data.addAll(retrieveData(
           uriInfo.getStartEntitySet(),
           uriInfo.getKeyPredicates(),
           uriInfo.getFunctionImport(),
           mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-          uriInfo.getNavigationSegments()));
+          uriInfo.getNavigationSegments()).getResult());
     } catch (final ODataNotFoundException e) {
       data.clear();
     }
@@ -259,7 +264,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     if (!appliesFilter(data, uriInfo.getFilter())) {
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -275,12 +280,13 @@ public class DataSourceProcessor extends ODataSingleProcessor {
   @Override
   public ODataResponse existsEntity(final GetEntityCountUriInfo uriInfo, final String contentType)
       throws ODataException {
-    final Object data = retrieveData(
+    final ReadResult result = retrieveData(
         uriInfo.getStartEntitySet(),
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
         uriInfo.getNavigationSegments());
+    final Object data = result.getFirst();
 
     return ODataResponse.fromResponse(EntityProvider.writeText(appliesFilter(data, uriInfo.getFilter()) ? "1" : "0"))
         .build();
@@ -333,7 +339,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
           uriInfo.getKeyPredicates(),
           uriInfo.getFunctionImport(),
           mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-          previousSegments);
+          previousSegments).getFirst();
       final EdmEntitySet previousEntitySet = previousSegments.isEmpty() ?
           uriInfo.getStartEntitySet() : previousSegments.get(previousSegments.size() - 1).getEntitySet();
       dataSource.writeRelation(previousEntitySet, sourceData, entitySet, getStructuralTypeValueMap(data, entityType));
@@ -346,13 +352,14 @@ public class DataSourceProcessor extends ODataSingleProcessor {
   @Override
   public ODataResponse updateEntity(final PutMergePatchUriInfo uriInfo, final InputStream content,
       final String requestContentType, final boolean merge, final String contentType) throws ODataException {
-    Object data = retrieveData(
+    ReadResult<?> readResult = retrieveData(
         uriInfo.getStartEntitySet(),
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
         uriInfo.getNavigationSegments());
 
+    Object data = readResult.getFirst();
     if (!appliesFilter(data, uriInfo.getFilter())) {
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
     }
@@ -378,7 +385,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     // if (!appliesFilter(data, uriInfo.getFilter()))
     if (data == null) {
@@ -422,7 +429,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        previousSegments);
+        previousSegments).getFirst();
 
     final EdmEntitySet entitySet = previousSegments.isEmpty() ?
         uriInfo.getStartEntitySet() : previousSegments.get(previousSegments.size() - 1).getEntitySet();
@@ -452,7 +459,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        previousSegments);
+        previousSegments).getFirst();
 
     final EdmEntitySet entitySet = previousSegments.isEmpty() ?
         uriInfo.getStartEntitySet() : previousSegments.get(previousSegments.size() - 1).getEntitySet();
@@ -476,7 +483,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        previousSegments);
+        previousSegments).getFirst();
 
     final EdmEntitySet entitySet = previousSegments.isEmpty() ?
         uriInfo.getStartEntitySet() : previousSegments.get(previousSegments.size() - 1).getEntitySet();
@@ -506,7 +513,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     // if (!appliesFilter(data, uriInfo.getFilter()))
     if (data == null) {
@@ -544,7 +551,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     // if (!appliesFilter(data, uriInfo.getFilter()))
     if (data == null) {
@@ -568,7 +575,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     if (data == null) {
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -592,7 +599,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     if (!appliesFilter(data, uriInfo.getFilter())) {
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -644,7 +651,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     if (!appliesFilter(data, uriInfo.getFilter())) {
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -681,7 +688,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     if (!appliesFilter(data, uriInfo.getFilter())) {
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -707,7 +714,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     if (data == null) {
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -726,7 +733,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
         uriInfo.getKeyPredicates(),
         uriInfo.getFunctionImport(),
         mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-        uriInfo.getNavigationSegments());
+        uriInfo.getNavigationSegments()).getFirst();
 
     if (!appliesFilter(data, uriInfo.getFilter())) {
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -842,10 +849,33 @@ public class DataSourceProcessor extends ODataSingleProcessor {
   }
 
   // FIXME: mibo_150917: Change method for ReadResult
-  private Object retrieveData(final EdmEntitySet startEntitySet, final List<KeyPredicate> keyPredicates,
+  private ReadResult<?> retrieveData(final EdmEntitySet startEntitySet, final List<KeyPredicate> keyPredicates,
       final EdmFunctionImport functionImport, final Map<String, Object> functionImportParameters,
       final List<NavigationSegment> navigationSegments)
         throws ODataException {
+    return retrieveData(ReadOptions.none(), startEntitySet, keyPredicates,
+        functionImport, functionImportParameters, navigationSegments);
+  }
+
+  private ReadResult<?> retrieveData(final GetEntitySetUriInfo uriInfo, final EdmEntitySet startEntitySet,
+                              final List<KeyPredicate> keyPredicates, final EdmFunctionImport functionImport,
+                              final Map<String, Object> functionImportParameters, final List<NavigationSegment> navigationSegments)
+      throws ODataException {
+    ReadOptions readOptions = ReadOptions.start()
+        .filter(uriInfo.getFilter())
+        .order(uriInfo.getOrderBy())
+        .skip(uriInfo.getSkipToken(), uriInfo.getSkip())
+        .top(uriInfo.getTop()).build();
+
+    return retrieveData(readOptions, startEntitySet, keyPredicates,
+        functionImport, functionImportParameters, navigationSegments);
+  }
+
+  private ReadResult<?> retrieveData(final ReadOptions readOptions, final EdmEntitySet startEntitySet,
+                              final List<KeyPredicate> keyPredicates, final EdmFunctionImport functionImport,
+                              final Map<String, Object> functionImportParameters, final List<NavigationSegment> navigationSegments)
+      throws ODataException {
+
     final Map<String, Object> keys = mapKey(keyPredicates);
 
     ODataContext context = getContext();
@@ -855,7 +885,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       Object data;
       if(functionImport == null) {
         if(keys.isEmpty()) {
-          data = dataSource.readData(startEntitySet, ReadOptions.none());
+          data = dataSource.readData(startEntitySet, readOptions);
         } else {
           data = dataSource.readData(startEntitySet, keys);
         }
@@ -865,42 +895,8 @@ public class DataSourceProcessor extends ODataSingleProcessor {
 
       EdmEntitySet currentEntitySet =
           functionImport == null ? startEntitySet : functionImport.getEntitySet();
+      Object innerData = data instanceof ReadResult ? ((ReadResult) data).getResult(): data;
       for (NavigationSegment navigationSegment : navigationSegments) {
-        data = dataSource.readRelatedData(
-            currentEntitySet,
-            data,
-            navigationSegment.getEntitySet(),
-            mapKey(navigationSegment.getKeyPredicates()));
-        currentEntitySet = navigationSegment.getEntitySet();
-      }
-      return data;
-    } finally {
-      context.stopRuntimeMeasurement(timingHandle);
-    }
-  }
-
-
-  private ReadResult<?> retrieveData(final GetEntitySetUriInfo uriInfo)
-      throws ODataException {
-    ReadResult<?> data;
-    final EdmEntitySet startEntitySet = uriInfo.getStartEntitySet();
-    ODataContext context = getContext();
-    final int timingHandle = context.startRuntimeMeasurement(getClass().getSimpleName(), "retrieveData");
-
-    try {
-      ReadOptions readOptions = ReadOptions.start()
-          .filter(uriInfo.getFilter())
-          .order(uriInfo.getOrderBy())
-          .skip(uriInfo.getSkipToken(), uriInfo.getSkip())
-          .top(uriInfo.getTop()).build();
-
-      data = dataSource.readData(startEntitySet, readOptions);
-
-      EdmEntitySet currentEntitySet = startEntitySet;
-      List<NavigationSegment> navigationSegments = uriInfo.getNavigationSegments();
-      Object innerData = data.getResult();
-      for (NavigationSegment navigationSegment : navigationSegments) {
-        // TODO: mibo_150904: Add read options
         innerData = dataSource.readRelatedData(
             currentEntitySet,
             innerData,
@@ -910,10 +906,14 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       }
       if(innerData instanceof ReadResult) {
         return (ReadResult<?>) innerData;
+      } else if(data instanceof ReadResult && innerData instanceof Collection) {
+        return ReadResult.fromResult((ReadResult) data, (Collection) innerData).build();
       } else if(innerData instanceof Collection) {
-        return (ReadResult<?>) ReadResult.fromResult(data, (Collection) innerData).build();
+        return ReadResult.forResult((Collection) innerData).build();
+      } else {
+        return ReadResult.forResult(Collections.singleton(innerData)).build();
       }
-      throw new ODataException("Found unexpected result type " + innerData.getClass());
+//      throw new ODataException("Found unexpected result type " + innerData.getClass());
     } finally {
       context.stopRuntimeMeasurement(timingHandle);
     }

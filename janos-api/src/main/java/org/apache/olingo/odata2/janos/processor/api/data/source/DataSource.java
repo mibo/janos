@@ -83,7 +83,7 @@ public interface DataSource {
    * @param targetEntitySet the requested target
    * @param targetKeys the key of the target entity as map of key names to key values
    * (optional)
-   * @return the requested releated data object, either a list or a single object
+   * @return the requested related data object, either a list or a single object
    * @throws ODataNotImplementedException the o data not implemented exception
    * @throws ODataNotFoundException the o data not found exception
    * @throws EdmException the edm exception

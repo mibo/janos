@@ -29,6 +29,20 @@ public final class ReadResult<T> {
   }
 
   /**
+   * Get first result from results collection
+   * or <code>null</code> if result collection is empty.
+   *
+   * @return first result from results collection
+   *          or <code>null</code> if result collection is empty.
+   */
+  public T getFirst() {
+    if(result.isEmpty()) {
+      return null;
+    }
+    return result.iterator().next();
+  }
+
+  /**
    * Applied skipApplied.
    *
    * @return the boolean
