@@ -20,9 +20,9 @@ package org.apache.olingo.odata2.janos.processor.api;
 
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.api.datasource.ValueAccess;
+import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 
 import java.util.Collection;
 
@@ -71,9 +71,10 @@ public abstract class JanosService {
      * Create an {@link ODataService} which is based on an EDM and Processor which are using the annotations from
      * <code>org.apache.olingo.olingo-odata2-api-annotation</code> module
      * (see package <code>org.apache.olingo.odata2.api.annotation.edm</code>) to define the model and access the data.
-     * 
+     *
      * @param modelPackage package name which is scanned for annotated classes
-     * @return service an {@link ODataService} based on on an EDM and Processor which are using annotations
+     * @return service an
+     * based on on an EDM and Processor which are using annotations
      * for model definition and data access.
      * @throws ODataException if an error during initialization occurs
      */
@@ -83,8 +84,10 @@ public abstract class JanosService {
      * Create an {@link ODataService} which is based on an EDM and Processor which are using the annotations from
      * <code>org.apache.olingo.olingo-odata2-api-annotation</code> module
      * (see package <code>org.apache.olingo.odata2.api.annotation.edm</code>) to define the model and access the data.
-     * 
-     * @return service an {@link ODataService} based on on an EDM and Processor which are using annotations
+     *
+     * @param annotatedClasses the annotated classes
+     * @return service an
+     * based on on an EDM and Processor which are using annotations
      * for model definition and data access.
      * @throws ODataException if an error during initialization occurs
      */
@@ -114,6 +117,7 @@ public abstract class JanosService {
     /**
      * Finish building and build/create the configured JanosService (ODataService)
      * @return an instance of a JanosService (ODataService)
+     * @throws ODataException the o data exception
      */
     ODataService build() throws ODataException;
   }
@@ -122,9 +126,10 @@ public abstract class JanosService {
    * Create an {@link ODataService} which is based on an EDM and Processor which are using the annotations from
    * <code>org.apache.olingo.olingo-odata2-api-annotation</code> module
    * (see package <code>org.apache.olingo.odata2.api.annotation.edm</code>) to define the model and access the data.
-   * 
+   *
    * @param modelPackage package name which is scanned for annotated classes
-   * @return service an {@link ODataService} based on on an EDM and Processor which are using annotations
+   * @return service an
+   * based on on an EDM and Processor which are using annotations
    * for model definition and data access.
    * @throws ODataException if an error during initialization occurs
    */
@@ -136,8 +141,10 @@ public abstract class JanosService {
    * Create an {@link ODataService} which is based on an EDM and Processor which are using the annotations from
    * <code>org.apache.olingo.olingo-odata2-api-annotation</code> module
    * (see package <code>org.apache.olingo.odata2.api.annotation.edm</code>) to define the model and access the data.
-   * 
-   * @return service an {@link ODataService} based on on an EDM and Processor which are using annotations
+   *
+   * @param annotatedClasses the annotated classes
+   * @return service an
+   * based on on an EDM and Processor which are using annotations
    * for model definition and data access.
    * @throws ODataException if an error during initialization occurs
    */

@@ -13,23 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.olingo.odata2.janos.processor.api.datasource;
+package org.apache.olingo.odata2.janos.processor.api.data.store;
 
 import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 
 import java.util.Locale;
 
 /**
- *
+ * The type Data store exception.
  */
 public class DataStoreException extends ODataApplicationException {
 
   private static final long serialVersionUID = 42L;
 
+  /**
+   * Instantiates a new Data store exception.
+   *
+   * @param message the message
+   */
   public DataStoreException(final String message) {
     this(message, null);
   }
 
+  /**
+   * Instantiates a new Data store exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
   public DataStoreException(final String message, final Throwable cause) {
     super(message, Locale.ENGLISH, cause);
   }

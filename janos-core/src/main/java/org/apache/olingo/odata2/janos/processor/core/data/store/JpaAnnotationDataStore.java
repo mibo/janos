@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.olingo.odata2.janos.processor.core.datasource;
+package org.apache.olingo.odata2.janos.processor.core.data.store;
 
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
+import org.apache.olingo.odata2.api.uri.expression.OrderByExpression;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStore;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreException;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 
@@ -121,6 +124,22 @@ public class JpaAnnotationDataStore<T> implements DataStore<T> {
   public Collection<T> read() {
     Query query = entityManager.createQuery("SELECT t FROM " + dataTypeClass.getSimpleName() + " t");
     return query.getResultList();
+  }
+
+  @Override
+  public ReadResult<T> read(ReadOptions readOptions) {
+    ReadResult.Builder<T> result = ReadResult.start();
+    Query query = entityManager.createQuery("SELECT t FROM " + dataTypeClass.getSimpleName() + " t");
+    if(readOptions.getTop() != null) {
+      query.setMaxResults(readOptions.getTop());
+      result.topApplied();
+    }
+    if(readOptions.getSkip() != null) {
+      query.setFirstResult(readOptions.getSkip());
+      result.skipApplied();
+    }
+
+    return result.values(query.getResultList()).build();
   }
 
   @Override

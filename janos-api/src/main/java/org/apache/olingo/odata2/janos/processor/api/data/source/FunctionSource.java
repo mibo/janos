@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.api.datasource;
+package org.apache.olingo.odata2.janos.processor.api.data.source;
 
 import org.apache.olingo.odata2.api.edm.EdmException;
 import org.apache.olingo.odata2.api.edm.EdmFunctionImport;
@@ -40,7 +40,7 @@ public interface FunctionSource {
    * <p>Retrieves data for the specified function import and key.</p>
    * <p>This method is called also for function imports that have defined in
    * their metadata an other HTTP method than <code>GET</code>.</p>
-   * @param function the requested {@link EdmFunctionImport}
+   * @param function the requested
    * @param parameters the parameters of the function import
    * as map of parameter names to parameter values
    * @param keys the key of the returned entity set, as map of key names to key values,
@@ -48,7 +48,11 @@ public interface FunctionSource {
    * (optional)
    * @return the requested data object, either a list or a single object;
    * if the function import's return type is of type <code>Binary</code>,
-   * the returned object(s) must be of type {@link BinaryData}
+   * the returned object(s) must be of type
+   * @throws ODataNotImplementedException the o data not implemented exception
+   * @throws ODataNotFoundException the o data not found exception
+   * @throws EdmException the edm exception
+   * @throws ODataApplicationException the o data application exception
    */
   Object executeFunction(EdmFunctionImport function, Map<String, Object> parameters, Map<String, Object> keys)
       throws ODataNotImplementedException, ODataNotFoundException, EdmException, ODataApplicationException;

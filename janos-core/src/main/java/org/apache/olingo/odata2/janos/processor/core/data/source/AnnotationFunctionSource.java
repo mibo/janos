@@ -1,4 +1,4 @@
-package org.apache.olingo.odata2.janos.processor.core.datasource;
+package org.apache.olingo.odata2.janos.processor.core.data.source;
 
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
@@ -6,9 +6,9 @@ import org.apache.olingo.odata2.api.edm.EdmException;
 import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 import org.apache.olingo.odata2.api.exception.ODataNotFoundException;
 import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionExecutor;
-import org.apache.olingo.odata2.janos.processor.api.datasource.FunctionSource;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionExecutor;
+import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;

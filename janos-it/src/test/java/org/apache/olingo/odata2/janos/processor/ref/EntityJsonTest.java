@@ -25,6 +25,7 @@ import org.apache.olingo.odata2.api.commons.HttpContentType;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -32,10 +33,26 @@ import static org.junit.Assert.*;
 /**
  *  
  */
-public class EntryJsonCreateTest extends AbstractRefJsonTest {
+public class EntityJsonTest extends AbstractRefJsonTest {
 
-  public EntryJsonCreateTest(String modelPackage) {
+  public EntityJsonTest(String modelPackage) {
     super(modelPackage);
+  }
+
+  @Test
+  @SuppressWarnings(value = "unchecked")
+  public void readEntityRoom() throws Exception {
+    String roomId = requestRoomId();
+    HttpResponse response =
+        callUri("Rooms('" + roomId + "')", HttpHeaders.ACCEPT, HttpContentType.APPLICATION_JSON, HttpStatusCodes.OK);
+    checkMediaType(response, HttpContentType.APPLICATION_JSON);
+
+    String body = getBody(response);
+    StringMap<?> firstRoom = getStringMap(body);
+
+    assertEquals("Small green room", firstRoom.get("Name"));
+    assertEquals(20.0, firstRoom.get("Seats"));
+    assertEquals(42.0, firstRoom.get("Version"));
   }
 
   @Test
@@ -159,4 +176,23 @@ public class EntryJsonCreateTest extends AbstractRefJsonTest {
       "        }" +
       "    }" +
       "}";
+
+  @SuppressWarnings(value = "unchecked")
+  private String requestRoomId() throws Exception {
+    HttpResponse response =
+        callUri("Rooms", HttpHeaders.ACCEPT, HttpContentType.APPLICATION_JSON, HttpStatusCodes.OK);
+    checkMediaType(response, HttpContentType.APPLICATION_JSON);
+
+    String body = getBody(response);
+    StringMap<?> map = getStringMap(body);
+
+    List<StringMap<String>> results = (List) map.get("results");
+
+    for (StringMap<String> result : results) {
+      if(result.get("Name").equals("Small green room")) {
+        return result.get("Id");
+      }
+    }
+    return null;
+  }
 }

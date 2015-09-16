@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.olingo.odata2.janos.processor.api.datasource;
+package org.apache.olingo.odata2.janos.processor.api.data.store;
 
 import java.util.Map;
 
@@ -22,6 +22,9 @@ import java.util.Map;
  * Manager (and factory) for DataStore instances.
  */
 public interface DataStoreManager {
+  /**
+   * The KEEP _ pERSISTENT.
+   */
   String KEEP_PERSISTENT = "KEEP_PERSISTENT";
 
   /**
@@ -35,18 +38,18 @@ public interface DataStoreManager {
   /**
    * Create a DataStore without managing (keeping a reference to it).
    *
+   * @param <T>  type of class for which the DataStore is created
    * @param clz class for which the DataStore is created
-   * @param <T> type of class for which the DataStore is created
    * @return the created (and not managed) DataStore
-   * @throws DataStoreException
+   * @throws DataStoreException the data store exception
    */
   <T> DataStore<T> createDataStore(Class<T> clz) throws DataStoreException;
 
   /**
    * Create a DataStore without managing (keeping a reference to it).
    *
+   * @param <T>  type of class for which the DataStore is created
    * @param clz class for which the DataStore is created
-   * @param <T> type of class for which the DataStore is created
    * @param properties properties for creation
    * @return the created (and not managed) DataStore
    * @throws DataStoreException if something goes wrong
@@ -57,9 +60,9 @@ public interface DataStoreManager {
    * Create a DataStore and managing it (keeping a reference to it).
    * If a DataStore with given name already exists this will be returned.
    *
+   * @param <T>  type of class for which the DataStore is created
    * @param name unique name for the DataStore
    * @param clz class for which the DataStore is created
-   * @param <T> type of class for which the DataStore is created
    * @return the created (and managed) DataStore
    * @throws DataStoreException if something goes wrong
    */
@@ -69,9 +72,9 @@ public interface DataStoreManager {
    * Create a DataStore and managing it (keeping a reference to it).
    * If a DataStore with given name already exists this will be returned.
    *
+   * @param <T>  type of class for which the DataStore is created
    * @param name unique name for the DataStore
    * @param clz class for which the DataStore is created
-   * @param <T> type of class for which the DataStore is created
    * @param properties properties for creation
    * @return the created (and managed) DataStore
    * @throws DataStoreException if something goes wrong
@@ -81,7 +84,6 @@ public interface DataStoreManager {
   /**
    * Get a reference to an already existing (managed) DataStore.
    *
-   * @param <T> type of class for which the DataStore is created
    * @param name name of the DataStore which is requested
    * @param clz class for which the DataStore is created
    * @return the created (and managed) DataStore or <code>NULL</code> if no according DataStore exists

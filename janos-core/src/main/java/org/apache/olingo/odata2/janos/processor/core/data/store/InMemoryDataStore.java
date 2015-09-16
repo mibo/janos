@@ -16,11 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-package org.apache.olingo.odata2.janos.processor.core.datasource;
+package org.apache.olingo.odata2.janos.processor.core.data.store;
 
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStore;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreException;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
+import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 import org.apache.olingo.odata2.janos.processor.core.util.ClassHelper;
@@ -103,6 +105,11 @@ public class InMemoryDataStore<T> implements DataStore<T> {
   @Override
   public Collection<T> read() {
     return Collections.unmodifiableCollection(dataStore.values());
+  }
+
+  @Override
+  public ReadResult<T> read(ReadOptions readOptions) {
+    return ReadResult.forResult(new ArrayList<>(dataStore.values())).build();
   }
 
   @Override

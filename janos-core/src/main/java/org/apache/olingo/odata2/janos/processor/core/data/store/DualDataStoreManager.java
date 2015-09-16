@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.apache.olingo.odata2.janos.processor.core.datasource;
+package org.apache.olingo.odata2.janos.processor.core.data.store;
 
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreException;
-import org.apache.olingo.odata2.janos.processor.api.datasource.DataStoreManager;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStore;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreException;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
 
 import javax.persistence.Entity;
 import java.util.HashMap;
