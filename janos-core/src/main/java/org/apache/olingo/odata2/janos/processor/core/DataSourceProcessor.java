@@ -181,12 +181,13 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       throws ODataException {
     ArrayList<Object> data = new ArrayList<>();
     try {
-      data.addAll((List<?>) retrieveData(
+      ReadResult<?> result = (ReadResult<?>) retrieveData(
           uriInfo.getStartEntitySet(),
           uriInfo.getKeyPredicates(),
           uriInfo.getFunctionImport(),
           mapFunctionParameters(uriInfo.getFunctionImportParameters()),
-          uriInfo.getNavigationSegments()));
+          uriInfo.getNavigationSegments());
+      data.addAll(result.getResult());
     } catch (final ODataNotFoundException e) {
       data.clear();
     }
@@ -840,6 +841,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     }
   }
 
+  // FIXME: mibo_150917: Change method for ReadResult
   private Object retrieveData(final EdmEntitySet startEntitySet, final List<KeyPredicate> keyPredicates,
       final EdmFunctionImport functionImport, final Map<String, Object> functionImportParameters,
       final List<NavigationSegment> navigationSegments)

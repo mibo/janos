@@ -68,6 +68,16 @@ public final class ReadResult<T> {
    * For result.
    *
    * @param <T>  the type parameter
+   * @return the builder
+   */
+  public static <T> Builder<T> start() {
+    return new Builder<T>();
+  }
+
+  /**
+   * For result.
+   *
+   * @param <T>  the type parameter
    * @param result the result
    * @return the builder
    */
@@ -75,6 +85,14 @@ public final class ReadResult<T> {
     return new Builder<T>(result);
   }
 
+  /**
+   * Start building a result with applied settings from existing result.
+   *
+   * @param readResult existing result
+   * @param result result values
+   * @param <T> type parameter for ReadResult
+   * @return the new ReadResult
+   */
   public static <T> Builder<T> fromResult(ReadResult<T> readResult, Collection<T> result) {
     return new Builder<T>(result).apply(readResult);
   }
@@ -95,6 +113,13 @@ public final class ReadResult<T> {
    */
   public static class Builder<T> {
     private final ReadResult<T> readResult;
+
+    /**
+     * Instantiates a new Builder.
+     */
+    public Builder() {
+      this(new ArrayList<T>());
+    }
 
     /**
      * Instantiates a new Builder.
@@ -151,6 +176,14 @@ public final class ReadResult<T> {
      */
     public Builder<T> orderApplied() {
       readResult.appliedOrder = true;
+      return this;
+    }
+
+    public Builder<T> values(Collection<T> values) {
+      if(!readResult.result.isEmpty()) {
+        readResult.result.clear();
+      }
+      readResult.result.addAll(values);
       return this;
     }
 

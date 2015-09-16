@@ -63,4 +63,69 @@ public class EntitySetJsonTest extends AbstractRefJsonTest {
     assertEquals(20.0, firstRoom.get("Seats"));
     assertEquals(42.0, firstRoom.get("Version"));
   }
+
+  @Test
+  @SuppressWarnings(value = "unchecked")
+  public void entitySetRoomsTop() throws Exception {
+    HttpResponse response =
+        callUri("Rooms?$top=1", HttpHeaders.ACCEPT, HttpContentType.APPLICATION_JSON, HttpStatusCodes.OK);
+    checkMediaType(response, HttpContentType.APPLICATION_JSON);
+
+    String body = getBody(response);
+    StringMap<?> map = getStringMap(body);
+
+    List<StringMap<String>> results = (List) map.get("results");
+    assertFalse(results.isEmpty());
+    assertEquals(1, results.size());
+    //
+    assertTrue(roomsCount() != results.size());
+
+    // TODO: 150917_mibo: Improve this test,
+    // currently it can not determined which room is returned as 'top' room
+//    StringMap<String> firstRoom = null;
+//    for (StringMap<String> result: results) {
+//      if(result.get("Name").equals("Small green room")) {
+//        firstRoom = result;
+//      }
+//    }
+//    assertNotNull("Found only room " + results.get(0), firstRoom);
+//    assertEquals("Small green room", firstRoom.get("Name"));
+//    assertEquals(20.0, firstRoom.get("Seats"));
+//    assertEquals(42.0, firstRoom.get("Version"));
+  }
+
+  @Test
+  @SuppressWarnings(value = "unchecked")
+  public void entitySetRoomsSkip() throws Exception {
+    HttpResponse response =
+        callUri("Rooms?$skip=1", HttpHeaders.ACCEPT, HttpContentType.APPLICATION_JSON, HttpStatusCodes.OK);
+    checkMediaType(response, HttpContentType.APPLICATION_JSON);
+
+    String body = getBody(response);
+    StringMap<?> map = getStringMap(body);
+
+    List<StringMap<String>> results = (List) map.get("results");
+    assertFalse(results.isEmpty());
+    //
+    assertTrue(roomsCount() != results.size());
+
+    StringMap<String> roomToCheck = null;
+    for (StringMap<String> result: results) {
+      if(result.get("Name").equals("Small dark green room")) {
+        roomToCheck = result;
+      }
+    }
+    assertNotNull(roomToCheck);
+    assertEquals("Small dark green room", roomToCheck.get("Name"));
+    assertEquals(30.0, roomToCheck.get("Seats"));
+    assertEquals(2.0, roomToCheck.get("Version"));
+  }
+
+  private int roomsCount() throws Exception {
+    HttpResponse response =
+        callUri("Rooms/$count", HttpHeaders.ACCEPT, HttpContentType.APPLICATION_JSON, HttpStatusCodes.OK);
+
+    String body = getBody(response);
+    return Integer.valueOf(body);
+  }
 }
