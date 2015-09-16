@@ -848,14 +848,15 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     }
   }
 
-  // FIXME: mibo_150917: Change method for ReadResult
   private ReadResult<?> retrieveData(final EdmEntitySet startEntitySet, final List<KeyPredicate> keyPredicates,
       final EdmFunctionImport functionImport, final Map<String, Object> functionImportParameters,
       final List<NavigationSegment> navigationSegments)
         throws ODataException {
+
     return retrieveData(ReadOptions.none(), startEntitySet, keyPredicates,
         functionImport, functionImportParameters, navigationSegments);
   }
+
 
   private ReadResult<?> retrieveData(final GetEntitySetUriInfo uriInfo, final EdmEntitySet startEntitySet,
                               final List<KeyPredicate> keyPredicates, final EdmFunctionImport functionImport,
@@ -913,7 +914,6 @@ public class DataSourceProcessor extends ODataSingleProcessor {
       } else {
         return ReadResult.forResult(Collections.singleton(innerData)).build();
       }
-//      throw new ODataException("Found unexpected result type " + innerData.getClass());
     } finally {
       context.stopRuntimeMeasurement(timingHandle);
     }
@@ -1272,7 +1272,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
               result = first.compareTo(second);
             } else if (first == null && second != null) {
               result = 1;
-            } else if (first != null && second == null) {
+            } else if (first != null) {
               result = -1;
             }
 
