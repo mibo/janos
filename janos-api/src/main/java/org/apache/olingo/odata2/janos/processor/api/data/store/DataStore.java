@@ -65,7 +65,7 @@ public interface DataStore<T> {
    * @param object object with key fields set
    * @return according object or <code>null</code>
    */
-  T read(final T object);
+  T read(final T object) throws DataStoreException;
 
 //  ReadResult<T> readOptimized(final T object);
 
@@ -74,7 +74,7 @@ public interface DataStore<T> {
    *
    * @return all object of this DataStore.
    */
-  Collection<T> read();
+  Collection<T> read() throws DataStoreException;
 
   /**
    * Read read result.
@@ -82,7 +82,7 @@ public interface DataStore<T> {
    * @param readOptions the read options
    * @return the read result
    */
-  ReadResult<T> read(ReadOptions readOptions);
+  ReadResult<T> read(ReadOptions readOptions) throws DataStoreException;
 
 //  ReadResult<Collection<T>> readOptimzied();
 
@@ -93,7 +93,7 @@ public interface DataStore<T> {
    * @param object object with key fields set
    * @return according object or <code>null</code>
    */
-  T update(final T object);
+  T update(final T object) throws DataStoreException;
 
   /**
    * Delete object which is key equal to given object (based on #isKeyEqualChecked method).
@@ -102,7 +102,7 @@ public interface DataStore<T> {
    * @param object object with key fields set
    * @return according object or <code>null</code>
    */
-  T delete(final T object);
+  T delete(final T object) throws DataStoreException;
 
   /**
    * Are the key values equal for both instances.

@@ -30,5 +30,6 @@ The extension is based (forked) from the *Apache Olingo Annotation Processor* (s
   * Abstract Topics
     * Provide more *Hooks* for customization of generic (default) data processing (e.g. *start/end of transaction*)
     * Provide more documentation (e.g. tutorials) as just the source code
+    * All fields of an POJO are handled as `@EdmProperty` by default (if no fields with annotations (beside `@EdmKey`) is found)
   * Specific enhancements
     * Support `ReadOptions` and `ReadResult` for `FunctionSource` (*FunctionImports*)

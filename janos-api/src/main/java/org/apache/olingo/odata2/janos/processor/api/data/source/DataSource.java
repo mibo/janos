@@ -165,7 +165,7 @@ public interface DataSource {
    * @throws EdmException the edm exception
    * @throws ODataApplicationException the o data application exception
    */
-  void createData(EdmEntitySet entitySet, Object data) throws ODataNotImplementedException, EdmException,
+  Object createData(EdmEntitySet entitySet, Object data) throws ODataNotImplementedException, EdmException,
       ODataApplicationException;
 
   /**

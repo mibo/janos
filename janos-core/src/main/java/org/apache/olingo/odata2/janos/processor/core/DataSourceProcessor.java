@@ -310,7 +310,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
     ExpandSelectTreeNode expandSelectTree = null;
 
     if (entityType.hasStream()) {
-      dataSource.createData(entitySet, data);
+      data = dataSource.createData(entitySet, data);
       dataSource.writeBinaryData(entitySet, data,
           new BinaryData(EntityProvider.readBinary(content), requestContentType));
 
@@ -323,7 +323,7 @@ public class DataSourceProcessor extends ODataSingleProcessor {
 
       setStructuralTypeValuesFromMap(data, entityType, entryValues.getProperties(), false);
 
-      dataSource.createData(entitySet, data);
+      data = dataSource.createData(entitySet, data);
 
       createInlinedEntities(entitySet, data, entryValues);
 

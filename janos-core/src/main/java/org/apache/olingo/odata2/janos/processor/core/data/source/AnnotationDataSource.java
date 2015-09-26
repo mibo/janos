@@ -291,11 +291,11 @@ public class AnnotationDataSource implements DataSource {
   }
 
   @Override
-  public void createData(final EdmEntitySet entitySet, final Object data)
+  public Object createData(final EdmEntitySet entitySet, final Object data)
       throws ODataNotImplementedException, EdmException, ODataApplicationException {
 
     DataStore<Object> dataStore = getDataStore(entitySet);
-    dataStore.create(data);
+    return dataStore.create(data);
   }
 
   @Override
