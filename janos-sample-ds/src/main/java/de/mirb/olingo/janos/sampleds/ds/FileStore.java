@@ -5,7 +5,7 @@ import org.apache.olingo.odata2.janos.processor.api.data.store.DataStore;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreException;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
 
-import java.util.Collections;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +13,11 @@ import java.util.Map;
  * Created by michael on 26.09.15.
  */
 public class FileStore implements DataStoreManager {
-  private Map<String,String> defaultProperties = Collections.emptyMap();
+  private Map<String,String> defaultProperties = new HashMap<>();
   private Map<String, DataStore> name2Ds = new HashMap<>();
 
   public void setDefaultProperty(String name, String value) {
-
+    defaultProperties.put(name, value);
   }
 
   public <T> DataStore<T> createDataStore(Class<T> clz) throws DataStoreException {
@@ -26,7 +26,12 @@ public class FileStore implements DataStoreManager {
 
   public <T> DataStore<T> createDataStore(Class<T> clz, Map<String, String> properties) throws DataStoreException {
     if(clz == Person.class) {
-      return (DataStore<T>) new PersonStore();
+      String rootPath = properties == null ? null : properties.get("STORE_ROOT_PATH");
+      if(rootPath == null) {
+        return (DataStore<T>) new PersonStore();
+      } else {
+        return (DataStore<T>) new PersonStore(Paths.get(rootPath));
+      }
     }
     throw new DataStoreException("Class '" + clz.getSimpleName() + "' is not supported");
   }

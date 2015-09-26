@@ -6,7 +6,7 @@
   <packaging>war</packaging>
 
   <version>2.1.0-SNAPSHOT</version>
-  <name>janos-sample-ds Maven Webapp</name>
+  <name>janos-sample-ds - Sample with own DataStore</name>
 
   <build>
     <finalName>janos-sample-ds</finalName>
@@ -15,9 +15,8 @@
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <version.olingo>2.0.4</version.olingo>
-    <!--<version.janos>2.1.0-SNAPSHOT</version.janos>-->
     <version.janos>${project.version}</version.janos>
+    <version.olingo>2.0.4</version.olingo>
     <version.slf4j>1.7.1</version.slf4j>
   </properties>
 

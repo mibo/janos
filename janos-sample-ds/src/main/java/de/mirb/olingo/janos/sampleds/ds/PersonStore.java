@@ -11,10 +11,10 @@ import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreExceptio
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
@@ -23,10 +23,20 @@ import java.util.stream.Stream;
  */
 public class PersonStore implements DataStore<Person> {
   private AtomicLong currentId = new AtomicLong();
-  private final File storeRoot = new File("./persons");
+  private final File storeRoot;
 
   public PersonStore() {
+    this(Paths.get(System.getProperty("java.io.tmpdir")));
+  }
+
+  public PersonStore(Path storePath) {
     try {
+      if(storePath == null) {
+        storeRoot = new File(Files.createTempDirectory("janos_ds_sample").toFile(), "persons");
+      } else {
+        storeRoot = new File(storePath.toFile(), "persons");
+      }
+
       if(!storeRoot.exists()) {
         Files.createDirectory(storeRoot.toPath());
       } else if(storeRoot.isFile()) {
