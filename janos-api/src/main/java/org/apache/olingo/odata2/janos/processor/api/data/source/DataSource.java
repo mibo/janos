@@ -77,12 +77,10 @@ public interface DataSource {
    * <p>If the underlying association of the EDM is specified to have target
    * multiplicity '*' and no target key is given, this method returns a list of
    * related data, otherwise it returns a single data object.</p>
-   * @param sourceEntitySet the
-   * of the source entity
+   * @param sourceEntitySet the EdmEntitySet of the source entity
    * @param sourceData the data object of the source entity
    * @param targetEntitySet the requested target
-   * @param targetKeys the key of the target entity as map of key names to key values
-   * (optional)
+   * @param targetKeys the key of the target entity as map of key names to key values (optional)
    * @return the requested related data object, either a list or a single object
    * @throws ODataNotImplementedException the o data not implemented exception
    * @throws ODataNotFoundException the o data not found exception
@@ -96,8 +94,7 @@ public interface DataSource {
   /**
    * Retrieves the binary data and the MIME type for the media resource
    * associated to the specified media-link entry.
-   * @param entitySet the
-   * of the media-link entry
+   * @param entitySet the EdmEntitySet of the media-link entry
    * @param mediaLinkEntryData the data object of the media-link entry
    * @return the binary data and the MIME type of the media resource
    * @throws ODataNotImplementedException the o data not implemented exception
@@ -158,9 +155,10 @@ public interface DataSource {
    * <p>If {@link #newDataObject} has not set the key and other mandatory
    * properties already, this method must set them before inserting the
    * instance into the list.</p>
-   * @param entitySet the
-   * the object must correspond to
+   *
+   * @param entitySet the EdmEntitySet the object must correspond to
    * @param data the data object of the new entity
+   * @return the new created object instance (which is NOT the same object as the given data parameter object)
    * @throws ODataNotImplementedException the o data not implemented exception
    * @throws EdmException the edm exception
    * @throws ODataApplicationException the o data application exception
@@ -171,13 +169,10 @@ public interface DataSource {
   /**
    * Deletes the relation from the specified source data to a target entity
    * specified by entity set and key.
-   * @param sourceEntitySet the
-   * of the source entity
+   * @param sourceEntitySet the EdmEntitySet of the source entity
    * @param sourceData the data object of the source entity
-   * @param targetEntitySet the
-   * of the target entity
-   * @param targetKeys the key of the target entity as map of key names to key values
-   * (optional)
+   * @param targetEntitySet the EdmEntitySet of the target entity
+   * @param targetKeys the key of the target entity as map of key names to key values (optional)
    * @throws ODataNotImplementedException the o data not implemented exception
    * @throws ODataNotFoundException the o data not found exception
    * @throws EdmException the edm exception
@@ -190,11 +185,9 @@ public interface DataSource {
   /**
    * Writes a relation from the specified source data to a target entity
    * specified by entity set and key.
-   * @param sourceEntitySet the
-   * of the source entity
+   * @param sourceEntitySet the EdmEntitySet of the source entity
    * @param sourceData the data object of the source entity
-   * @param targetEntitySet the
-   * of the relation target
+   * @param targetEntitySet the EdmEntitySet of the relation target
    * @param targetKeys the key of the target entity as map of key names to key values
    * @throws ODataNotImplementedException the o data not implemented exception
    * @throws ODataNotFoundException the o data not found exception

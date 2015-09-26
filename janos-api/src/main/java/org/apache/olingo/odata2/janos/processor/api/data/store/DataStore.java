@@ -22,7 +22,7 @@ import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
 import java.util.Collection;
 
 /**
- * The interface Data store.
+ * The DataStore interface for a given class handles all read/write operations.
  * @param <T>  the type parameter
  * @author michael
  */
@@ -67,8 +67,6 @@ public interface DataStore<T> {
    */
   T read(final T object) throws DataStoreException;
 
-//  ReadResult<T> readOptimized(final T object);
-
   /**
    * Read all object of this DataStore.
    *
@@ -83,8 +81,6 @@ public interface DataStore<T> {
    * @return the read result
    */
   ReadResult<T> read(ReadOptions readOptions) throws DataStoreException;
-
-//  ReadResult<Collection<T>> readOptimzied();
 
   /**
    * Update object which is key equal to given object (based on #isKeyEqualChecked method).
