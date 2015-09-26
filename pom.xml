@@ -23,13 +23,14 @@
     </parent>
 
     <modules>
-        <module>janos-api</module>
-        <module>janos-testutil</module>
-        <module>janos-core</module>
-        <module>janos-ref</module>
-        <module>janos-jpa-ref</module>
-        <module>janos-it</module>
-        <module>janos-web</module>
+      <module>janos-api</module>
+      <module>janos-testutil</module>
+      <module>janos-core</module>
+      <module>janos-ref</module>
+      <module>janos-jpa-ref</module>
+      <module>janos-it</module>
+      <module>janos-web</module>
+      <module>janos-sample-ds</module>
     </modules>
 
     <licenses>
