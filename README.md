@@ -4,7 +4,7 @@ This extension provides *Java Annotations* for defining the OData (V2) EDM and I
 The extension is based (forked) from the *Apache Olingo Annotation Processor* (see [Olingo Homepage](http://olingo.apache.org/doc/odata2/tutorials/AnnotationProcessorExtension.html) and [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22olingo-odata2-annotation-processor%22)).
 
 
-## Current Features <small>(of stable version)</small>
+## Current Features <small>(for stable version)</small>
 
   * Create your *EDM (Entity Data Model)* with using *Java Annotations* (the *EDM-(Java)-Annotations* from the [*Apache Olingo OData Library (v2)*](http://olingo.apache.org/doc/odata2/index.html) (or in [maven central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22olingo-odata2-api-annotation%22)))
   * Data Access Layer with...
@@ -13,10 +13,11 @@ The extension is based (forked) from the *Apache Olingo Annotation Processor* (s
   * Generic `DataSource` and `DataStore` implementations for...
     * ...using the *EDM-(Java)-Annotations* in combination with an *In-Memory-Store (none-persistent)*
     * ...using the *EDM-(Java)-Annotations* in combination with an *JPA-Based-Store*
+  * `ReadOptions` and `ReadResult` for optimized data access (read) in the `DataStore` layer
 
 ## New and Noteworthy
 
-  * `Version 2.1` (upcoming)
+  * `Version 2.1` (current stable version - released *07.10.2015*)
     * Added `ReadOptions` and `ReadResult` for optimization of data access (read) in the `DataStore` layer
     * Refactored API packages (incompatible changes to `2.0`)
     * Refactored (changed) API methods
@@ -24,7 +25,8 @@ The extension is based (forked) from the *Apache Olingo Annotation Processor* (s
       instance instead of modifying the given data parameter instance. 
       * `org.apache.olingo.odata2.janos.processor.api.data.store.DataStore` all data access methods can now throw 
       a `DataStoreException` 
-  * `Version 2.0` (current stable version)
+    * Updated to newest Apache Olingo version `2.0.5`
+  * `Version 2.0` (released *03.09.2015*)
     * Made `DataStore` and `DataSource` part of the public API
     * Provide a generic `JpaAnnotationDataStore` and a `DualDataStoreManager` which can handle *Model classes* with *JPA annotations*
     * Added support for *FunctionImports* via the `@EdmFunctionImport` annotation and the `FunctionExecutor` interface
