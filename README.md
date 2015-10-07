@@ -17,14 +17,16 @@ The extension is based (forked) from the *Apache Olingo Annotation Processor* (s
 
 ## New and Noteworthy
 
+  * `Version 2.2` (current development version - release *upcoming*)
+    * ...upcoming features list
   * `Version 2.1` (current stable version - released *07.10.2015*)
     * Added `ReadOptions` and `ReadResult` for optimization of data access (read) in the `DataStore` layer
     * Refactored API packages (incompatible changes to `2.0`)
     * Refactored (changed) API methods
-      * `org.apache.olingo.odata2.janos.processor.api.data.source.DataSource` `createData(...)` method now returns the new created 
-      instance instead of modifying the given data parameter instance. 
-      * `org.apache.olingo.odata2.janos.processor.api.data.store.DataStore` all data access methods can now throw 
-      a `DataStoreException` 
+      * `org.apache.olingo.odata2.janos.processor.api.data.source.DataSource` `createData(...)` method now returns the new created
+      instance instead of modifying the given data parameter instance.
+      * `org.apache.olingo.odata2.janos.processor.api.data.store.DataStore` all data access methods can now throw
+      a `DataStoreException`
     * Updated to newest Apache Olingo version `2.0.5`
   * `Version 2.0` (released *03.09.2015*)
     * Made `DataStore` and `DataSource` part of the public API
