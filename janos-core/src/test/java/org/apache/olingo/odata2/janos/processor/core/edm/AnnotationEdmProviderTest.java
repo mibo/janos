@@ -237,7 +237,7 @@ public class AnnotationEdmProviderTest {
 
   private void validateAssociation(final Association association) {
     String name = association.getName();
-    if (name.equals("r_Employees-r_Room")) {
+    if (name.equals("r_Employees_2_r_Room")) {
       validateAssociation(association,
           "r_Room", EdmMultiplicity.ONE, defaultFqn("Room"),
           "r_Employees", EdmMultiplicity.MANY, defaultFqn("Employee"));
@@ -253,7 +253,7 @@ public class AnnotationEdmProviderTest {
       validateAssociation(association,
           "r_Team", EdmMultiplicity.ONE, defaultFqn("Team"),
           "r_Employees", EdmMultiplicity.MANY, defaultFqn("Employee"));
-    } else if (name.equals("Team-r_SubTeam")) {
+    } else if (name.equals("Team_2_r_SubTeam")) {
       validateAssociation(association,
           "Team", EdmMultiplicity.ONE, defaultFqn("Team"),
           "r_SubTeam", EdmMultiplicity.ONE, defaultFqn("Team"));
@@ -263,8 +263,8 @@ public class AnnotationEdmProviderTest {
   }
 
   private void validateAssociation(final Association association,
-      final String fromRole, final EdmMultiplicity fromMulti, final FullQualifiedName fromType,
-      final String toRole, final EdmMultiplicity toMulti, final FullQualifiedName toType) {
+                                   final String fromRole, final EdmMultiplicity fromMulti, final FullQualifiedName fromType,
+                                   final String toRole, final EdmMultiplicity toMulti, final FullQualifiedName toType) {
 
     AssociationEnd[] ends = new AssociationEnd[] { association.getEnd1(), association.getEnd2() };
     for (AssociationEnd associationEnd : ends) {
@@ -280,7 +280,7 @@ public class AnnotationEdmProviderTest {
   }
 
   private void validateAssociationEnd(final AssociationEnd associationEnd,
-      final String role, final EdmMultiplicity multiplicity, final FullQualifiedName type) {
+                                      final String role, final EdmMultiplicity multiplicity, final FullQualifiedName type) {
     assertEquals(role, associationEnd.getRole());
     assertEquals(multiplicity, associationEnd.getMultiplicity());
     assertEquals(type, associationEnd.getType());
@@ -313,7 +313,7 @@ public class AnnotationEdmProviderTest {
       } else if (navigationProperty.getName().equals("ne_Team")) {
         validateNavProperty(navigationProperty, "TeamEmployees", "r_Employees", "r_Team");
       } else if (navigationProperty.getName().equals("ne_Room")) {
-        validateNavProperty(navigationProperty, "r_Employees-r_Room", "r_Employees", "r_Room");
+        validateNavProperty(navigationProperty, "r_Employees_2_r_Room", "r_Employees", "r_Room");
       } else {
         fail("Got unexpected navigation property with name '" + navigationProperty.getName() + "'.");
       }
@@ -356,7 +356,7 @@ public class AnnotationEdmProviderTest {
     NavigationProperty navPropTeamEmployess = team.getNavigationProperties().get(0);
     validateNavProperty(navPropTeamEmployess, "TeamEmployees", "r_Team", "r_Employees");
     NavigationProperty navPropTeamTeam = team.getNavigationProperties().get(1);
-    validateNavProperty(navPropTeamTeam, "Team-r_SubTeam", "Team", "r_SubTeam");
+    validateNavProperty(navPropTeamTeam, "Team_2_r_SubTeam", "Team", "r_SubTeam");
   }
 
   @Test
@@ -437,7 +437,7 @@ public class AnnotationEdmProviderTest {
 
     for (NavigationProperty navigationProperty : navigationProperties) {
       if (navigationProperty.getName().equals("nr_Employees")) {
-        validateNavProperty(navigationProperty, "r_Employees-r_Room", "r_Room", "r_Employees");
+        validateNavProperty(navigationProperty, "r_Employees_2_r_Room", "r_Room", "r_Employees");
       } else if (navigationProperty.getName().equals("nr_Building")) {
         validateNavProperty(navigationProperty, "BuildingRooms", "r_Rooms", "r_Building");
       } else {
@@ -447,7 +447,7 @@ public class AnnotationEdmProviderTest {
   }
 
   private void validateNavProperty(final NavigationProperty navigationProperty, final String name,
-      final String relationship, final String fromRole, final String toRole) {
+                                   final String relationship, final String fromRole, final String toRole) {
     if (name != null) {
       assertEquals(name, navigationProperty.getName());
     }
@@ -458,7 +458,7 @@ public class AnnotationEdmProviderTest {
   }
 
   private void validateNavProperty(final NavigationProperty navigationProperty,
-      final String relationship, final String fromRole, final String toRole) {
+                                   final String relationship, final String fromRole, final String toRole) {
     validateNavProperty(navigationProperty, null, relationship, fromRole, toRole);
   }
 

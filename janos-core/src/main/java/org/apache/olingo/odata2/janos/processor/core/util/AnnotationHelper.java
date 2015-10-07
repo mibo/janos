@@ -302,11 +302,11 @@ public class AnnotationHelper {
   }
 
   public String createCanonicalRelationshipName(String fromRole, String toRole) {
-      if (fromRole.compareTo(toRole) > 0) {
-        return toRole + "-" + fromRole;
-      } else {
-        return fromRole + "-" + toRole;
-      }
+    if (fromRole.compareTo(toRole) > 0) {
+      return toRole + "_2_" + fromRole;
+    } else {
+      return fromRole + "_2_" + toRole;
+    }
   }
 
   public EdmMultiplicity extractMultiplicity(final EdmNavigationProperty enp, final Field field) {
