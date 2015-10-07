@@ -83,7 +83,7 @@ public class JanosSampleDataGenerator {
         "      }\n" +
         "    }}";
 
-    String employeeUri = serviceUrl + "/Employees";
+    String employeeUri = serviceUrl + "Employees";
     String location = createEntity(employeeUri, firstEmployee, usedFormat);
     updateEntity(location, firstEmployee, usedFormat);
 
@@ -91,13 +91,13 @@ public class JanosSampleDataGenerator {
     String teamBeta = "{\"Name\": \"Team Beta\",\"IsScrumTeam\": false\n}";
     String teamGamma = "{\"Name\": \"Team Gamma\",\"IsScrumTeam\": false\n}";
 
-    String teamUri = serviceUrl + "/Teams";
+    String teamUri = serviceUrl + "Teams";
     createEntity(teamUri, teamAlpha, usedFormat);
     createEntity(teamUri, teamBeta, usedFormat);
     createEntity(teamUri, teamGamma, usedFormat);
 
     String roomGreen = "{\"Name\": \"Small green room\",\"Seats\": 20,\"Version\": 42\n}";
-    String roomUri = serviceUrl + "/Rooms";
+    String roomUri = serviceUrl + "Rooms";
     createEntity(roomUri, roomGreen, usedFormat);
 
     String buildingGreenWithRooms = "{\n" +
@@ -108,7 +108,7 @@ public class JanosSampleDataGenerator {
         "          \"Seats\": 30,\n" +
         "          \"Version\": 2\n" +
         "        }]}}";
-    String buildingsUri = serviceUrl + "/Buildings";
+    String buildingsUri = serviceUrl + "Buildings";
     createEntity(buildingsUri, buildingGreenWithRooms, usedFormat);
   }
 
