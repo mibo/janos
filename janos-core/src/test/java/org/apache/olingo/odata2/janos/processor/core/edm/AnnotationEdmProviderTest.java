@@ -15,10 +15,7 @@
  */
 package org.apache.olingo.odata2.janos.processor.core.edm;
 
-import org.apache.olingo.odata2.api.annotation.edm.EdmComplexType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
-import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
+import org.apache.olingo.odata2.api.annotation.edm.*;
 import org.apache.olingo.odata2.api.edm.EdmConcurrencyMode;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
@@ -27,10 +24,8 @@ import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.core.model.*;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -53,6 +48,21 @@ public class AnnotationEdmProviderTest {
   @EdmEntityType(namespace = "MyTestNamespace")
   @EdmEntitySet(container = "MyTestContainer")
   private static final class DefinedNamesTestClass {}
+
+  @EdmEntityType
+  private static final class TestEntityWithOnlyKeyAnnotation {
+    @EdmKey
+    private Long id;
+    private String someValue;
+    private Double anotherValue;
+  }
+
+  @EdmComplexType
+  private static final class TestComplexWithoutAnnotation {
+    private Long id;
+    private String someValue;
+    private Double anotherValue;
+  }
 
   private final AnnotationEdmProvider aep;
   private final Collection<Class<?>> annotatedClasses = new ArrayList<Class<?>>();
@@ -146,6 +156,40 @@ public class AnnotationEdmProviderTest {
     EntityContainerInfo containerInfo = localAep.getEntityContainerInfo(null);
     assertNotNull(containerInfo);
     assertEquals("MyTestContainer", containerInfo.getName());
+  }
+
+  @Test
+  public void defaultFieldsWoAnnotationsToProperties() throws ODataException {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    AnnotationEdmProvider localAep = new AnnotationEdmProvider(Collections.singletonList(TestEntityWithOnlyKeyAnnotation.class));
+
+    String defaultNs = TestEntityWithOnlyKeyAnnotation.class.getPackage().getName();
+    FullQualifiedName fqn = new FullQualifiedName(defaultNs, TestEntityWithOnlyKeyAnnotation.class.getSimpleName());
+    EntityType entityType = localAep.getEntityType(fqn);
+    assertNotNull(entityType);
+    assertEquals("TestEntityWithOnlyKeyAnnotation", entityType.getName());
+    assertEquals("Id", entityType.getKey().getKeys().get(0).getName());
+    List<Property> properties = entityType.getProperties();
+    assertEquals(3, properties.size());
+    assertTrue(contains("SomeValue", properties));
+    assertTrue(contains("AnotherValue", properties));
+  }
+
+  @Test
+  public void defaultFieldsWoAnnotationsToPropertiesForComplexTypes() throws ODataException {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    AnnotationEdmProvider localAep = new AnnotationEdmProvider(Collections.singletonList(TestComplexWithoutAnnotation.class));
+
+    String defaultNs = TestComplexWithoutAnnotation.class.getPackage().getName();
+    FullQualifiedName fqn = new FullQualifiedName(defaultNs, TestComplexWithoutAnnotation.class.getSimpleName());
+    ComplexType entityType = localAep.getComplexType(fqn);
+    assertNotNull(entityType);
+    assertEquals("TestComplexWithoutAnnotation", entityType.getName());
+    List<Property> properties = entityType.getProperties();
+    assertEquals(3, properties.size());
+    assertTrue(contains("Id", properties));
+    assertTrue(contains("SomeValue", properties));
+    assertTrue(contains("AnotherValue", properties));
   }
 
   @Test
@@ -444,6 +488,11 @@ public class AnnotationEdmProviderTest {
         fail("Got unexpected navigation property with name '" + navigationProperty.getName() + "'.");
       }
     }
+  }
+
+  private boolean contains(String propertyName, List<Property> properties) {
+    Stream<Property> res = properties.stream().filter(b -> propertyName.equals(b.getName()));
+    return res.count() > 0;
   }
 
   private void validateNavProperty(final NavigationProperty navigationProperty, final String name,

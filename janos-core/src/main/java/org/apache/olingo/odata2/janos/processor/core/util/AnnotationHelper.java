@@ -238,21 +238,21 @@ public class AnnotationHelper {
 
   /**
    * Get the set property name from an EdmProperty or EdmNavigationProperty annotation.
+   * If no property annotations is set an empty string (<code>""</code>).
    *
-   * @param field
-   * @return
+   * @param field which is checked
+   * @return the name of the property or if no property annotations is set an empty string (<code>""</code>).
    */
   public String getPropertyNameFromAnnotation(final Field field) {
     EdmProperty property = field.getAnnotation(EdmProperty.class);
-    if (property == null) {
-      EdmNavigationProperty navProperty = field.getAnnotation(EdmNavigationProperty.class);
-      if (navProperty == null) {
-        throw new EdmAnnotationException("Given field '" + field
-            + "' has no EdmProperty or EdmNavigationProperty annotation.");
-      }
+    if (property != null) {
+      return property.name();
+    }
+    EdmNavigationProperty navProperty = field.getAnnotation(EdmNavigationProperty.class);
+    if (navProperty != null) {
       return navProperty.name();
     }
-    return property.name();
+    return "";
   }
 
   public String getPropertyName(final Field field) {
@@ -552,7 +552,11 @@ public class AnnotationHelper {
     Field[] fields = resultClass.getDeclaredFields();
     for (Field field : fields) {
       EdmProperty property = field.getAnnotation(EdmProperty.class);
-      if (property != null) {
+      if (property == null) {
+        if(getCanonicalName(field).equals(propertyName)) {
+          return field;
+        }
+      } else {
         if (property.name().isEmpty() && getCanonicalName(field).equals(propertyName)) {
           return field;
         } else if (property.name().equals(propertyName)) {

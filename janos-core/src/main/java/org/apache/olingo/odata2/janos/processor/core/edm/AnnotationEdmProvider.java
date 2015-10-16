@@ -339,6 +339,7 @@ public class AnnotationEdmProvider extends EdmProvider {
   //
   static class TypeBuilder {
 
+    @EdmProperty
     final private String namespace;
     final private String name;
     private boolean isAbstract = false;
@@ -371,14 +372,6 @@ public class AnnotationEdmProvider extends EdmProvider {
 
       Field[] fields = aClass.getDeclaredFields();
       for (Field field : fields) {
-        EdmProperty ep = field.getAnnotation(EdmProperty.class);
-        if (ep != null) {
-          properties.add(createProperty(ep, field, namespace));
-          EdmKey eti = field.getAnnotation(EdmKey.class);
-          if (eti != null) {
-            keyProperties.add(createKeyProperty(ep, field));
-          }
-        }
         EdmNavigationProperty enp = field.getAnnotation(EdmNavigationProperty.class);
         if (enp != null) {
           Class<?> fromClass = field.getDeclaringClass();
@@ -389,14 +382,39 @@ public class AnnotationEdmProvider extends EdmProvider {
           navProperties.add(navProperty);
           Association association = createAssociation(info);
           associations.add(association);
+          // continue after a navigation property is found
+          continue;
         }
+
         EdmMediaResourceContent emrc = field.getAnnotation(EdmMediaResourceContent.class);
         if (emrc != null) {
           isMediaResource = true;
         }
+        EdmProperty ep = field.getAnnotation(EdmProperty.class);
+        EdmKey eti = field.getAnnotation(EdmKey.class);
+        int annotationsCount = field.getAnnotations().length;
+        if(ep == null && eti == null && annotationsCount > 0) {
+          // skip because this field is annotated but not as property (or key)
+          continue;
+        } else if (ep == null) {
+          ep = getDefaultEdmProperty();
+        }
+        properties.add(createProperty(ep, field, namespace));
+        if (eti != null) {
+          keyProperties.add(createKeyProperty(ep, field));
+        }
       }
 
       return this;
+    }
+
+    private EdmProperty getDefaultEdmProperty() {
+      try {
+        return TypeBuilder.class.getDeclaredField("namespace").getAnnotation(EdmProperty.class);
+      } catch (NoSuchFieldException e) {
+        // can be ignored because we known that this field is there
+        throw new RuntimeException(e);
+      }
     }
 
     public TypeBuilder addProperty(final PropertyRef property) {
