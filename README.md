@@ -18,7 +18,9 @@ The extension is based (forked) from the *Apache Olingo Annotation Processor* (s
 ## New and Noteworthy
 
   * `Version 2.2` (current development version - release *upcoming*)
-    * ...upcoming features list
+    * All fields of an POJO are handled as `@EdmProperty` by default (if no fields with annotations (beside `@EdmKey`) is found)
+    * Switch to *real* [Semantic Versioning](http://semver.org/). Based on this decision it is possible that next version will be `3
+    .0` instead of `2.2`.
   * `Version 2.1` (current stable version - released *07.10.2015*)
     * Added `ReadOptions` and `ReadResult` for optimization of data access (read) in the `DataStore` layer
     * Refactored API packages (incompatible changes to `2.0`)
@@ -39,6 +41,5 @@ The extension is based (forked) from the *Apache Olingo Annotation Processor* (s
   * Abstract Topics
     * Provide more *Hooks* for customization of generic (default) data processing (e.g. *start/end of transaction*)
     * Provide more documentation (e.g. tutorials) as just the source code
-    * All fields of an POJO are handled as `@EdmProperty` by default (if no fields with annotations (beside `@EdmKey`) is found)
   * Specific enhancements
     * Support `ReadOptions` and `ReadResult` for `FunctionSource` (*FunctionImports*)
