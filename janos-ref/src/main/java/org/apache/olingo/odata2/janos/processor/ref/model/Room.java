@@ -33,9 +33,7 @@ import java.util.List;
 @EdmEntitySet(name = "Rooms")
 public class Room extends RefBase {
 
-  @EdmProperty
   private Integer seats;
-  @EdmProperty
   private Integer version;
   @EdmNavigationProperty(name = "nr_Building", association = "BuildingRooms")
   private Building building;

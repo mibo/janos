@@ -18,7 +18,9 @@ The extension is based (forked) from the *Apache Olingo Annotation Processor* (s
 ## New and Noteworthy
 
   * `Version 2.2` (current development version - release *upcoming*)
-    * All fields of an POJO are handled as `@EdmProperty` by default (if no fields with annotations (beside `@EdmKey`) is found)
+    * **[Janos#9](https://github.com/mibo/janos/issues/9):** Add method to create an `EdmProvider` based on `Annotations` (accordingly annotated classes)
+    * **[Janos#8](https://github.com/mibo/janos/issues/8):** All fields of an POJO are handled as `@EdmProperty` by default (if no 
+    fields with annotations (beside `@EdmKey`) is found)
     * Switch to *real* [Semantic Versioning](http://semver.org/). Based on this decision it is possible that next version will be `3
     .0` instead of `2.2`.
   * `Version 2.1` (current stable version - released *07.10.2015*)

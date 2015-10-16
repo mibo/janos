@@ -8,11 +8,9 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
  */
 @EdmComplexType
 public class Address {
-  @EdmProperty
+  @EdmProperty(name="ZipCode")
   private String postalCode;
-  @EdmProperty
   private String city;
-  @EdmProperty
   private String street;
 
   public Address() { /* empty ctor necessary for Janos */  }

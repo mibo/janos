@@ -10,15 +10,11 @@ import org.apache.olingo.odata2.api.annotation.edm.*;
 @EdmEntitySet(name = "Persons")
 public class Person {
   @EdmKey
-  @EdmProperty
   private Long id;
-  @EdmProperty
   private String name;
-  @EdmProperty
   private String lastname;
-  @EdmProperty
   private Calendar birthdate;
-  @EdmProperty
+  @EdmProperty(name="HomeAddress")
   private Address address = new Address();
 
   public Long getId() {
