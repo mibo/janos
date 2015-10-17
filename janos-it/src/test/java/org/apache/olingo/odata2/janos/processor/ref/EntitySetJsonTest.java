@@ -26,7 +26,6 @@ import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 

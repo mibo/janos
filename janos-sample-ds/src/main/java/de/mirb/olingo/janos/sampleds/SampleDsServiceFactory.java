@@ -30,14 +30,10 @@ import org.apache.olingo.odata2.api.processor.ODataErrorCallback;
 import org.apache.olingo.odata2.api.processor.ODataErrorContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
-import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreException;
-import org.apache.olingo.odata2.janos.processor.core.data.store.InMemoryDataStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**

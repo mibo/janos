@@ -21,7 +21,6 @@ package org.apache.olingo.odata2.janos.processor.ref.model;
 import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
 import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmNavigationProperty;
-import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
 
 import java.util.ArrayList;
 import java.util.List;
