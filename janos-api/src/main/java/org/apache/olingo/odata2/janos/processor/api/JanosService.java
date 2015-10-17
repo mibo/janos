@@ -19,12 +19,16 @@
 package org.apache.olingo.odata2.janos.processor.api;
 
 import org.apache.olingo.odata2.api.ODataService;
+import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
 import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * AnnotationServiceFactory which provides an AnnotationService which handles java beans (classes)
@@ -35,6 +39,8 @@ public abstract class JanosService {
 
   private static final String IMPLEMENTATION =
       "org.apache.olingo.odata2.janos.processor.core.rt.JanosServiceBuilderImpl";
+  private static final String EDM_PROVIDER_IMPLEMENTATION =
+      "org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider";
 
   /**
    * Create a runtime delegate instance from the core library. The core
@@ -43,21 +49,63 @@ public abstract class JanosService {
    * @return implementation instance
    */
   private static JanosServiceBuilder getInstance() {
-    JanosServiceBuilder delegate;
+    return getInstance(IMPLEMENTATION, JanosServiceBuilder.class);
+  }
 
+  private static <T> T getInstance(String className, Class<T> clz) {
+    return getInstance(className, clz, null);
+  }
+
+  private static <T> T getInstance(String className, Class<T> clz, Object[] parameters) {
     try {
-      final Class<?> clazz = Class.forName(IMPLEMENTATION);
+      final Class<?> clazz = Class.forName(className);
       /*
        * We explicitly do not use the singleton pattern to keep the server state free
        * and avoid class loading issues also during hot deployment.
        */
-      final Object object = clazz.newInstance();
-      delegate = (JanosServiceBuilder) object;
-
+      if(parameters == null || parameters.length == 0) {
+        final Object object = clazz.newInstance();
+        return clz.cast(object);
+      } else {
+        Class[] paraClasses = toClass(parameters);
+        Constructor<?> ctor = clazz.getConstructor(paraClasses);
+        final Object object = ctor.newInstance(parameters);
+        return clz.cast(object);
+      }
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }
-    return delegate;
+  }
+
+  private static Class[] toClass(Object[] parameters) {
+    Class[] classes = new Class[parameters.length];
+    for (int i = 0; i < classes.length; i++) {
+      classes[i] = parameters[i].getClass();
+      if(Collection.class.isAssignableFrom(classes[i])) {
+        classes[i] = Collection.class;
+      }
+    }
+    return classes;
+  }
+
+  /**
+   * Create an <code>EdmProvider</code> based on annotated classes in given package (and sub-packages).
+   *
+   * @param packageToScan package (and sub-packages) which are scanned for annotated classes
+   * @return according <code>EdmProvider</code>
+   */
+  public static EdmProvider createEdmProvider(String packageToScan) {
+    return getInstance(EDM_PROVIDER_IMPLEMENTATION, EdmProvider.class, new Object[]{packageToScan});
+  }
+
+  /**
+   * Create an <code>EdmProvider</code> based on given annotated classes.
+   *
+   * @param annotatedClasses all classes which are annotated and are used as Edm
+   * @return according <code>EdmProvider</code>
+   */
+  public static EdmProvider createEdmProvider(Collection<Class<?>> annotatedClasses) {
+    return getInstance(EDM_PROVIDER_IMPLEMENTATION, EdmProvider.class, new Object[]{annotatedClasses});
   }
 
   /**

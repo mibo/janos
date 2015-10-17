@@ -31,10 +31,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Provider for the entity data model used in the reference scenario
- *
  */
 public class AnnotationEdmProvider extends EdmProvider {
 
@@ -46,18 +46,25 @@ public class AnnotationEdmProvider extends EdmProvider {
   private final Map<String, Schema> namespace2Schema = new HashMap<>();
   private EntityContainer defaultContainer;
 
+  /**
+   * Create an <code>AnnotationEdmProvider</code> based on given annotated classes.
+   *
+   * @param annotatedClasses all classes which are annotated and are used as Edm
+   */
   public AnnotationEdmProvider(final Collection<Class<?>> annotatedClasses) throws ODataException {
 
     this.annotatedClasses = new ArrayList<>(annotatedClasses.size());
-    for (Class<?> aClass : annotatedClasses) {
-      if (ANNOTATION_HELPER.isEdmAnnotated(aClass)) {
-        this.annotatedClasses.add(aClass);
-      }
-    }
+    this.annotatedClasses.addAll(annotatedClasses.stream().filter(
+        ANNOTATION_HELPER::isEdmAnnotated).collect(Collectors.toList()));
 
     init();
   }
 
+  /**
+   * Create an <code>AnnotationEdmProvider</code> based on annotated classes in given package (and sub-packages).
+   *
+   * @param packageToScan package (and sub-packages) which are scanned for annotated classes
+   */
   public AnnotationEdmProvider(final String packageToScan) throws ODataException {
     annotatedClasses = ClassHelper.loadClasses(packageToScan, new ClassHelper.ClassValidator() {
       @Override
