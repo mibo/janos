@@ -19,7 +19,7 @@
 package org.apache.olingo.odata2.janos.processor.ref;
 
 import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 import org.junit.Ignore;
 
@@ -32,11 +32,11 @@ public class AbstractRefJsonTest extends AbstractRefTest {
     super(modelPackage);
   }
 
-  public StringMap<?> getStringMap(final String body) {
+  public LinkedTreeMap<?, ?> getLinkedTreeMap(final String body) {
     Gson gson = new Gson();
-    final StringMap<?> map = gson.fromJson(body, new TypeToken<StringMap<?>>() {}.getType());
-    if (map.get("d") instanceof StringMap<?>) {
-      return (StringMap<?>) map.get("d");
+    final LinkedTreeMap<?, ?> map = gson.fromJson(body, new TypeToken<LinkedTreeMap<?, ?>>() {}.getType());
+    if (map.get("d") instanceof LinkedTreeMap<?, ?>) {
+      return (LinkedTreeMap<?, ?>) map.get("d");
     } else {
       return map;
     }

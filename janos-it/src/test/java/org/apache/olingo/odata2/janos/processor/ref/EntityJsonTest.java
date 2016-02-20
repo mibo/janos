@@ -18,7 +18,7 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref;
 
-import com.google.gson.internal.StringMap;
+import com.google.gson.internal.LinkedTreeMap;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.olingo.odata2.api.commons.HttpContentType;
@@ -48,7 +48,7 @@ public class EntityJsonTest extends AbstractRefJsonTest {
     checkMediaType(response, HttpContentType.APPLICATION_JSON);
 
     String body = getBody(response);
-    StringMap<?> firstRoom = getStringMap(body);
+    LinkedTreeMap<?, ?> firstRoom = getLinkedTreeMap(body);
 
     assertEquals("Small green room", firstRoom.get("Name"));
     assertEquals(20.0, firstRoom.get("Seats"));
@@ -71,11 +71,11 @@ public class EntityJsonTest extends AbstractRefJsonTest {
     checkMediaType(response, HttpContentType.APPLICATION_JSON);
 
     String body = getBody(response);
-    StringMap<?> map = getStringMap(body);
+    LinkedTreeMap<?, ?> map = getLinkedTreeMap(body);
     assertEquals(id, map.get("Id"));
     assertEquals("Room 104", map.get("Name"));
     @SuppressWarnings("unchecked")
-    StringMap<String> metadataMap = (StringMap<String>) map.get("__metadata");
+    LinkedTreeMap<String, String> metadataMap = (LinkedTreeMap<String, String>) map.get("__metadata");
     assertNotNull(metadataMap);
     String expectedRoomId = getEndpoint() + "Rooms('" + id + "')";
     assertEquals(expectedRoomId, metadataMap.get("id"));
@@ -103,14 +103,14 @@ public class EntityJsonTest extends AbstractRefJsonTest {
     checkMediaType(response, HttpContentType.APPLICATION_JSON);
 
     String body = getBody(response);
-    StringMap<?> map = getStringMap(body);
+    LinkedTreeMap<?, ?> map = getLinkedTreeMap(body);
     assertEquals(id, map.get("Id"));
     assertEquals("Room 104", map.get("Name"));
     @SuppressWarnings("unchecked")
-    StringMap<Object> employeesMap = (StringMap<Object>) map.get("nr_Employees");
+    LinkedTreeMap<Object, Object> employeesMap = (LinkedTreeMap<Object, Object>) map.get("nr_Employees");
     assertNotNull(employeesMap);
     @SuppressWarnings("unchecked")
-    StringMap<String> deferredMap = (StringMap<String>) employeesMap.get("__deferred");
+    LinkedTreeMap<String, String> deferredMap = (LinkedTreeMap<String, String>) employeesMap.get("__deferred");
     assertNotNull(deferredMap);
     assertEquals(getEndpoint() + "Rooms('" + id + "')/nr_Employees", deferredMap.get("uri"));
   }
@@ -126,7 +126,7 @@ public class EntityJsonTest extends AbstractRefJsonTest {
     checkMediaType(createResponse, HttpContentType.APPLICATION_JSON);
 
     String body = getBody(createResponse);
-    StringMap<?> map = getStringMap(body);
+    LinkedTreeMap<?, ?> map = getLinkedTreeMap(body);
     String id = (String) map.get("EmployeeId");
     assertNull(map.get("EmployeeName"));
 
@@ -135,15 +135,15 @@ public class EntityJsonTest extends AbstractRefJsonTest {
     HttpResponse updateResponse = callUri("Employees('" + id + "')", "Accept", HttpContentType.APPLICATION_JSON);
     checkMediaType(updateResponse, HttpContentType.APPLICATION_JSON);
     String updatedBody = getBody(updateResponse);
-    StringMap<?> updatedMap = getStringMap(updatedBody);
+    LinkedTreeMap<?, ?> updatedMap = getLinkedTreeMap(updatedBody);
     assertNotNull(updatedMap.get("EmployeeId"));
     assertEquals("Douglas", updatedMap.get("EmployeeName"));
     assertNull(updatedMap.get("EntryData"));
 
-    StringMap<?> location = (StringMap<?>) updatedMap.get("Location");
+    LinkedTreeMap<?, ?> location = (LinkedTreeMap<?, ?>) updatedMap.get("Location");
     assertEquals("Britian", location.get("Country"));
 
-    StringMap<?> city = (StringMap<?>) location.get("City");
+    LinkedTreeMap<?, ?> city = (LinkedTreeMap<?, ?>) location.get("City");
     assertEquals("12345", city.get("PostalCode"));
     assertEquals("Sample", city.get("CityName"));
   }
@@ -184,11 +184,11 @@ public class EntityJsonTest extends AbstractRefJsonTest {
     checkMediaType(response, HttpContentType.APPLICATION_JSON);
 
     String body = getBody(response);
-    StringMap<?> map = getStringMap(body);
+    LinkedTreeMap<?, ?> map = getLinkedTreeMap(body);
 
-    List<StringMap<String>> results = (List) map.get("results");
+    List<LinkedTreeMap<String, String>> results = (List) map.get("results");
 
-    for (StringMap<String> result : results) {
+    for (LinkedTreeMap<String, String> result : results) {
       if(result.get("Name").equals("Small green room")) {
         return result.get("Id");
       }

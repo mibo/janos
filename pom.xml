@@ -47,7 +47,7 @@
     <version.jetty-plugin>8.1.14.v20131031</version.jetty-plugin>
     <version.bundle-plugin>2.5.3</version.bundle-plugin>
     <!-- Core dependency versions -->
-    <version.olingo>2.0.5</version.olingo>
+    <version.olingo>2.0.6</version.olingo>
     <version.javax.persistence>2.0.5</version.javax.persistence>
     <version.slf4j>1.7.1</version.slf4j>
     <version.log4j>1.2.17</version.log4j>
@@ -57,7 +57,7 @@
     <version.mockito>1.9.0</version.mockito>
     <version.junit>4.10</version.junit>
     <version.xmlunit>1.3</version.xmlunit>
-    <version.gson>2.2.2</version.gson>
+    <version.gson>2.4</version.gson>
   </properties>
 
   <build>

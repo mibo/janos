@@ -15,7 +15,7 @@
  */
 package org.apache.olingo.odata2.janos.processor.core;
 
-import com.google.gson.internal.StringMap;
+import com.google.gson.internal.LinkedTreeMap;
 import org.apache.olingo.odata2.api.edm.Edm;
 import org.apache.olingo.odata2.api.edm.EdmEntitySet;
 import org.apache.olingo.odata2.api.exception.ODataException;
@@ -164,7 +164,7 @@ public class DataSourceProcessorTest {
     ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
 
     StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
-    List<StringMap<?>> parsedResults = JsonHelper.getResults(resultStream.asString());
+    List<LinkedTreeMap<?, ?>> parsedResults = JsonHelper.getResults(resultStream.asString());
     Assert.assertEquals(10, parsedResults.size());
     Assert.assertEquals("Room with id: 1", parsedResults.get(0).get("Name"));
     Assert.assertEquals("Room with id: 9", parsedResults.get(9).get("Name"));
@@ -187,7 +187,7 @@ public class DataSourceProcessorTest {
     ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
 
     StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
-    List<StringMap<?>> parsedResults = JsonHelper.getResults(resultStream.asString());
+    List<LinkedTreeMap<?, ?>> parsedResults = JsonHelper.getResults(resultStream.asString());
     Assert.assertEquals(10, parsedResults.size());
     Assert.assertEquals("Room with id: 1", parsedResults.get(0).get("Name"));
     Assert.assertEquals("Room with id: 9", parsedResults.get(9).get("Name"));
@@ -209,7 +209,7 @@ public class DataSourceProcessorTest {
     ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
 
     StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
-    List<StringMap<?>> parsedResults = JsonHelper.getResults(resultStream.asString());
+    List<LinkedTreeMap<?, ?>> parsedResults = JsonHelper.getResults(resultStream.asString());
     Assert.assertEquals(5, parsedResults.size());
     Assert.assertEquals("Room with id: 10", parsedResults.get(0).get("Name"));
     Assert.assertEquals("Room with id: 9", parsedResults.get(4).get("Name"));
@@ -231,7 +231,7 @@ public class DataSourceProcessorTest {
     ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
 
     StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
-    List<StringMap<?>> parsedResults = JsonHelper.getResults(resultStream.asString());
+    List<LinkedTreeMap<?, ?>> parsedResults = JsonHelper.getResults(resultStream.asString());
     Assert.assertEquals(10, parsedResults.size());
     Assert.assertEquals("Room with id: 1", parsedResults.get(0).get("Name"));
     Assert.assertEquals("Room with id: 9", parsedResults.get(9).get("Name"));
@@ -252,7 +252,7 @@ public class DataSourceProcessorTest {
     ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
 
     StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
-    List<StringMap<?>> parsedResults = JsonHelper.getResults(resultStream.asString());
+    List<LinkedTreeMap<?, ?>> parsedResults = JsonHelper.getResults(resultStream.asString());
     Assert.assertEquals(3, parsedResults.size());
     Assert.assertEquals("Room with id: 7", parsedResults.get(0).get("Name"));
     Assert.assertEquals("Room with id: 9", parsedResults.get(2).get("Name"));
@@ -273,7 +273,7 @@ public class DataSourceProcessorTest {
     ODataResponse result = dataSourceProcessor.readEntitySet(uriInfo, "application/json");
 
     StringHelper.Stream resultStream = StringHelper.toStream(result.getEntityAsStream());
-    List<StringMap<?>> parsedResults = JsonHelper.getResults(resultStream.asString());
+    List<LinkedTreeMap<?, ?>> parsedResults = JsonHelper.getResults(resultStream.asString());
     Assert.assertEquals(10, parsedResults.size());
     Assert.assertEquals("Room with id: 1", parsedResults.get(0).get("Name"));
     Assert.assertEquals("Room with id: 9", parsedResults.get(9).get("Name"));

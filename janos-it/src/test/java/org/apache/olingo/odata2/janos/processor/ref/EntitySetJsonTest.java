@@ -18,7 +18,7 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.ref;
 
-import com.google.gson.internal.StringMap;
+import com.google.gson.internal.LinkedTreeMap;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.olingo.odata2.api.commons.HttpContentType;
@@ -46,13 +46,13 @@ public class EntitySetJsonTest extends AbstractRefJsonTest {
     checkMediaType(response, HttpContentType.APPLICATION_JSON);
 
     String body = getBody(response);
-    StringMap<?> map = getStringMap(body);
+    LinkedTreeMap<?, ?> map = getLinkedTreeMap(body);
 
-    List<StringMap<String>> results = (List) map.get("results");
+    List<LinkedTreeMap<String, String>> results = (List) map.get("results");
     assertFalse(results.isEmpty());
 
-    StringMap<String> firstRoom = null;
-    for (StringMap<String> result: results) {
+    LinkedTreeMap<String, String> firstRoom = null;
+    for (LinkedTreeMap<String, String> result: results) {
       if(result.get("Name").equals("Small green room")) {
         firstRoom = result;
       }
@@ -71,9 +71,9 @@ public class EntitySetJsonTest extends AbstractRefJsonTest {
     checkMediaType(response, HttpContentType.APPLICATION_JSON);
 
     String body = getBody(response);
-    StringMap<?> map = getStringMap(body);
+    LinkedTreeMap<?, ?> map = getLinkedTreeMap(body);
 
-    List<StringMap<String>> results = (List) map.get("results");
+    List<LinkedTreeMap<String, String>> results = (List) map.get("results");
     assertFalse(results.isEmpty());
     assertEquals(1, results.size());
     //
@@ -81,8 +81,8 @@ public class EntitySetJsonTest extends AbstractRefJsonTest {
 
     // TODO: 150917_mibo: Improve this test,
     // currently it can not determined which room is returned as 'top' room
-//    StringMap<String> firstRoom = null;
-//    for (StringMap<String> result: results) {
+//    LinkedTreeMap<String, String> firstRoom = null;
+//    for (LinkedTreeMap<String, String> result: results) {
 //      if(result.get("Name").equals("Small green room")) {
 //        firstRoom = result;
 //      }
@@ -101,15 +101,15 @@ public class EntitySetJsonTest extends AbstractRefJsonTest {
     checkMediaType(response, HttpContentType.APPLICATION_JSON);
 
     String body = getBody(response);
-    StringMap<?> map = getStringMap(body);
+    LinkedTreeMap<?, ?> map = getLinkedTreeMap(body);
 
-    List<StringMap<String>> results = (List) map.get("results");
+    List<LinkedTreeMap<String, String>> results = (List) map.get("results");
     assertFalse(results.isEmpty());
     //
     assertTrue(roomsCount() != results.size());
 
-    StringMap<String> roomToCheck = null;
-    for (StringMap<String> result: results) {
+    LinkedTreeMap<String, String> roomToCheck = null;
+    for (LinkedTreeMap<String, String> result: results) {
       if(result.get("Name").equals("Small dark green room")) {
         roomToCheck = result;
       }
