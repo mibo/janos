@@ -162,6 +162,15 @@ public abstract class JanosService {
      */
     JanosServiceBuilder with(DataSource dataSource);
 
+
+    /**
+     * Set classes which have with @Extension annotated methods.
+     *
+     * @param extensions classes with @Extension annotated methods.
+     * @return this builder (fluent builder)
+     */
+    JanosServiceBuilder extensions(Collection<Class<?>> extensions);
+
     /**
      * Finish building and build/create the configured JanosService (ODataService)
      * @return an instance of a JanosService (ODataService)

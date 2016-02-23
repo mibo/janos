@@ -33,10 +33,7 @@ import org.apache.olingo.odata2.janos.processor.ref.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * ODataServiceFactory implementation based on ListProcessor
@@ -68,7 +65,8 @@ public class JanosRefServiceFactory extends ODataServiceFactory {
     static {
       try {
 //        ANNOTATION_ODATA_SERVICE = AnnotationServiceFactory.createFor(MODEL_PACKAGE).build();
-        ANNOTATION_ODATA_SERVICE = JanosService.createFor(ANNOTATED_MODEL_CLASSES).build();
+        ANNOTATION_ODATA_SERVICE = JanosService.createFor(ANNOTATED_MODEL_CLASSES)
+            .extensions(Collections.singletonList(RefExtensions.class)).build();
         initializeSampleData();
       } catch (ODataApplicationException ex) {
         throw new RuntimeException("Exception during sample data generation.", ex);
