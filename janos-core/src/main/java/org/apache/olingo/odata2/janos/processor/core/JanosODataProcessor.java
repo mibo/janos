@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by michael on 23.02.16.
+ * Created by mibo on 23.02.16.
  */
 public class JanosODataProcessor implements ODataProcessor {
   private ODataContext context;

@@ -23,6 +23,7 @@ import org.apache.olingo.odata2.api.edm.Edm;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.processor.ODataSingleProcessor;
+import org.apache.olingo.odata2.api.processor.feature.ODataProcessorFeature;
 import org.apache.olingo.odata2.api.processor.part.*;
 import org.apache.olingo.odata2.api.rt.RuntimeDelegate;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
@@ -152,7 +153,7 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
     @Override
     public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
       // XXX: change
-      if (ODataProcessor.class.isAssignableFrom(method.getDeclaringClass())) {
+      if (isValid(method)) {
         invokeMethod = method;
         invokeParameters = Arrays.copyOf(objects, objects.length);
       } else {
@@ -160,8 +161,14 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
             "' can not wrapped for asynchronous processing.");
       }
 
-      return null;
+      return process();
     }
+
+    private boolean isValid(Method method) {
+      return org.apache.olingo.odata2.api.processor.ODataProcessor.class.isAssignableFrom(method.getDeclaringClass())
+          || ODataProcessorFeature.class.isAssignableFrom(method.getDeclaringClass());
+    }
+
 
     Object process() throws InvocationTargetException, IllegalAccessException {
       return invokeMethod.invoke(wrappedInstance, invokeParameters);
