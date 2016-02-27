@@ -55,7 +55,7 @@ import java.util.*;
  * <br/>
  * 
  */
-public class DataSourceProcessor  extends ODataSingleProcessor {
+public class DataSourceProcessor extends ODataSingleProcessor implements ODataProcessor {
 
   // TODO: Paging size should be configurable.
   private static final int SERVER_PAGING_SIZE = 100;

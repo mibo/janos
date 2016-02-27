@@ -41,6 +41,7 @@ import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationFunct
 import org.apache.olingo.odata2.janos.processor.core.data.access.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.data.store.DualDataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
+import org.apache.olingo.odata2.janos.processor.core.extension.ExtensionProcessor;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -128,80 +129,11 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
       valueAccess = new AnnotationValueAccess();
     }
 
-//    ODataProcessor.class.getInterfaces()
-    DataSourceProcessor p = new DataSourceProcessor(dataSource, valueAccess, functionSource);
-    ProcessorInvocationHandler handler = new ProcessorInvocationHandler(p);
-    Object proxyInstance = Proxy.newProxyInstance(this.getClass().getClassLoader(),
-        JanosODataProcessor.class.getInterfaces(), handler);
+    DataSourceProcessor dsProcessor = new DataSourceProcessor(dataSource, valueAccess, functionSource);
+    ODataProcessor wrappedProcessor = ExtensionProcessor.wrap(dsProcessor).finish();
 
-//    return RuntimeDelegate.createODataSingleProcessorService(edmProvider, (ODataSingleProcessor) proxyInstance);
-    return new JanosODataService(edmProvider, (ODataProcessor) proxyInstance);
+    return new JanosODataService(edmProvider, wrappedProcessor);
   }
 
-  /**
-   * InvocationHandler which is used as proxy for the Processor method.
-   */
-  private static class ProcessorInvocationHandler implements InvocationHandler {
-    private final Object wrappedInstance;
-    private Method invokeMethod;
-    private Object[] invokeParameters;
-
-    public ProcessorInvocationHandler(Object wrappedInstance) {
-      this.wrappedInstance = wrappedInstance;
-    }
-
-    @Override
-    public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
-      // XXX: change
-      if (isValid(method)) {
-        invokeMethod = method;
-        invokeParameters = Arrays.copyOf(objects, objects.length);
-      } else {
-        throw new RuntimeException("Invalid class '" + method.getDeclaringClass() +
-            "' can not wrapped for asynchronous processing.");
-      }
-
-      return process();
-    }
-
-    private boolean isValid(Method method) {
-      return org.apache.olingo.odata2.api.processor.ODataProcessor.class.isAssignableFrom(method.getDeclaringClass())
-          || ODataProcessorFeature.class.isAssignableFrom(method.getDeclaringClass());
-    }
-
-
-    Object process() throws InvocationTargetException, IllegalAccessException {
-      return invokeMethod.invoke(wrappedInstance, invokeParameters);
-    }
-
-    <P> void replaceInvokeParameter(P replacement) {
-      if (replacement == null) {
-        return;
-      }
-
-      List<Object> copy = new ArrayList<Object>();
-      for (Object parameter : invokeParameters) {
-        if (replacement.getClass() == parameter.getClass()) {
-          copy.add(replacement);
-        } else {
-          copy.add(parameter);
-        }
-      }
-      invokeParameters = copy.toArray();
-    }
-
-    Object getWrappedInstance() {
-      return this.wrappedInstance;
-    }
-
-    <P> P getParameter(Class<P> parameterClass) {
-      for (Object parameter : invokeParameters) {
-        if (parameter != null && parameterClass == parameter.getClass()) {
-          return parameterClass.cast(parameter);
-        }
-      }
-      return null;
-    }
-  }
 
 }
