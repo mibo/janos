@@ -130,7 +130,7 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
     }
 
     DataSourceProcessor dsProcessor = new DataSourceProcessor(dataSource, valueAccess, functionSource);
-    ODataProcessor wrappedProcessor = ExtensionProcessor.wrap(dsProcessor).finish();
+    ODataProcessor wrappedProcessor = ExtensionProcessor.wrap(dsProcessor).extensions(this.extensions).finish();
 
     return new JanosODataService(edmProvider, wrappedProcessor);
   }

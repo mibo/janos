@@ -8,5 +8,5 @@ public interface ExtensionContext {
 
   Object getParameter(String name);
 
-  Object proceed();
+  Object proceed() throws Exception;
 }

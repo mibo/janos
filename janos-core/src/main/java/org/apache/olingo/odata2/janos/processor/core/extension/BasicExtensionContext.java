@@ -10,6 +10,11 @@ import java.util.Map;
  */
 public final class BasicExtensionContext implements ExtensionContext {
   private Map<String, Object> parameters = new HashMap<>();
+  private final ExtensionProcessor extensionProcessor;
+
+  public BasicExtensionContext(ExtensionProcessor extensionProcessor) {
+    this.extensionProcessor = extensionProcessor;
+  }
 
   @Override
   public ExtensionContext addParameter(String name, Object value) {
@@ -23,7 +28,7 @@ public final class BasicExtensionContext implements ExtensionContext {
   }
 
   @Override
-  public Object proceed() {
-    return null;
+  public Object proceed() throws Exception {
+    return extensionProcessor.proceed();
   }
 }

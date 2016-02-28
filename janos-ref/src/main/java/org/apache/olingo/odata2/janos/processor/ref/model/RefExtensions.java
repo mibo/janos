@@ -13,8 +13,8 @@ public class RefExtensions {
 
   private static final Logger LOG = LoggerFactory.getLogger(RefExtensions.class);
 
-  @Extension(entitySetNames="Employee", methods={Method.GET})
-  public Object logReadAccess(ExtensionContext context) {
+  @Extension(entitySetNames="Employees", methods={Method.GET})
+  public Object logReadAccess(ExtensionContext context) throws Exception {
     LOG.info("Start READ access for Employee.");
     Object res = context.proceed();
     LOG.info("Finished READ access for Employee.");
