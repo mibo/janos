@@ -1,11 +1,13 @@
 package org.apache.olingo.odata2.janos.processor.core.extension;
 
+import org.apache.olingo.odata2.api.processor.ODataResponse;
+import org.apache.olingo.odata2.api.processor.feature.ODataProcessorFeature;
 import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.apache.olingo.odata2.api.uri.info.GetEntitySetUriInfo;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
-import org.apache.olingo.odata2.janos.processor.core.JanosODataProcessor;
+import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
 import org.apache.olingo.odata2.janos.processor.core.ODataProcessor;
-import org.apache.olingo.odata2.api.processor.feature.ODataProcessorFeature;
+import org.omg.CORBA.portable.InputStream;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -43,7 +45,7 @@ public class ExtensionProcessor<T extends ODataProcessor> {
     ExtensionRegistry r = ExtensionRegistry.getInstance();
     // get uri info and map to according methods
     GetEntitySetUriInfo info = (GetEntitySetUriInfo) handler.getParameter(GetEntitySetUriInfo.class);
-    if(info != null) {
+    if(info != null && info.getTargetEntitySet() != null) {
       ExtensionRegistry.ExtensionHolder ext = r.getExtension(Extension.Method.GET, info.getTargetEntitySet().getName());
       if(ext != null) {
         return ext.process(this);
@@ -58,8 +60,24 @@ public class ExtensionProcessor<T extends ODataProcessor> {
    * @return
    * @throws Exception
    */
-  public Object proceed() throws Exception {
-    return this.handler.process();
+  public ODataResponse proceed() throws Exception {
+    Object o = this.handler.process();
+    if(o instanceof ODataResponse) {
+      return (ODataResponse) o;
+    }
+    // TODO: change with 'better/concrete' exception
+    throw new RuntimeException("Could not cast to ODataResponse");
+  }
+
+  public ExtensionContext createContext() {
+    BasicExtensionContext context = new BasicExtensionContext(this);
+
+    context.addParameter("~method", handler.getMethod());
+    context.addParameter(ExtensionContext.PARA_URI_INFO, handler.getParameter(UriInfo.class));
+    context.addParameter(ExtensionContext.PARA_ACCEPT_HEADER, handler.getParameter(String.class));
+    context.addParameter(ExtensionContext.PARA_REQUEST_BODY, handler.getParameter(InputStream.class));
+
+    return context;
   }
 
   InvocationHandler getInvocationHandler() {
@@ -152,6 +170,14 @@ public class ExtensionProcessor<T extends ODataProcessor> {
         }
       }
       return null;
+    }
+
+    /**
+     * Method which was invoked (and wrapped by this ProcessorInvocationHandler instance).
+     * @return Method which was invoked
+     */
+    public Object getMethod() {
+      return this.invokeMethod;
     }
   }
 

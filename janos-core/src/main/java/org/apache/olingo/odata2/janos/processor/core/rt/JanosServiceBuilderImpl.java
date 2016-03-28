@@ -19,35 +19,26 @@
 package org.apache.olingo.odata2.janos.processor.core.rt;
 
 import org.apache.olingo.odata2.api.ODataService;
-import org.apache.olingo.odata2.api.edm.Edm;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
-import org.apache.olingo.odata2.api.processor.ODataSingleProcessor;
-import org.apache.olingo.odata2.api.processor.feature.ODataProcessorFeature;
-import org.apache.olingo.odata2.api.processor.part.*;
-import org.apache.olingo.odata2.api.rt.RuntimeDelegate;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.JanosService.JanosServiceBuilder;
-import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
-import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
+import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
+import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionSource;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.DataSourceProcessor;
-import org.apache.olingo.odata2.janos.processor.core.JanosODataProcessor;
 import org.apache.olingo.odata2.janos.processor.core.JanosODataService;
 import org.apache.olingo.odata2.janos.processor.core.ODataProcessor;
+import org.apache.olingo.odata2.janos.processor.core.data.access.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationDataSource;
 import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationFunctionSource;
-import org.apache.olingo.odata2.janos.processor.core.data.access.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.data.store.DualDataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
 import org.apache.olingo.odata2.janos.processor.core.extension.ExtensionProcessor;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * AnnotationServiceFactoryInstance (ODataServiceFactory) implementation based on ListProcessor

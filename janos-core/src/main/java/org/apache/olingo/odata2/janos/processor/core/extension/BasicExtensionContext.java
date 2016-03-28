@@ -1,6 +1,9 @@
 package org.apache.olingo.odata2.janos.processor.core.extension;
 
+import org.apache.olingo.odata2.api.processor.ODataResponse;
+import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
+import org.omg.CORBA.portable.InputStream;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +30,31 @@ public final class BasicExtensionContext implements ExtensionContext {
     return parameters.get(name);
   }
 
+  public <T> T getParameter(String name, Class<T> clazz) {
+    Object o = getParameter(name);
+    if(clazz.isInstance(o)) {
+      return (T) o;
+    }
+    return null;
+  }
+
   @Override
-  public Object proceed() throws Exception {
+  public UriInfo getUriInfo() {
+    return getParameter(PARA_URI_INFO, UriInfo.class);
+  }
+
+  @Override
+  public String getAcceptHeader() {
+    return getParameter(PARA_ACCEPT_HEADER, String.class);
+  }
+
+  @Override
+  public InputStream getRequestBody() {
+    return getParameter(PARA_REQUEST_BODY, InputStream.class);
+  }
+
+  @Override
+  public ODataResponse proceed() throws Exception {
     return extensionProcessor.proceed();
   }
 }

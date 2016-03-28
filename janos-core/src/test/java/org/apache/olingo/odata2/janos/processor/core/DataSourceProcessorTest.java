@@ -29,12 +29,12 @@ import org.apache.olingo.odata2.api.uri.info.GetEntitySetUriInfo;
 import org.apache.olingo.odata2.core.uri.UriParserImpl;
 import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
 import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
+import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
+import org.apache.olingo.odata2.janos.processor.core.data.access.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.data.access.BeanPropertyAccess;
 import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationDataSource;
-import org.apache.olingo.odata2.janos.processor.core.data.access.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.model.Building;
 import org.apache.olingo.odata2.janos.processor.core.model.Room;
 import org.apache.olingo.odata2.testutil.helper.JsonHelper;
@@ -44,7 +44,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *

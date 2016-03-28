@@ -1,6 +1,7 @@
 package org.apache.olingo.odata2.janos.processor.core.extension;
 
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
+import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -101,7 +102,7 @@ public class ExtensionRegistry {
 //      Object INSTANCE = extensionHolder.getInstance();
 //      Method method = extensionHolder.getMethod();
 
-      BasicExtensionContext context = new BasicExtensionContext(extProcessor);
+      ExtensionContext context = extProcessor.createContext();
       return method.invoke(instance, context);
       //
     }

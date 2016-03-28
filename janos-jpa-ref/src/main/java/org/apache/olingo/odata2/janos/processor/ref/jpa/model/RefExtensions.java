@@ -1,6 +1,6 @@
-package org.apache.olingo.odata2.janos.processor.ref.model;
+package org.apache.olingo.odata2.janos.processor.ref.jpa.model;
 
-import org.apache.olingo.odata2.api.processor.ODataResponse;
+import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension.Method;
 import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
@@ -17,8 +17,8 @@ public class RefExtensions {
   @Extension(entitySetNames="Employees", methods={Method.GET})
   public Object logReadAccess(ExtensionContext context) throws Exception {
     LOG.info("Start READ access for Employee.");
-    ODataResponse res = context.proceed();
-    res = ODataResponse.fromResponse(res).header("FunctionTest", "TRUE").build();
+    UriInfo uri = context.getUriInfo();
+    Object res = context.proceed();
     LOG.info("Finished READ access for Employee.");
     return res;
   }
