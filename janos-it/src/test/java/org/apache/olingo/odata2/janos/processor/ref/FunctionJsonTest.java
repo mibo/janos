@@ -38,10 +38,15 @@ public class FunctionJsonTest extends AbstractRefTest {
      checkMediaType(response, HttpContentType.APPLICATION_JSON);
     String body = getBody(response);
 
+    System.out.println("Model package: " + modelPackageUnderTest);
+    System.out.println(body);
+    System.out.println("---");
+
     Assert.assertTrue(jsonDataResponseContains(body, "RefScenario.c_City"));
     Assert.assertTrue(jsonDataResponseContains(body, "8392"));
     Assert.assertTrue(jsonDataResponseContains(body, "Northpole"));
-    Assert.assertTrue(jsonDataResponseContains(body, "\"type\":\"RefScenario.c_City\"}," +
+    Assert.assertTrue("Body\n---[\n" + body + "\n]---\n is not as expected.",
+        jsonDataResponseContains(body, "\"type\":\"RefScenario.c_City\"}," +
         "\"PostalCode\":\"8392\",\"CityName\":\"Northpole„\""));
   }
 

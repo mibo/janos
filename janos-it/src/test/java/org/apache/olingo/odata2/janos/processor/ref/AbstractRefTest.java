@@ -29,14 +29,18 @@ import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.commons.ODataHttpMethod;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
+import org.apache.olingo.odata2.janos.processor.ref.model.RefExtensions;
 import org.apache.olingo.odata2.testutil.fit.AbstractFitTest;
 import org.apache.olingo.odata2.testutil.helper.StringHelper;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -50,7 +54,7 @@ import static org.junit.Assert.*;
 public class AbstractRefTest extends AbstractFitTest {
 
   private static final Logger LOG = Logger.getLogger(AbstractRefTest.class);
-  private final String modelPackageUnderTest;
+  protected final String modelPackageUnderTest;
 
   public AbstractRefTest(String modelPackage) {
     super(modelPackage);
@@ -67,7 +71,9 @@ public class AbstractRefTest extends AbstractFitTest {
 
   @Override
   protected ODataService createService() throws ODataException {
-    return JanosService.createFor(modelPackageUnderTest).build();
+    return JanosService.createFor(modelPackageUnderTest)
+        .extensions(Collections.singletonList(RefExtensions.class))
+        .build();
   }
 
   @Parameterized.Parameters
@@ -81,43 +87,95 @@ public class AbstractRefTest extends AbstractFitTest {
     return Arrays.asList(modelPackages);
   }
 
+  public class RequestBuilder {
+    final HttpRequestBase request;
+
+    public RequestBuilder(HttpRequestBase request) {
+      this.request = request;
+    }
+
+    public RequestBuilder(ODataHttpMethod method) {
+      request = method == ODataHttpMethod.GET ? new HttpGet() :
+                method == ODataHttpMethod.DELETE ? new HttpDelete() :
+                method == ODataHttpMethod.POST ? new HttpPost() :
+                method == ODataHttpMethod.PUT ? new HttpPut() : new HttpPatch();
+    }
+
+    public RequestBuilder uri(String uri) {
+      request.setURI(URI.create(getEndpoint() + uri));
+      return this;
+    }
+
+    public RequestBuilder addHeader(String name, String value) {
+      request.addHeader(name, value);
+      return this;
+    }
+
+    public RequestBuilder requestBody(String requestBody, String contentType)
+        throws UnsupportedEncodingException {
+      if(request instanceof HttpPost || request instanceof HttpPut || request instanceof HttpPatch) {
+        ((HttpEntityEnclosingRequest) request).setEntity(new StringEntity(requestBody));
+        request.setHeader(HttpHeaders.CONTENT_TYPE, contentType);
+        return this;
+      } else {
+        throw new RuntimeException("Request body is only supported for POST and PUT and PATCH.");
+      }
+    }
+
+    public HttpResponse execute() throws IOException {
+      return getHttpClient().execute(request);
+    }
+
+    public HttpResponse executeValidated(HttpStatusCodes expectedStatusCode) throws IOException {
+      HttpResponse response = this.execute();
+      assertNotNull(response);
+      assertEquals(expectedStatusCode.getStatusCode(), response.getStatusLine().getStatusCode());
+
+      if (expectedStatusCode == HttpStatusCodes.OK) {
+        assertNotNull(response.getEntity());
+        assertNotNull(response.getEntity().getContent());
+      } else if (expectedStatusCode == HttpStatusCodes.CREATED) {
+        assertNotNull(response.getEntity());
+        assertNotNull(response.getEntity().getContent());
+        assertNotNull(response.getFirstHeader(HttpHeaders.LOCATION));
+      } else if (expectedStatusCode == HttpStatusCodes.NO_CONTENT) {
+        assertTrue(response.getEntity() == null || response.getEntity().getContent() == null);
+      }
+
+      return response;
+    }
+  }
+
+  public RequestBuilder createRequest(ODataHttpMethod httpMethod, String uri) {
+    return new RequestBuilder(httpMethod).uri(uri);
+  }
+  public RequestBuilder createGet(String uri) {
+    return createRequest(ODataHttpMethod.GET, uri);
+  }
+  public RequestBuilder createPost(String uri) {
+    return createRequest(ODataHttpMethod.POST, uri);
+  }
+  public RequestBuilder createPut(String uri) {
+    return createRequest(ODataHttpMethod.PUT, uri);
+  }
+  public RequestBuilder createDelete(String uri) {
+    return new RequestBuilder(ODataHttpMethod.DELETE).uri(uri);
+  }
+
   protected HttpResponse callUri(
       final ODataHttpMethod httpMethod, final String uri,
       final String additionalHeader, final String additionalHeaderValue,
       final String requestBody, final String requestContentType,
       final HttpStatusCodes expectedStatusCode) throws Exception {
 
-    HttpRequestBase request =
-        httpMethod == ODataHttpMethod.GET ? new HttpGet() :
-            httpMethod == ODataHttpMethod.DELETE ? new HttpDelete() :
-                httpMethod == ODataHttpMethod.POST ? new HttpPost() :
-                    httpMethod == ODataHttpMethod.PUT ? new HttpPut() : new HttpPatch();
-    request.setURI(URI.create(getEndpoint() + uri));
-    if (additionalHeader != null) {
-      request.addHeader(additionalHeader, additionalHeaderValue);
+    RequestBuilder builder = createRequest(httpMethod, uri);
+    if(additionalHeader != null) {
+      builder.addHeader(additionalHeader, additionalHeaderValue);
     }
-    if (requestBody != null) {
-      ((HttpEntityEnclosingRequest) request).setEntity(new StringEntity(requestBody));
-      request.setHeader(HttpHeaders.CONTENT_TYPE, requestContentType);
+    if(requestBody != null) {
+      builder.requestBody(requestBody, requestContentType);
     }
-
-    final HttpResponse response = getHttpClient().execute(request);
-
-    assertNotNull(response);
-    assertEquals(expectedStatusCode.getStatusCode(), response.getStatusLine().getStatusCode());
-
-    if (expectedStatusCode == HttpStatusCodes.OK) {
-      assertNotNull(response.getEntity());
-      assertNotNull(response.getEntity().getContent());
-    } else if (expectedStatusCode == HttpStatusCodes.CREATED) {
-      assertNotNull(response.getEntity());
-      assertNotNull(response.getEntity().getContent());
-      assertNotNull(response.getFirstHeader(HttpHeaders.LOCATION));
-    } else if (expectedStatusCode == HttpStatusCodes.NO_CONTENT) {
-      assertTrue(response.getEntity() == null || response.getEntity().getContent() == null);
-    }
-
-    return response;
+    return builder.executeValidated(expectedStatusCode);
   }
 
   protected HttpResponse callUri(final String uri, final String additionalHeader, final String additionalHeaderValue,

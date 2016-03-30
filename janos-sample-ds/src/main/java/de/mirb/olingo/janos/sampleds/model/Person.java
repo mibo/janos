@@ -1,7 +1,11 @@
 package de.mirb.olingo.janos.sampleds.model;
 
+import org.apache.olingo.odata2.api.annotation.edm.EdmEntitySet;
+import org.apache.olingo.odata2.api.annotation.edm.EdmEntityType;
+import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
+import org.apache.olingo.odata2.api.annotation.edm.EdmProperty;
+
 import java.util.Calendar;
-import org.apache.olingo.odata2.api.annotation.edm.*;
 
 /**
  * Created by michael on 26.09.15.

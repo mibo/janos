@@ -17,13 +17,15 @@ The extension is based (forked) from the *Apache Olingo Annotation Processor* (s
 
 ## New and Noteworthy
 
+  * `Version 2.3/3.0` (current development version - release *upcoming*)
+    * *Planned:* Implement enhancement in **[Janos#10]**: More customization over generic (default) data processing (see also in *Roadmap* at the end of this readme)
   * `Version 2.2` (current development version - release *21.02.2016*)
     * **[Janos#9](https://github.com/mibo/janos/issues/9):** Add method to create an `EdmProvider` based on `Annotations` (accordingly annotated classes)
     * **[Janos#8](https://github.com/mibo/janos/issues/8):** All fields of an POJO are handled as `@EdmProperty` by default (if no
     fields with annotations (beside `@EdmKey`) is found)
     * Updated `Apache Olingo` to version `2.0.6` and because Olingo updated to `GSon 2.4` also updated `Gson`.
     * Switch to *real* [Semantic Versioning](http://semver.org/). Based on this decision it is possible that next version will be `3
-    .0` instead of `2.2`.
+    .0` instead of `2.2`, however the API did not changed, hence the release version is now `2.2.0`.
   * `Version 2.1` (current stable version - released *07.10.2015*)
     * Added `ReadOptions` and `ReadResult` for optimization of data access (read) in the `DataStore` layer
     * Refactored API packages (incompatible changes to `2.0`)
@@ -42,7 +44,7 @@ The extension is based (forked) from the *Apache Olingo Annotation Processor* (s
 ## Roadmap
 
   * Abstract Topics
-    * Provide more *Hooks* for customization of generic (default) data processing (e.g. *start/end of transaction*)
+    * Provide more Extension points for customization of generic (default) data processing (e.g. start/end of transaction). Beside the actual only possibility to use the ReadOptions and ReadResult for performance optimization. -> created enhancement [Janos#10](https://github.com/mibo/janos/issues/10)
     * Provide more documentation (e.g. tutorials) as just the source code
   * Specific enhancements
     * Support `ReadOptions` and `ReadResult` for `FunctionSource` (*FunctionImports*)

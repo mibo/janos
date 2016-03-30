@@ -40,6 +40,7 @@
       <property name="eclipselink.orm.throw.exceptions" value="true"/>
       <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+      <!--<property name="hibernate.show_sql" value="true"/>-->
     </properties>
   </persistence-unit>
 </persistence>

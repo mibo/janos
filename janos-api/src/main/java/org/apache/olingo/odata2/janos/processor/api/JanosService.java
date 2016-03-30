@@ -21,14 +21,12 @@ package org.apache.olingo.odata2.janos.processor.api;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * AnnotationServiceFactory which provides an AnnotationService which handles java beans (classes)
@@ -161,6 +159,15 @@ public abstract class JanosService {
      * @return this builder (fluent builder)
      */
     JanosServiceBuilder with(DataSource dataSource);
+
+
+    /**
+     * Set classes which have with @Extension annotated methods.
+     *
+     * @param extensions classes with @Extension annotated methods.
+     * @return this builder (fluent builder)
+     */
+    JanosServiceBuilder extensions(Collection<Class<?>> extensions);
 
     /**
      * Finish building and build/create the configured JanosService (ODataService)

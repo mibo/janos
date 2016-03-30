@@ -16,10 +16,10 @@
 package org.apache.olingo.odata2.janos.processor.core.data.store;
 
 import org.apache.olingo.odata2.api.annotation.edm.EdmKey;
-import org.apache.olingo.odata2.janos.processor.api.data.store.DataStore;
-import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreException;
 import org.apache.olingo.odata2.janos.processor.api.data.ReadOptions;
 import org.apache.olingo.odata2.janos.processor.api.data.ReadResult;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStore;
+import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreException;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationHelper;
 import org.apache.olingo.odata2.janos.processor.core.util.AnnotationRuntimeException;
 
