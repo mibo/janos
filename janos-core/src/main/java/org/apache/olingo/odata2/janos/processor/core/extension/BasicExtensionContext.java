@@ -2,6 +2,7 @@ package org.apache.olingo.odata2.janos.processor.core.extension;
 
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.api.uri.UriInfo;
+import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
 import org.omg.CORBA.portable.InputStream;
 
@@ -51,6 +52,11 @@ public final class BasicExtensionContext implements ExtensionContext {
   @Override
   public InputStream getRequestBody() {
     return getParameter(PARA_REQUEST_BODY, InputStream.class);
+  }
+
+  @Override
+  public Extension.Method getRequestType() {
+    return getParameter(PARA_REQUEST_TYPE, Extension.Method.class);
   }
 
   @Override

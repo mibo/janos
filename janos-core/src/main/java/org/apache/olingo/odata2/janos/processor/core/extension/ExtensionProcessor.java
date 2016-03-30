@@ -1,5 +1,7 @@
 package org.apache.olingo.odata2.janos.processor.core.extension;
 
+import org.apache.olingo.odata2.api.edm.EdmException;
+import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.api.processor.feature.ODataProcessorFeature;
 import org.apache.olingo.odata2.api.uri.UriInfo;
@@ -33,25 +35,56 @@ public class ExtensionProcessor<T extends ODataProcessor> {
     return new Builder<>(processor);
   }
 
+  private ODataContext context;
 
   /**
-   * Process call and checks for extensions
+   * Wrapped processor call and checks for extensions
    *
    * @return
    * @throws Exception
    */
   public Object process() throws Exception {
     //
-    ExtensionRegistry r = ExtensionRegistry.getInstance();
     // get uri info and map to according methods
-    GetEntitySetUriInfo info = (GetEntitySetUriInfo) handler.getParameter(GetEntitySetUriInfo.class);
+    // FIXME: mibo_160329: the context handling is not thread (multiple request) safe
+    ODataContext actualContext = (ODataContext) handler.getParameter(ODataContext.class);
+    if(actualContext != null) {
+      context = actualContext;
+    }
+
+    UriInfo info = (UriInfo) handler.getParameter(UriInfo.class);
     if(info != null && info.getTargetEntitySet() != null) {
-      ExtensionRegistry.ExtensionHolder ext = r.getExtension(Extension.Method.GET, info.getTargetEntitySet().getName());
-      if(ext != null) {
-        return ext.process(this);
+      // XXX: ugly hack
+      if(context != null) {
+        String httpMethod = context.getHttpMethod();
+        return dispatch(httpMethod, info);
       }
+      //
     }
     return handler.process();
+  }
+
+  private Object dispatch(String httpMethod, UriInfo info)
+      throws InvocationTargetException, IllegalAccessException, EdmException {
+
+    ExtensionRegistry r = ExtensionRegistry.getInstance();
+    Extension.Method method = mapMethod(httpMethod);
+    ExtensionRegistry.ExtensionHolder ext = r.getExtension(method,
+        info.getTargetEntitySet().getName());
+    if(ext != null) {
+      return ext.process(this);
+    }
+    return handler.process();
+  }
+
+  private Extension.Method mapMethod(String httpMethod) throws InvocationTargetException {
+    switch (httpMethod) {
+      case "GET": return Extension.Method.GET;
+      case "POST": return Extension.Method.POST;
+      case "PUT": return Extension.Method.PUT;
+      case "DELETE": return Extension.Method.DELETE;
+    }
+    throw new RuntimeException("Not mappable/supported HTTP method: " + httpMethod);
   }
 
   /**
@@ -73,6 +106,7 @@ public class ExtensionProcessor<T extends ODataProcessor> {
     BasicExtensionContext context = new BasicExtensionContext(this);
 
     context.addParameter("~method", handler.getMethod());
+    context.addParameter(ExtensionContext.PARA_REQUEST_TYPE, handler.getMethod());
     context.addParameter(ExtensionContext.PARA_URI_INFO, handler.getParameter(UriInfo.class));
     context.addParameter(ExtensionContext.PARA_ACCEPT_HEADER, handler.getParameter(String.class));
     context.addParameter(ExtensionContext.PARA_REQUEST_BODY, handler.getParameter(InputStream.class));

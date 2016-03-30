@@ -11,6 +11,7 @@ public interface ExtensionContext {
   String PARA_URI_INFO = "~uriinfo";
   String PARA_ACCEPT_HEADER = "~acceptheader";
   String PARA_REQUEST_BODY = "~requestbody";
+  String PARA_REQUEST_TYPE = "~requesttype";
 
   ExtensionContext addParameter(String name, Object value);
 
@@ -21,6 +22,8 @@ public interface ExtensionContext {
   String getAcceptHeader();
 
   InputStream getRequestBody();
+
+  Extension.Method getRequestType();
 
   ODataResponse proceed() throws Exception;
 }

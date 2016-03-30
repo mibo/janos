@@ -5,7 +5,6 @@ import org.apache.olingo.odata2.api.edm.Edm;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
-import org.apache.olingo.odata2.api.processor.feature.CustomContentType;
 import org.apache.olingo.odata2.api.processor.part.*;
 import org.apache.olingo.odata2.api.rt.RuntimeDelegate;
 
@@ -106,8 +105,8 @@ public class JanosODataService implements ODataService {
 
   @Override
   public List<String> getSupportedContentTypes(Class<? extends org.apache.olingo.odata2.api.processor.ODataProcessor> processorFeature) throws ODataException {
-    ArrayList result = new ArrayList();
-    if(this.processor instanceof CustomContentType) {
+    ArrayList<String> result = new ArrayList<>();
+    if(this.processor != null) {
       result.addAll(this.processor.getCustomContentTypes(processorFeature));
     }
 
