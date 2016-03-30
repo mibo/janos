@@ -4,8 +4,8 @@ import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
-import org.omg.CORBA.portable.InputStream;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
