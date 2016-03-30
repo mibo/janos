@@ -39,6 +39,7 @@ import org.junit.runners.Parameterized;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -88,6 +89,7 @@ public class AbstractRefTest extends AbstractFitTest {
   }
 
   public class RequestBuilder {
+    public static final String DEFAULT_CHARSET = "utf-8";
     final HttpRequestBase request;
 
     public RequestBuilder(HttpRequestBase request) {
@@ -113,8 +115,14 @@ public class AbstractRefTest extends AbstractFitTest {
 
     public RequestBuilder requestBody(String requestBody, String contentType)
         throws UnsupportedEncodingException {
+      return requestBody(requestBody, DEFAULT_CHARSET, contentType);
+    }
+
+
+    public RequestBuilder requestBody(String requestBody, String charset, String contentType)
+        throws UnsupportedEncodingException {
       if(request instanceof HttpPost || request instanceof HttpPut || request instanceof HttpPatch) {
-        ((HttpEntityEnclosingRequest) request).setEntity(new StringEntity(requestBody));
+        ((HttpEntityEnclosingRequest) request).setEntity(new StringEntity(requestBody, Charset.forName(charset)));
         request.setHeader(HttpHeaders.CONTENT_TYPE, contentType);
         return this;
       } else {
