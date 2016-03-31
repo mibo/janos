@@ -21,6 +21,7 @@ package org.apache.olingo.odata2.janos.processor.api;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
@@ -174,7 +175,7 @@ public abstract class JanosService {
      * @return an instance of a JanosService (ODataService)
      * @throws ODataException the o data exception
      */
-    ODataService build() throws ODataException;
+    JanosServiceFactory build() throws ODataException;
   }
 
   /**

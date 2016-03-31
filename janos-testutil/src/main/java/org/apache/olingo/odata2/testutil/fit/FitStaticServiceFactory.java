@@ -23,6 +23,7 @@ import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.ODataServiceFactory;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.processor.ODataContext;
+import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.apache.olingo.odata2.testutil.server.TestServer;
 
 import java.net.URI;
@@ -48,18 +49,14 @@ public class FitStaticServiceFactory extends ODataServiceFactory {
     return super.getCallback(callbackInterface);
   }
 
-  private static Map<String, ODataService> PORT_2_SERVICE = Collections
-      .synchronizedMap(new HashMap<String, ODataService>());
-
-  public static void bindService(final String key, final ODataService service) {
-    PORT_2_SERVICE.put(key, service);
-  }
+  private static Map<String, JanosServiceFactory> PORT_2_SERVICE = Collections
+      .synchronizedMap(new HashMap<>());
 
   public static void unbindService(final String key) {
     PORT_2_SERVICE.remove(key);
   }
 
-  public static void bindService(final TestServer server, final ODataService service) {
+  public static void bindService(final TestServer server, final JanosServiceFactory service) {
     PORT_2_SERVICE.put(createId(server), service);
   }
 
@@ -81,13 +78,8 @@ public class FitStaticServiceFactory extends ODataServiceFactory {
     String port = (tmp.length == 2 && tmp[1] != null) ? tmp[1] : "80";
 
     // access and validation in synchronized block
-    synchronized (PORT_2_SERVICE) {
-      final ODataService service = PORT_2_SERVICE.get(port);
-//      if (service == null) {
-//        throw new IllegalArgumentException("no static service set for JUnit test");
-//      }
-      return service;
-    }
+    final JanosServiceFactory service = PORT_2_SERVICE.get(port);
+    return service.createService(ctx);
   }
 
   private static String createId(final TestServer server) {

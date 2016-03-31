@@ -5,7 +5,6 @@ import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.api.processor.feature.ODataProcessorFeature;
 import org.apache.olingo.odata2.api.uri.UriInfo;
-import org.apache.olingo.odata2.api.uri.info.GetEntitySetUriInfo;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
 import org.apache.olingo.odata2.janos.processor.core.ODataProcessor;
@@ -15,10 +14,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by mibo on 27.02.16.
@@ -26,16 +22,20 @@ import java.util.List;
 public class ExtensionProcessor<T extends ODataProcessor> {
 
   private final ProcessorInvocationHandler handler;
+  private final ExtensionRegistry extensionRegistry;
+  private final ODataContext context;
 
-  public ExtensionProcessor(T processor) {
+  ExtensionProcessor(T processor, ExtensionRegistry extensionRegistry, ODataContext context) {
+    this.extensionRegistry = extensionRegistry;
     this.handler = new ProcessorInvocationHandler<>(this, processor);
+    this.context = context;
   }
 
   public static <T extends ODataProcessor> Builder<T> wrap(T processor) {
     return new Builder<>(processor);
   }
 
-  private ODataContext context;
+  private ThreadLocal<ODataContext> threadContext = new ThreadLocal<>();
 
   /**
    * Wrapped processor call and checks for extensions
@@ -43,23 +43,15 @@ public class ExtensionProcessor<T extends ODataProcessor> {
    * @return
    * @throws Exception
    */
-  public Object process() throws Exception {
+  Object process() throws Exception {
     //
     // get uri info and map to according methods
-    // FIXME: mibo_160329: the context handling is not thread (multiple request) safe
-    ODataContext actualContext = (ODataContext) handler.getParameter(ODataContext.class);
-    if(actualContext != null) {
-      context = actualContext;
-    }
-
     UriInfo info = (UriInfo) handler.getParameter(UriInfo.class);
     if(info != null && info.getTargetEntitySet() != null) {
-      // XXX: ugly hack
       if(context != null) {
         String httpMethod = context.getHttpMethod();
         return dispatch(httpMethod, info);
       }
-      //
     }
     return handler.process();
   }
@@ -67,9 +59,8 @@ public class ExtensionProcessor<T extends ODataProcessor> {
   private Object dispatch(String httpMethod, UriInfo info)
       throws InvocationTargetException, IllegalAccessException, EdmException {
 
-    ExtensionRegistry r = ExtensionRegistry.getInstance();
     Extension.Method method = mapMethod(httpMethod);
-    ExtensionRegistry.ExtensionHolder ext = r.getExtension(method,
+    ExtensionRegistry.ExtensionHolder ext = extensionRegistry.getExtension(method,
         info.getTargetEntitySet().getName());
     if(ext != null) {
       return ext.process(this);
@@ -119,22 +110,24 @@ public class ExtensionProcessor<T extends ODataProcessor> {
   }
 
   public static class Builder<T extends ODataProcessor> {
-    private final ExtensionProcessor processor;
+    private T processor;
+    private ExtensionRegistry extensionRegistry;
 
-    public Builder(T processor) {
-//      this.processor = new ProcessorInvocationHandler<>(processor);
-      this.processor = new ExtensionProcessor<>(processor);
+    Builder(T processor) {
+      this.processor = processor;
     }
 
-    public ODataProcessor finish() {
+    public ODataProcessor finish(ODataContext context) {
+      if(extensionRegistry == null) {
+        extensionRegistry = ExtensionRegistry.getInstance();
+      }
+      ExtensionProcessor extProc = new ExtensionProcessor<>(processor, extensionRegistry, context);
       return (ODataProcessor) Proxy.newProxyInstance(this.getClass().getClassLoader(),
-          new Class[]{ODataProcessor.class}, processor.getInvocationHandler());
-
+          new Class[]{ODataProcessor.class}, extProc.getInvocationHandler());
     }
 
-    public Builder<T> extensions(Collection<Class<?>> extensions) {
-      ExtensionRegistry r = ExtensionRegistry.getInstance();
-      r.registerExtensions(extensions);
+    public Builder<T> extensions(ExtensionRegistry extensionRegistry) {
+      this.extensionRegistry = extensionRegistry;
       return this;
     }
   }
@@ -182,7 +175,7 @@ public class ExtensionProcessor<T extends ODataProcessor> {
         return;
       }
 
-      List<Object> copy = new ArrayList<Object>();
+      List<Object> copy = new ArrayList<>();
       for (Object parameter : invokeParameters) {
         if (replacement.getClass() == parameter.getClass()) {
           copy.add(replacement);

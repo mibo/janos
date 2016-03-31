@@ -22,6 +22,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.apache.olingo.odata2.testutil.TestUtilRuntimeException;
 import org.apache.olingo.odata2.testutil.data.JanosSampleDataGenerator;
 import org.apache.olingo.odata2.testutil.server.ServerRuntimeException;
@@ -38,7 +39,7 @@ public abstract class AbstractFitTest extends BaseTest {
 
   private final TestServer server;
 
-  private ODataService service;
+  private JanosServiceFactory service;
 
   private final HttpClient httpClient = new DefaultHttpClient();
 
@@ -58,7 +59,7 @@ public abstract class AbstractFitTest extends BaseTest {
     return httpClient;
   }
 
-  protected ODataService getService() {
+  protected JanosServiceFactory getService() {
     return service;
   }
 
@@ -79,7 +80,7 @@ public abstract class AbstractFitTest extends BaseTest {
     }
   }
   
-  protected abstract ODataService createService() throws ODataException;
+  protected abstract JanosServiceFactory createService() throws ODataException;
 
   @Before
   public void before() {

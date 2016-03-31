@@ -24,11 +24,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.log4j.Logger;
-import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.commons.ODataHttpMethod;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
+import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.apache.olingo.odata2.janos.processor.ref.model.RefExtensions;
 import org.apache.olingo.odata2.testutil.fit.AbstractFitTest;
 import org.apache.olingo.odata2.testutil.helper.StringHelper;
@@ -71,7 +71,7 @@ public class AbstractRefTest extends AbstractFitTest {
 
 
   @Override
-  protected ODataService createService() throws ODataException {
+  protected JanosServiceFactory createService() throws ODataException {
     return JanosService.createFor(modelPackageUnderTest)
         .extensions(Collections.singletonList(RefExtensions.class))
         .build();

@@ -23,12 +23,14 @@ import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.JanosService.JanosServiceBuilder;
+import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.DataSourceProcessor;
 import org.apache.olingo.odata2.janos.processor.core.JanosODataService;
+import org.apache.olingo.odata2.janos.processor.core.JanosODataServiceFactory;
 import org.apache.olingo.odata2.janos.processor.core.ODataProcessor;
 import org.apache.olingo.odata2.janos.processor.core.data.access.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationDataSource;
@@ -36,6 +38,7 @@ import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationFunct
 import org.apache.olingo.odata2.janos.processor.core.data.store.DualDataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
 import org.apache.olingo.odata2.janos.processor.core.extension.ExtensionProcessor;
+import org.apache.olingo.odata2.janos.processor.core.extension.ExtensionRegistry;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -98,7 +101,7 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
     return this;
   }
 
-  public ODataService build() throws ODataException {
+  public JanosServiceFactory build() throws ODataException {
     if(dataStoreManager == null) {
       dataStoreManager = new DualDataStoreManager();
       dataStoreManager.setDefaultProperty(DataStoreManager.KEEP_PERSISTENT, DEFAULT_PERSISTENCE);
@@ -120,10 +123,9 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
       valueAccess = new AnnotationValueAccess();
     }
 
-    DataSourceProcessor dsProcessor = new DataSourceProcessor(dataSource, valueAccess, functionSource);
-    ODataProcessor wrappedProcessor = ExtensionProcessor.wrap(dsProcessor).extensions(this.extensions).finish();
+    ExtensionRegistry registry = ExtensionRegistry.getInstance().registerExtensions(extensions);
 
-    return new JanosODataService(edmProvider, wrappedProcessor);
+    return new JanosODataServiceFactory(edmProvider, dataSource, valueAccess, functionSource, registry);
   }
 
 
