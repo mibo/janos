@@ -66,12 +66,13 @@ public class AnnotationEdmProvider extends EdmProvider {
    * @param packageToScan package (and sub-packages) which are scanned for annotated classes
    */
   public AnnotationEdmProvider(final String packageToScan) throws ODataException {
-    annotatedClasses = ClassHelper.loadClasses(packageToScan, new ClassHelper.ClassValidator() {
-      @Override
-      public boolean isClassValid(final Class<?> c) {
-        return ANNOTATION_HELPER.isEdmAnnotated(c);
-      }
-    });
+//    annotatedClasses = ClassHelper.loadClasses(packageToScan, new ClassHelper.ClassValidator() {
+//      @Override
+//      public boolean isClassValid(final Class<?> c) {
+//        return ANNOTATION_HELPER.isEdmAnnotated(c);
+//      }
+//    });
+    annotatedClasses = ClassHelper.loadClasses(packageToScan, ANNOTATION_HELPER::isEdmAnnotated);
 
     init();
   }

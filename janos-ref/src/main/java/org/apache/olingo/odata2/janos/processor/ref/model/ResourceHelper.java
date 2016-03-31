@@ -61,7 +61,7 @@ public class ResourceHelper {
 
   public enum Format {
     BMP, JPEG, PNG, GIF
-  };
+  }
 
   public static byte[] generateImage() {
     return generateImage(Format.PNG);

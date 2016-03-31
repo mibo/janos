@@ -16,7 +16,6 @@
 package org.apache.olingo.odata2.janos.processor.core;
 
 import junit.framework.Assert;
-import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.apache.olingo.odata2.janos.processor.core.model.*;
@@ -42,7 +41,7 @@ public class AnnotationServiceFactoryImplTest {
   @Test
   public void createFromAnnotatedClasses() throws ODataException {
     JanosServiceBuilderImpl factory = new JanosServiceBuilderImpl();
-    final Collection<Class<?>> annotatedClasses = new ArrayList<Class<?>>();
+    final Collection<Class<?>> annotatedClasses = new ArrayList<>();
     annotatedClasses.add(RefBase.class);
     annotatedClasses.add(Building.class);
     annotatedClasses.add(Employee.class);
@@ -59,7 +58,7 @@ public class AnnotationServiceFactoryImplTest {
   public void createFromClasses() throws ODataException {
     JanosServiceBuilderImpl factory = new JanosServiceBuilderImpl();
 
-    final Collection<Class<?>> notAnnotatedClasses = new ArrayList<Class<?>>();
+    final Collection<Class<?>> notAnnotatedClasses = new ArrayList<>();
     notAnnotatedClasses.add(String.class);
     notAnnotatedClasses.add(Long.class);
     JanosServiceFactory service = factory.createFor(notAnnotatedClasses).build();

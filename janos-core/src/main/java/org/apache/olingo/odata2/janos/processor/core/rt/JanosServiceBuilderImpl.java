@@ -18,8 +18,6 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.janos.processor.core.rt;
 
-import org.apache.olingo.odata2.api.ODataService;
-import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.JanosService.JanosServiceBuilder;
@@ -28,16 +26,12 @@ import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.core.DataSourceProcessor;
-import org.apache.olingo.odata2.janos.processor.core.JanosODataService;
 import org.apache.olingo.odata2.janos.processor.core.JanosODataServiceFactory;
-import org.apache.olingo.odata2.janos.processor.core.ODataProcessor;
 import org.apache.olingo.odata2.janos.processor.core.data.access.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationDataSource;
 import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationFunctionSource;
 import org.apache.olingo.odata2.janos.processor.core.data.store.DualDataStoreManager;
 import org.apache.olingo.odata2.janos.processor.core.edm.AnnotationEdmProvider;
-import org.apache.olingo.odata2.janos.processor.core.extension.ExtensionProcessor;
 import org.apache.olingo.odata2.janos.processor.core.extension.ExtensionRegistry;
 
 import java.util.ArrayList;
@@ -49,7 +43,6 @@ import java.util.Collection;
  */
 public class JanosServiceBuilderImpl implements JanosServiceBuilder {
   private static final String DEFAULT_PERSISTENCE = Boolean.TRUE.toString();
-  private EdmProvider edmProvider;
   private DataSource dataSource;
   private FunctionSource functionSource;
   private ValueAccess valueAccess;
@@ -107,6 +100,7 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
       dataStoreManager.setDefaultProperty(DataStoreManager.KEEP_PERSISTENT, DEFAULT_PERSISTENCE);
     }
 
+    AnnotationEdmProvider edmProvider;
     if(!annotatedClasses.isEmpty()) {
       edmProvider = new AnnotationEdmProvider(annotatedClasses);
       dataSource = new AnnotationDataSource(annotatedClasses, dataStoreManager);

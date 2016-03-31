@@ -48,7 +48,7 @@ public class SampleDsServiceFactory extends ODataServiceFactory {
    * instances within the ODataApplication (ODataService)
    */
   private static class AnnotationInstances {
-    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<Class<?>>();
+    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<>();
     static {
       ANNOTATED_MODEL_CLASSES.add(Address.class);
       ANNOTATED_MODEL_CLASSES.add(Person.class);

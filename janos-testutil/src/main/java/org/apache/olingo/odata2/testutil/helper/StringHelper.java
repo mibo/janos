@@ -131,9 +131,7 @@ public class StringHelper {
 
     bufferedReader.close();
 
-    final String result = stringBuilder.toString();
-
-    return result;
+    return stringBuilder.toString();
   }
 
   public static String inputStreamToStringCRLFLineBreaks(final InputStream in) throws IOException {
@@ -148,9 +146,7 @@ public class StringHelper {
 
     bufferedReader.close();
 
-    final String result = stringBuilder.toString();
-
-    return result;
+    return stringBuilder.toString();
   }
 
   public static int countLines(final String content) {

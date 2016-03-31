@@ -1,7 +1,6 @@
 package org.apache.olingo.odata2.janos.processor.ref.jpa.model;
 
 import org.apache.olingo.odata2.api.processor.ODataResponse;
-import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension.Method;
 import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;

@@ -1,6 +1,5 @@
 package org.apache.olingo.odata2.janos.processor.core;
 
-import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;

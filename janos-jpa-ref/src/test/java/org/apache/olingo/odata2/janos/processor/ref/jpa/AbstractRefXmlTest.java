@@ -44,7 +44,7 @@ public class AbstractRefXmlTest extends AbstractRefTest {
 
   @Before
   public void setXmlNamespacePrefixes() {
-    Map<String, String> prefixMap = new HashMap<String, String>();
+    Map<String, String> prefixMap = new HashMap<>();
     prefixMap.put(Edm.PREFIX_ATOM, Edm.NAMESPACE_ATOM_2005);
     prefixMap.put(Edm.PREFIX_APP, Edm.NAMESPACE_APP_2007);
     prefixMap.put(Edm.PREFIX_D, Edm.NAMESPACE_D_2007_08);
@@ -81,7 +81,7 @@ public class AbstractRefXmlTest extends AbstractRefTest {
 
     byte[] tmp = new byte[8192];
     int count = in.read(tmp);
-    StringBuffer b = new StringBuffer();
+    StringBuilder b = new StringBuilder();
     while (count >= 0) {
       b.append(new String(tmp, 0, count));
       count = in.read(tmp);

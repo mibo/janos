@@ -14,7 +14,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by mibo on 27.02.16.
@@ -34,8 +36,6 @@ public class ExtensionProcessor<T extends ODataProcessor> {
   public static <T extends ODataProcessor> Builder<T> wrap(T processor) {
     return new Builder<>(processor);
   }
-
-  private ThreadLocal<ODataContext> threadContext = new ThreadLocal<>();
 
   /**
    * Wrapped processor call and checks for extensions
@@ -96,7 +96,6 @@ public class ExtensionProcessor<T extends ODataProcessor> {
   public ExtensionContext createContext() {
     BasicExtensionContext context = new BasicExtensionContext(this);
 
-    context.addParameter("~method", handler.getMethod());
     context.addParameter(ExtensionContext.PARA_REQUEST_TYPE, handler.getMethod());
     context.addParameter(ExtensionContext.PARA_URI_INFO, handler.getParameter(UriInfo.class));
     context.addParameter(ExtensionContext.PARA_ACCEPT_HEADER, handler.getParameter(String.class));

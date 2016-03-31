@@ -41,7 +41,7 @@ public class AnnotationHelperTest {
   @Test
   public void keyMatchMapPositive() throws ODataException {
     SimpleEntity firstInstance = new SimpleEntity(42l, "Another Name");
-    Map<String, Object> keyName2Value = new HashMap<String, Object>();
+    Map<String, Object> keyName2Value = new HashMap<>();
     keyName2Value.put("Id", Long.valueOf(42));
 
     boolean result = annotationHelper.keyMatch(firstInstance, keyName2Value);
@@ -52,7 +52,7 @@ public class AnnotationHelperTest {
   @Test
   public void keyMatchMapNegativeWrongClass() throws ODataException {
     SimpleEntity firstInstance = new SimpleEntity(42l, "Another Name");
-    Map<String, Object> keyName2Value = new HashMap<String, Object>();
+    Map<String, Object> keyName2Value = new HashMap<>();
     keyName2Value.put("Id", 42);
 
     boolean result = annotationHelper.keyMatch(firstInstance, keyName2Value);
@@ -63,7 +63,7 @@ public class AnnotationHelperTest {
   @Test
   public void keyMatchMapNegativeDifferentValues() throws ODataException {
     SimpleEntity firstInstance = new SimpleEntity(99l, "Another Name");
-    Map<String, Object> keyName2Value = new HashMap<String, Object>();
+    Map<String, Object> keyName2Value = new HashMap<>();
     keyName2Value.put("Id", 42);
 
     boolean result = annotationHelper.keyMatch(firstInstance, keyName2Value);
@@ -74,7 +74,7 @@ public class AnnotationHelperTest {
   @Test
   public void keyMatchMapNegativeDifferentValueCount() throws ODataException {
     SimpleEntity firstInstance = new SimpleEntity(99l, "Another Name");
-    Map<String, Object> keyName2Value = new HashMap<String, Object>();
+    Map<String, Object> keyName2Value = new HashMap<>();
 
     boolean result = annotationHelper.keyMatch(firstInstance, keyName2Value);
 

@@ -43,7 +43,7 @@ public class Room extends RefBase {
   private Building building;
   @OneToMany
   @EdmNavigationProperty(name = "nr_Employees")
-  private List<Employee> employees = new ArrayList<Employee>();
+  private List<Employee> employees = new ArrayList<>();
 
   public void setSeats(final int seats) {
     this.seats = seats;

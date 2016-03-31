@@ -48,7 +48,7 @@ public class JanosRefServiceFactory extends ODataServiceFactory {
    */
   private static class AnnotationInstances {
 //    final static String MODEL_PACKAGE = "org.apache.olingo.odata2.janos.processor.ref.model";
-    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<Class<?>>();
+    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<>();
     static {
       ANNOTATED_MODEL_CLASSES.add(Building.class);
       ANNOTATED_MODEL_CLASSES.add(City.class);

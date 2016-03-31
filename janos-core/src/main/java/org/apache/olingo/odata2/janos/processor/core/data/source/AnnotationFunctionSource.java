@@ -42,7 +42,7 @@ public class AnnotationFunctionSource implements FunctionSource {
     try {
       EdmFunctionImport efi = method.getAnnotation(EdmFunctionImport.class);
       String name = efi.name();
-      if(name == null || name.isEmpty()) {
+      if(name.isEmpty()) {
         name = method.getName();
       }
 

@@ -65,7 +65,7 @@ public class AnnotationEdmProviderTest {
   }
 
   private final AnnotationEdmProvider aep;
-  private final Collection<Class<?>> annotatedClasses = new ArrayList<Class<?>>();
+  private final Collection<Class<?>> annotatedClasses = new ArrayList<>();
 
   public AnnotationEdmProviderTest() throws ODataException {
     annotatedClasses.add(RefBase.class);
@@ -83,7 +83,7 @@ public class AnnotationEdmProviderTest {
 
   @Test
   public void defaultNameAndNamespaceGeneration() throws ODataException {
-    Collection<Class<?>> localAnnotatedClasses = new ArrayList<Class<?>>();
+    Collection<Class<?>> localAnnotatedClasses = new ArrayList<>();
     localAnnotatedClasses.add(GeneratedNamesTestClass.class);
     localAnnotatedClasses.add(GeneratedNamesComplexTestClass.class);
     AnnotationEdmProvider localAep = new AnnotationEdmProvider(localAnnotatedClasses);
@@ -112,7 +112,7 @@ public class AnnotationEdmProviderTest {
 
   @Test
   public void defaultNamespaceGenerationComplexType() throws ODataException {
-    Collection<Class<?>> localAnnotatedClasses = new ArrayList<Class<?>>();
+    Collection<Class<?>> localAnnotatedClasses = new ArrayList<>();
     localAnnotatedClasses.add(GeneratedNamesComplexTestClass.class);
     AnnotationEdmProvider localAep = new AnnotationEdmProvider(localAnnotatedClasses);
     // validate
@@ -128,7 +128,7 @@ public class AnnotationEdmProviderTest {
   public void defaultContainerNameGeneration() throws ODataException {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     AnnotationEdmProvider localAep =
-        new AnnotationEdmProvider((Collection) Arrays.asList(GeneratedNamesTestClass.class));
+        new AnnotationEdmProvider(Collections.singletonList(GeneratedNamesTestClass.class));
 
     EntityContainerInfo containerInfo = localAep.getEntityContainerInfo(null);
     assertNotNull(containerInfo);
@@ -137,7 +137,7 @@ public class AnnotationEdmProviderTest {
 
   @Test
   public void defaultNamespaceDefined() throws ODataException {
-    Collection<Class<?>> localAnnotatedClasses = new ArrayList<Class<?>>();
+    Collection<Class<?>> localAnnotatedClasses = new ArrayList<>();
     localAnnotatedClasses.add(DefinedNamesTestClass.class);
     AnnotationEdmProvider localAep = new AnnotationEdmProvider(localAnnotatedClasses);
     // validate
@@ -151,7 +151,7 @@ public class AnnotationEdmProviderTest {
   @Test
   public void defaultContainerNameDefined() throws ODataException {
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    AnnotationEdmProvider localAep = new AnnotationEdmProvider((Collection) Arrays.asList(DefinedNamesTestClass.class));
+    AnnotationEdmProvider localAep = new AnnotationEdmProvider((Collection) Collections.singletonList(DefinedNamesTestClass.class));
 
     EntityContainerInfo containerInfo = localAep.getEntityContainerInfo(null);
     assertNotNull(containerInfo);
