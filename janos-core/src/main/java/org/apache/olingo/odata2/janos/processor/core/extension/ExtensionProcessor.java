@@ -68,7 +68,7 @@ public class ExtensionProcessor<T extends ODataProcessor> {
     return handler.process();
   }
 
-  private Extension.Method mapMethod(String httpMethod) throws InvocationTargetException {
+  private Extension.Method mapMethod(String httpMethod) {
     switch (httpMethod) {
       case "GET": return Extension.Method.GET;
       case "POST": return Extension.Method.POST;
@@ -167,26 +167,6 @@ public class ExtensionProcessor<T extends ODataProcessor> {
 
     Object process() throws InvocationTargetException, IllegalAccessException {
       return invokeMethod.invoke(wrappedInstance, invokeParameters);
-    }
-
-    <P> void replaceInvokeParameter(P replacement) {
-      if (replacement == null) {
-        return;
-      }
-
-      List<Object> copy = new ArrayList<>();
-      for (Object parameter : invokeParameters) {
-        if (replacement.getClass() == parameter.getClass()) {
-          copy.add(replacement);
-        } else {
-          copy.add(parameter);
-        }
-      }
-      invokeParameters = copy.toArray();
-    }
-
-    T getWrappedInstance() {
-      return this.wrappedInstance;
     }
 
     <P> P getParameter(Class<P> parameterClass) {

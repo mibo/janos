@@ -254,7 +254,7 @@ public class InMemoryDataStore<T> implements DataStore<T> {
       return keyElement;
     }
 
-    KeyElement createSetAndGetKeys(final T object) throws DataStoreException {
+    KeyElement createSetAndGetKeys(final T object) {
       KeyElement keyElement = new KeyElement(keyFields.size());
       for (Field field : keyFields) {
         Object key = createKey(field);

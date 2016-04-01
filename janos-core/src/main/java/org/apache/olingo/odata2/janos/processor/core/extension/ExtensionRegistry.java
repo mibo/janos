@@ -26,9 +26,7 @@ public class ExtensionRegistry {
   }
 
   public ExtensionRegistry registerExtensions(Collection<Class<?>> clazzes) {
-    for (Class<?> clazz : clazzes) {
-      registerExtension(clazz);
-    }
+    clazzes.forEach(this::registerExtension);
     return this;
   }
 

@@ -272,7 +272,7 @@ public class AnnotationDataSource implements DataSource {
    * @throws org.apache.olingo.odata2.api.exception.ODataApplicationException
    */
   public Object updateData(final EdmEntitySet entitySet, final Object data)
-      throws ODataNotImplementedException, EdmException, ODataApplicationException {
+      throws EdmException, ODataApplicationException {
 
     DataStore<Object> dataStore = getDataStore(entitySet);
     return dataStore.update(data);
@@ -345,8 +345,7 @@ public class AnnotationDataSource implements DataSource {
    * @param value
    * @throws EdmException
    */
-  private void setValueAtNavigationField(final Object instance, final Field field, final Object value)
-      throws EdmException {
+  private void setValueAtNavigationField(final Object instance, final Field field, final Object value) {
     Class<?> fieldTypeClass = field.getType();
     if (Collection.class.isAssignableFrom(fieldTypeClass)) {
       @SuppressWarnings("unchecked")

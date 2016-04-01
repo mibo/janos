@@ -166,19 +166,16 @@ public class AnnotationsDataSourceTest {
     int max = 500;
     latch = new CountDownLatch(max);
     for (int i = 0; i < max; i++) {
-      Runnable run = new Runnable() {
-        @Override
-        public void run() {
-          SimpleEntity se = new SimpleEntity();
-          se.id = Integer.valueOf(String.valueOf(System.currentTimeMillis()).substring(8));
-          se.name = "Name: " + System.currentTimeMillis();
-          try {
-            localDs.createData(edmEntitySet, se);
-          } catch (Exception ex) {
-            throw new RuntimeException(ex);
-          } finally {
-            latch.countDown();
-          }
+      Runnable run = () -> {
+        SimpleEntity se = new SimpleEntity();
+        se.id = Integer.valueOf(String.valueOf(System.currentTimeMillis()).substring(8));
+        se.name = "Name: " + System.currentTimeMillis();
+        try {
+          localDs.createData(edmEntitySet, se);
+        } catch (Exception ex) {
+          throw new RuntimeException(ex);
+        } finally {
+          latch.countDown();
         }
       };
 
@@ -198,20 +195,17 @@ public class AnnotationsDataSourceTest {
 
   private Thread createBuildingThread(final CountDownLatch latch, final DataSource datasource,
       final EdmEntitySet edmEntitySet, final String id) {
-    Runnable run = new Runnable() {
-      @Override
-      public void run() {
-        Building building = new Building();
-        building.setName("Common Building - " + System.currentTimeMillis());
-        building.setId(id);
-        try {
-          datasource.createData(edmEntitySet, building);
-        } catch (Exception ex) {
-          ex.printStackTrace();
-          throw new RuntimeException(ex);
-        } finally {
-          latch.countDown();
-        }
+    Runnable run = () -> {
+      Building building = new Building();
+      building.setName("Common Building - " + System.currentTimeMillis());
+      building.setId(id);
+      try {
+        datasource.createData(edmEntitySet, building);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        throw new RuntimeException(ex);
+      } finally {
+        latch.countDown();
       }
     };
 

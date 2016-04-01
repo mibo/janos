@@ -32,20 +32,10 @@ import java.util.List;
  */
 public class ClassHelperTest {
 
-  private final ClassHelper.ClassValidator annotatedTestEntityInnerClasses = new ClassHelper.ClassValidator() {
-    @Override
-    public boolean isClassValid(final Class<?> c) {
-      return c.isAnnotationPresent(EdmEntityType.class)
-          && c.getName().contains(ClassHelperTest.class.getSimpleName());
-    }
-  };
+  private final ClassHelper.ClassValidator annotatedTestEntityInnerClasses = c ->
+      c.isAnnotationPresent(EdmEntityType.class) && c.getName().contains(ClassHelperTest.class.getSimpleName());
 
-  private final ClassHelper.ClassValidator annotatedEntityClasses = new ClassHelper.ClassValidator() {
-    @Override
-    public boolean isClassValid(final Class<?> c) {
-      return c.isAnnotationPresent(EdmEntityType.class);
-    }
-  };
+  private final ClassHelper.ClassValidator annotatedEntityClasses = c -> c.isAnnotationPresent(EdmEntityType.class);
 
   @Test
   public void loadSingleEntity() throws ODataException {
