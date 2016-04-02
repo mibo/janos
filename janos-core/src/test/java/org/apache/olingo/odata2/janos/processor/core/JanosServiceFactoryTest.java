@@ -3,7 +3,6 @@ package org.apache.olingo.odata2.janos.processor.core;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
-import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.apache.olingo.odata2.janos.processor.core.model.*;
 import org.junit.Test;
@@ -15,15 +14,15 @@ import static org.junit.Assert.assertNotNull;
 
 
 /**
- * Test the JanosService from the API package which use this implementation by default.
+ * Test the JanosServiceFactory from the API package which use this implementation by default.
  *
  * Created by mibo on 17.10.15.
  */
-public class JanosServiceTest {
+public class JanosServiceFactoryTest {
 
   @Test
   public void createFromPackage() throws ODataException {
-    JanosServiceFactory service = JanosService.createFor(Building.class.getPackage().getName()).build();
+    JanosServiceFactory service = JanosServiceFactory.createFor(Building.class.getPackage().getName()).build();
     assertNotNull(service);
   }
 
@@ -37,7 +36,7 @@ public class JanosServiceTest {
     annotatedClasses.add(Photo.class);
     annotatedClasses.add(Room.class);
     annotatedClasses.add(Team.class);
-    JanosServiceFactory service = JanosService.createFor(annotatedClasses).build();
+    JanosServiceFactory service = JanosServiceFactory.createFor(annotatedClasses).build();
 
     assertNotNull(service);
   }
@@ -47,14 +46,14 @@ public class JanosServiceTest {
     final Collection<Class<?>> notAnnotatedClasses = new ArrayList<>();
     notAnnotatedClasses.add(String.class);
     notAnnotatedClasses.add(Long.class);
-    JanosServiceFactory service = JanosService.createFor(notAnnotatedClasses).build();
+    JanosServiceFactory service = JanosServiceFactory.createFor(notAnnotatedClasses).build();
 
     assertNotNull(service);
   }
 
   @Test
   public void createEdmFromPackage() throws ODataException {
-    EdmProvider provider = JanosService.createEdmProvider(Building.class.getPackage().getName());
+    EdmProvider provider = JanosServiceFactory.createEdmProvider(Building.class.getPackage().getName());
 
     assertNotNull(provider);
     assertNotNull(provider.getEntityType(new FullQualifiedName(ModelSharedConstants.NAMESPACE_1, "Building")));
@@ -78,7 +77,7 @@ public class JanosServiceTest {
     annotatedClasses.add(Team.class);
     annotatedClasses.add(City.class);
 
-    EdmProvider provider = JanosService.createEdmProvider(annotatedClasses);
+    EdmProvider provider = JanosServiceFactory.createEdmProvider(annotatedClasses);
 
     assertNotNull(provider);
     assertNotNull(provider.getEntityType(new FullQualifiedName(ModelSharedConstants.NAMESPACE_1, "Building")));

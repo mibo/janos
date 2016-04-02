@@ -24,7 +24,10 @@ import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.core.model.*;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
