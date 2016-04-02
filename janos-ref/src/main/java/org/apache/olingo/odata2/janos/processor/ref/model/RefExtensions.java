@@ -1,6 +1,7 @@
 package org.apache.olingo.odata2.janos.processor.ref.model;
 
 import org.apache.olingo.odata2.api.processor.ODataResponse;
+import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension.Method;
 import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
@@ -17,10 +18,19 @@ public class RefExtensions {
 
   @Extension(entitySetNames="Employees", methods={Method.GET})
   public Object logReadAccess(ExtensionContext context) throws Exception {
-    LOG.info("Start READ access for Employee.");
-    ODataResponse res = context.proceed();
-    res = ODataResponse.fromResponse(res).header(EXTENSION_TEST, "READ").build();
-    LOG.info("Finished READ access for Employee.");
+    UriInfo uriInfo = context.getUriInfo();
+    ODataResponse res;
+    if(uriInfo.getKeyPredicates().isEmpty()) {
+      LOG.info("Start READ access for Employees.");
+      res = context.proceed();
+      res = ODataResponse.fromResponse(res).header(EXTENSION_TEST, "READ EMPLOYEES SET").build();
+      LOG.info("Finished READ access for Employees.");
+    } else {
+      LOG.info("Start READ access for Employee.");
+      res = context.proceed();
+      res = ODataResponse.fromResponse(res).header(EXTENSION_TEST, "READ EMPLOYEE").build();
+      LOG.info("Finished READ access for Employee.");
+    }
     return res;
   }
 
@@ -39,6 +49,15 @@ public class RefExtensions {
     ODataResponse res = context.proceed();
     res = ODataResponse.fromResponse(res).header(EXTENSION_TEST, "UPDATE").build();
     LOG.info("Finished UPDATE for Employee.");
+    return res;
+  }
+
+  @Extension(entitySetNames="Employees", methods={Method.DELETE})
+  public Object deleteEmployee(ExtensionContext context) throws Exception {
+    LOG.info("Start DELETE for Employee.");
+    ODataResponse res = context.proceed();
+    res = ODataResponse.fromResponse(res).header(EXTENSION_TEST, "DELETE").build();
+    LOG.info("Finished DELETE for Employee.");
     return res;
   }
 }
