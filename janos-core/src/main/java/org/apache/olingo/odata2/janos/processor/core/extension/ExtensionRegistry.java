@@ -3,7 +3,6 @@ package org.apache.olingo.odata2.janos.processor.core.extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
