@@ -672,6 +672,39 @@ public class AnnotationsDataSourceTest {
   }
 
   @Test
+  public void createGuidKeyEntity() throws Exception {
+    EdmEntitySet edmEntitySet = createMockedEdmEntitySet(GuidKeyEntity.GUID_KEY_ENTITIES);
+
+    final String entityName = "Entity name";
+    GuidKeyEntity testEntity = new GuidKeyEntity();
+    testEntity.setName(entityName);
+    datasource.createData(edmEntitySet, testEntity);
+
+    ReadResult result = datasource.readData(edmEntitySet, ReadOptions.none());
+    GuidKeyEntity readEntity = (GuidKeyEntity) result.getFirst();
+    Assert.assertEquals(entityName, readEntity.getName());
+  }
+
+  @Test
+  public void createGuidKeyEntityWithOwnKey() throws Exception {
+    EdmEntitySet edmEntitySet = createMockedEdmEntitySet(GuidKeyEntity.GUID_KEY_ENTITIES);
+
+    final UUID entityId = UUID.randomUUID();
+    final String entityName = "Entity name";
+    GuidKeyEntity testEntity = new GuidKeyEntity();
+    testEntity.setId(entityId);
+    testEntity.setName(entityName);
+    datasource.createData(edmEntitySet, testEntity);
+
+    Map<String, Object> keys = new HashMap<String, Object>();
+    keys.put("Id", entityId);
+
+    GuidKeyEntity readEntity = (GuidKeyEntity) datasource.readData(edmEntitySet, keys);
+    Assert.assertEquals(entityId, readEntity.getId());
+    Assert.assertEquals(entityName, readEntity.getName());
+  }
+
+  @Test
   public void deleteSimpleEntity() throws Exception {
     EdmEntitySet edmEntitySet = createMockedEdmEntitySet("Buildings");
     DataStore<Building> datastore = datasource.getDataStore(Building.class);
