@@ -274,6 +274,8 @@ public class InMemoryDataStore<T> implements DataStore<T> {
         return idCounter.getAndIncrement();
       } else if (type == Long.class || type == long.class) {
         return (long) idCounter.getAndIncrement();
+      } else if (type == UUID.class) {
+        return UUID.randomUUID();
       }
 
       throw new UnsupportedOperationException("Automated key generation for type '" + type
