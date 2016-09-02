@@ -18,11 +18,13 @@ package org.apache.olingo.odata2.janos.processor.core.util;
 import junit.framework.Assert;
 import org.apache.olingo.odata2.api.annotation.edm.*;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
+import org.apache.olingo.odata2.api.edm.provider.*;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.core.model.Location;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -237,6 +239,20 @@ public class AnnotationHelperTest {
     Assert.assertEquals(Byte.valueOf("1"), cp.byteProp);
   }
 
+  @Test
+  public void extractComplexReturnType() throws Exception {
+    Method method = FunctionExecutor.class.getMethod("findNames", String.class);
+    ReturnType returnType = annotationHelper.extractReturnType(method);
+    Assert.assertEquals("Names", returnType.getTypeName().getName());
+  }
+
+  @Test
+  public void extractEntityReturnType() throws Exception {
+    Method method = FunctionExecutor.class.getMethod("findSimple", String.class);
+    ReturnType returnType = annotationHelper.extractReturnType(method);
+    Assert.assertEquals("SimpleEntity", returnType.getTypeName().getName());
+  }
+
   @EdmEntityType
   private class SimpleEntity {
     @EdmKey
@@ -261,6 +277,31 @@ public class AnnotationHelperTest {
     SimpleEntity navigationPropertyDefault;
     @EdmNavigationProperty
     List<NavigationAnnotated> selfReferencedNavigation;
+  }
+
+  @EdmComplexType
+  private class Names {
+    @EdmProperty
+    String firstName;
+    @EdmProperty
+    String lastName;
+  }
+
+  private class FunctionExecutor {
+    @EdmFunctionImport(
+            returnType = @EdmFunctionImport.ReturnType(
+                    type = EdmFunctionImport.ReturnType.Type.COMPLEX))
+    public Names findNames(
+            @EdmFunctionImportParameter(name = "Name") final String name) {
+      return new Names();
+    }
+    @EdmFunctionImport(
+            returnType = @EdmFunctionImport.ReturnType(
+                    type = EdmFunctionImport.ReturnType.Type.ENTITY))
+    public SimpleEntity findSimple(
+            @EdmFunctionImportParameter(name = "Name") final String name) {
+      return new SimpleEntity(1L, name);
+    }
   }
 
   private class ConversionProperty {
