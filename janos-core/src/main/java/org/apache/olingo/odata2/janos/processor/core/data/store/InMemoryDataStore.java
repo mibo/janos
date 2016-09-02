@@ -118,16 +118,17 @@ public class InMemoryDataStore<T> implements DataStore<T> {
     return create(object, keyElement);
   }
 
-  private T create(final T object, final KeyElement keyElement) throws DataStoreException {
-    synchronized (dataStore) {
-      if (keyElement.keyValuesMissing() || dataStore.containsKey(keyElement)) {
-        KeyElement newKey = createSetAndGetKeys(object);
-        return this.create(object, newKey);
+    private T create(final T object, final KeyElement keyElement) throws DataStoreException {
+      synchronized (dataStore) {
+        final boolean replaceKeys = dataStore.containsKey(keyElement);
+        if (keyElement.keyValuesMissing() || replaceKeys) {
+          KeyElement newKey = createSetAndGetKeys(object, replaceKeys);
+          return this.create(object, newKey);
+        }
+        dataStore.put(keyElement, object);
       }
-      dataStore.put(keyElement, object);
+      return object;
     }
-    return object;
-  }
 
   @Override
   public T update(final T object) {
@@ -254,13 +255,16 @@ public class InMemoryDataStore<T> implements DataStore<T> {
       return keyElement;
     }
 
-    KeyElement createSetAndGetKeys(final T object) {
+    KeyElement createSetAndGetKeys(final T object, final boolean replaceKeys) {
       KeyElement keyElement = new KeyElement(keyFields.size());
-      for (Field field : keyFields) {
-        Object key = createKey(field);
-        ClassHelper.setFieldValue(object, field, key);
-        keyElement.addValue(key);
-      }
+        for (Field field : keyFields) {
+          Object key = ClassHelper.getFieldValue(object, field);
+          if (key == null || replaceKeys) {
+            key = createKey(field);
+            ClassHelper.setFieldValue(object, field, key);
+          }
+          keyElement.addValue(key);
+        }
 
       return keyElement;
     }
@@ -274,6 +278,8 @@ public class InMemoryDataStore<T> implements DataStore<T> {
         return idCounter.getAndIncrement();
       } else if (type == Long.class || type == long.class) {
         return (long) idCounter.getAndIncrement();
+      } else if (type == UUID.class) {
+        return UUID.randomUUID();
       }
 
       throw new UnsupportedOperationException("Automated key generation for type '" + type
@@ -285,7 +291,7 @@ public class InMemoryDataStore<T> implements DataStore<T> {
     return keyAccess.getKeyValues(object);
   }
 
-  private KeyElement createSetAndGetKeys(final T object) throws DataStoreException {
-    return keyAccess.createSetAndGetKeys(object);
+  private KeyElement createSetAndGetKeys(final T object, final boolean replaceKeys) throws DataStoreException {
+    return keyAccess.createSetAndGetKeys(object, replaceKeys);
   }
 }
