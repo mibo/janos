@@ -719,20 +719,27 @@ public class AnnotationHelper {
         returnType.setTypeName(edmSimpleTypeKind.getFullQualifiedName());
         break;
       case ENTITY:
+        returnType.setTypeName(extractEntityTypeFqn(
+                determineAnnotatedClass(functionImport, annotatedMethod)));
+        break;
       case COMPLEX:
-        Class<?> annotatedClazz;
-        if (functionImport.returnType().isCollection()) {
-          ParameterizedType parameterizedType = (ParameterizedType) annotatedMethod.getGenericReturnType();
-          annotatedClazz = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-        } else {
-          annotatedClazz = annotatedMethod.getReturnType();
-        }
-        returnType.setTypeName(extractComplexTypeFqn(annotatedClazz));
+        returnType.setTypeName(extractComplexTypeFqn(
+                determineAnnotatedClass(functionImport, annotatedMethod)));
         break;
       default:
         throw new UnsupportedOperationException("Not yet supported return type type '" + functionImport.returnType().type() + "'.");
     }
     return returnType;
+  }
+
+  private Class<?> determineAnnotatedClass(final EdmFunctionImport functionImport,
+                                           final Method annotatedMethod) {
+    if (functionImport.returnType().isCollection()) {
+      ParameterizedType parameterizedType = (ParameterizedType) annotatedMethod.getGenericReturnType();
+      return (Class<?>) parameterizedType.getActualTypeArguments()[0];
+    } else {
+      return annotatedMethod.getReturnType();
+    }
   }
 
   public String extractEntitySetName(final Method annotatedMethod) {

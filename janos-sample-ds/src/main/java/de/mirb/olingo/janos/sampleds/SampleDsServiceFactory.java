@@ -29,7 +29,6 @@ import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.apache.olingo.odata2.api.processor.ODataErrorCallback;
 import org.apache.olingo.odata2.api.processor.ODataErrorContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
-import org.apache.olingo.odata2.janos.processor.api.JanosService;
 import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +56,7 @@ public class SampleDsServiceFactory extends ODataServiceFactory {
 
     static {
       try {
-        ANNOTATION_ODATA_SERVICE = JanosService.createFor(ANNOTATED_MODEL_CLASSES)
+        ANNOTATION_ODATA_SERVICE = JanosServiceFactory.createFor(ANNOTATED_MODEL_CLASSES)
             .with(new FileStore())
             .build();
         initializeSampleData();

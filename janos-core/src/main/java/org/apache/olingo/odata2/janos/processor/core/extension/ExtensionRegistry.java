@@ -3,9 +3,9 @@ package org.apache.olingo.odata2.janos.processor.core.extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.Extension;
 import org.apache.olingo.odata2.janos.processor.api.extension.ExtensionContext;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,20 +26,15 @@ public class ExtensionRegistry {
   }
 
   public ExtensionRegistry registerExtensions(Collection<Class<?>> clazzes) {
-    for (Class<?> clazz : clazzes) {
-      registerExtension(clazz);
-    }
+    clazzes.forEach(this::registerExtension);
     return this;
   }
 
   public ExtensionRegistry registerExtension(Class<?> clazz) {
-    for (Method method : clazz.getDeclaredMethods()) {
-      for (Annotation annotation : method.getDeclaredAnnotations()) {
-        if (annotation instanceof Extension) {
-          registerExtension(clazz, method, (Extension) annotation);
-        }
-      }
-    }
+    Arrays.stream(clazz.getDeclaredMethods()).parallel().forEach(method ->
+      Arrays.stream(method.getDeclaredAnnotations()).parallel().filter(annotation ->
+          annotation instanceof Extension).forEach(annotation ->
+            registerExtension(clazz, method, (Extension) annotation)));
     return this;
   }
 
@@ -100,13 +95,8 @@ public class ExtensionRegistry {
     }
 
     public Object process(ExtensionProcessor extProcessor) throws InvocationTargetException, IllegalAccessException {
-//    return handler.process();
-//      Object INSTANCE = extensionHolder.getInstance();
-//      Method method = extensionHolder.getMethod();
-
       ExtensionContext context = extProcessor.createContext();
       return method.invoke(instance, context);
-      //
     }
   }
 }

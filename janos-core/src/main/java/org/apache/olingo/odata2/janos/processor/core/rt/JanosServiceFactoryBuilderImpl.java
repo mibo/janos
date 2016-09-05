@@ -19,14 +19,13 @@
 package org.apache.olingo.odata2.janos.processor.core.rt;
 
 import org.apache.olingo.odata2.api.exception.ODataException;
-import org.apache.olingo.odata2.janos.processor.api.JanosService;
-import org.apache.olingo.odata2.janos.processor.api.JanosService.JanosServiceBuilder;
 import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
+import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory.JanosServiceFactoryBuilder;
 import org.apache.olingo.odata2.janos.processor.api.data.access.ValueAccess;
 import org.apache.olingo.odata2.janos.processor.api.data.source.DataSource;
 import org.apache.olingo.odata2.janos.processor.api.data.source.FunctionSource;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreManager;
-import org.apache.olingo.odata2.janos.processor.core.JanosODataServiceFactory;
+import org.apache.olingo.odata2.janos.processor.core.JanosODataServiceFactoryFactory;
 import org.apache.olingo.odata2.janos.processor.core.data.access.AnnotationValueAccess;
 import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationDataSource;
 import org.apache.olingo.odata2.janos.processor.core.data.source.AnnotationFunctionSource;
@@ -41,7 +40,7 @@ import java.util.Collection;
  * AnnotationServiceFactoryInstance (ODataServiceFactory) implementation based on ListProcessor
  * in combination with Annotation-Support-Classes for EdmProvider, DataSource and ValueAccess.
  */
-public class JanosServiceBuilderImpl implements JanosServiceBuilder {
+public class JanosServiceFactoryBuilderImpl implements JanosServiceFactoryBuilder {
   private static final String DEFAULT_PERSISTENCE = Boolean.TRUE.toString();
   private DataSource dataSource;
   private FunctionSource functionSource;
@@ -55,7 +54,7 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
    * {@inheritDoc}
    */
   @Override
-  public JanosServiceBuilder createFor(final String modelPackage) throws ODataException {
+  public JanosServiceFactoryBuilder createFor(final String modelPackage) throws ODataException {
     this.modelPackage = modelPackage;
     return this;
   }
@@ -64,32 +63,32 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
    * {@inheritDoc}
    */
   @Override
-  public JanosServiceBuilder createFor(final Collection<Class<?>> annotatedClasses) throws ODataException {
+  public JanosServiceFactoryBuilder createFor(final Collection<Class<?>> annotatedClasses) throws ODataException {
     this.annotatedClasses = annotatedClasses;
     return this;
   }
 
-  public JanosServiceBuilder with(DataStoreManager dataStoreManager) {
+  public JanosServiceFactoryBuilder with(DataStoreManager dataStoreManager) {
     this.dataStoreManager = dataStoreManager;
     return this;
   }
 
-  public JanosServiceBuilder with(ValueAccess valueAccess) {
+  public JanosServiceFactoryBuilder with(ValueAccess valueAccess) {
     this.valueAccess = valueAccess;
     return this;
   }
 
-  public JanosServiceBuilder with(DataSource dataSource) {
+  public JanosServiceFactoryBuilder with(DataSource dataSource) {
     this.dataSource = dataSource;
     return this;
   }
 
-  public JanosServiceBuilder with(FunctionSource functionSource) {
+  public JanosServiceFactoryBuilder with(FunctionSource functionSource) {
     this.functionSource = functionSource;
     return this;
   }
 
-  public JanosServiceBuilder extensions(Collection<Class<?>> extensions) {
+  public JanosServiceFactoryBuilder extensions(Collection<Class<?>> extensions) {
     this.extensions = extensions;
     return this;
   }
@@ -110,7 +109,7 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
       dataSource = new AnnotationDataSource(modelPackage, dataStoreManager);
       functionSource = AnnotationFunctionSource.with(modelPackage).with(dataStoreManager).build();
     } else {
-      throw new RuntimeException("Unable to build " + JanosService.class);
+      throw new RuntimeException("Unable to build " + JanosServiceFactory.class);
     }
 
     if(valueAccess == null) {
@@ -119,7 +118,7 @@ public class JanosServiceBuilderImpl implements JanosServiceBuilder {
 
     ExtensionRegistry registry = ExtensionRegistry.getInstance().registerExtensions(extensions);
 
-    return new JanosODataServiceFactory(edmProvider, dataSource, valueAccess, functionSource, registry);
+    return new JanosODataServiceFactoryFactory(edmProvider, dataSource, valueAccess, functionSource, registry);
   }
 
 

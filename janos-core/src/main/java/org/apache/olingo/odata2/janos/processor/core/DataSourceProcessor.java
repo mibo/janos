@@ -76,12 +76,8 @@ public class DataSourceProcessor extends ODataSingleProcessor implements ODataPr
   }
 
   private static FunctionSource createDefaultFunctionSource() {
-    return new FunctionSource() {
-      @Override
-      public Object executeFunction(EdmFunctionImport function, Map<String, Object> parameters, Map<String, Object> keys)
-          throws ODataNotImplementedException, ODataNotFoundException, EdmException, ODataApplicationException {
-        throw new ODataNotImplementedException(ODataNotImplementedException.COMMON, "No FunctionExecutor defined.");
-      }
+    return (function, parameters, keys) -> {
+      throw new ODataNotImplementedException(ODataNotImplementedException.COMMON, "No FunctionExecutor defined.");
     };
   }
 
@@ -1259,48 +1255,42 @@ public class DataSourceProcessor extends ODataSingleProcessor implements ODataPr
   }
 
   private <T> void sort(final List<T> data, final OrderByExpression orderBy) {
-    Collections.sort(data, new Comparator<T>() {
-      @Override
-      public int compare(final T entity1, final T entity2) {
-        try {
-          int result = 0;
-          for (final OrderExpression expression : orderBy.getOrders()) {
-            String first = evaluateExpression(entity1, expression.getExpression());
-            String second = evaluateExpression(entity2, expression.getExpression());
+    Collections.sort(data, (entity1, entity2) -> {
+      try {
+        int result = 0;
+        for (final OrderExpression expression : orderBy.getOrders()) {
+          String first = evaluateExpression(entity1, expression.getExpression());
+          String second = evaluateExpression(entity2, expression.getExpression());
 
-            if (first != null && second != null) {
-              result = first.compareTo(second);
-            } else if (first == null && second != null) {
-              result = 1;
-            } else if (first != null) {
-              result = -1;
-            }
-
-            if (expression.getSortOrder() == SortOrder.desc) {
-              result = -result;
-            }
-
-            if (result != 0) {
-              break;
-            }
+          if (first != null && second != null) {
+            result = first.compareTo(second);
+          } else if (first == null && second != null) {
+            result = 1;
+          } else if (first != null) {
+            result = -1;
           }
-          return result;
-        } catch (final ODataException e) {
-          return 0;
+
+          if (expression.getSortOrder() == SortOrder.desc) {
+            result = -result;
+          }
+
+          if (result != 0) {
+            break;
+          }
         }
+        return result;
+      } catch (final ODataException e) {
+        return 0;
       }
     });
   }
 
   private <T> void sortInDefaultOrder(final EdmEntitySet entitySet, final List<T> data) {
-    Collections.sort(data, new Comparator<T>() {
-      @Override
-      public int compare(final T entity1, final T entity2) {
-        try {
-          return getSkipToken(entitySet, entity1).compareTo(getSkipToken(entitySet, entity2));
-        } catch (final ODataException e) {
-          return 0;
-        }
+    Collections.sort(data, (first, second) -> {
+      try {
+        return getSkipToken(entitySet, first).compareTo(getSkipToken(entitySet, second));
+      } catch (final ODataException e) {
+        return 0;
       }
     });
   }

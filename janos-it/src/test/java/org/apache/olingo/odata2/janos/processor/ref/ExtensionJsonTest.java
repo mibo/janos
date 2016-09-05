@@ -65,7 +65,18 @@ public class ExtensionJsonTest extends AbstractRefTest {
     String body = getBody(response);
 
     Header functionTest = response.getFirstHeader(EXTENSION_TEST);
-    assertEquals("READ", functionTest.getValue());
+    assertEquals("READ EMPLOYEES SET", functionTest.getValue());
+    assertTrue(jsonDataResponseContains(body, "Employees"));
+  }
+
+  @Test
+  public void readEmployee() throws Exception {
+    final HttpResponse response = callUri("Employees('1')?$format=json");
+    checkMediaType(response, HttpContentType.APPLICATION_JSON);
+    String body = getBody(response);
+
+    Header functionTest = response.getFirstHeader(EXTENSION_TEST);
+    assertEquals("READ EMPLOYEE", functionTest.getValue());
     assertTrue(jsonDataResponseContains(body, "Employees"));
   }
 
@@ -93,6 +104,16 @@ public class ExtensionJsonTest extends AbstractRefTest {
 
     Header functionTest = response.getFirstHeader(EXTENSION_TEST);
     assertEquals("UPDATE", functionTest.getValue());
+  }
+
+  @Test
+  public void deleteEmployee() throws Exception {
+    final HttpResponse response = createDelete("Employees('1')")
+        .addHeader(HttpHeaders.ACCEPT, HttpContentType.APPLICATION_JSON)
+        .executeValidated(HttpStatusCodes.NO_CONTENT);
+
+    Header functionTest = response.getFirstHeader(EXTENSION_TEST);
+    assertEquals("DELETE", functionTest.getValue());
   }
 
   private boolean jsonDataResponseContains(final String content, final String containingValue) {

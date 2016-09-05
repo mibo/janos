@@ -24,7 +24,10 @@ import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.core.model.*;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
@@ -281,28 +284,35 @@ public class AnnotationEdmProviderTest {
 
   private void validateAssociation(final Association association) {
     String name = association.getName();
-    if (name.equals("r_Employees_2_r_Room")) {
-      validateAssociation(association,
-          "r_Room", EdmMultiplicity.ONE, defaultFqn("Room"),
-          "r_Employees", EdmMultiplicity.MANY, defaultFqn("Employee"));
-    } else if (name.equals("BuildingRooms")) {
-      validateAssociation(association,
-          "r_Building", EdmMultiplicity.ONE, defaultFqn("Building"),
-          "r_Rooms", EdmMultiplicity.MANY, defaultFqn("Room"));
-    } else if (name.equals("ManagerEmployees")) {
-      validateAssociation(association,
-          "r_Manager", EdmMultiplicity.ONE, defaultFqn("Manager"),
-          "r_Employees", EdmMultiplicity.MANY, defaultFqn("Employee"));
-    } else if (name.equals("TeamEmployees")) {
-      validateAssociation(association,
-          "r_Team", EdmMultiplicity.ONE, defaultFqn("Team"),
-          "r_Employees", EdmMultiplicity.MANY, defaultFqn("Employee"));
-    } else if (name.equals("Team_2_r_SubTeam")) {
-      validateAssociation(association,
-          "Team", EdmMultiplicity.ONE, defaultFqn("Team"),
-          "r_SubTeam", EdmMultiplicity.ONE, defaultFqn("Team"));
-    } else {
-      fail("Got unknown association to validate with name '" + name + "'.");
+    switch (name) {
+      case "r_Employees_2_r_Room":
+        validateAssociation(association,
+            "r_Room", EdmMultiplicity.ONE, defaultFqn("Room"),
+            "r_Employees", EdmMultiplicity.MANY, defaultFqn("Employee"));
+        break;
+      case "BuildingRooms":
+        validateAssociation(association,
+            "r_Building", EdmMultiplicity.ONE, defaultFqn("Building"),
+            "r_Rooms", EdmMultiplicity.MANY, defaultFqn("Room"));
+        break;
+      case "ManagerEmployees":
+        validateAssociation(association,
+            "r_Manager", EdmMultiplicity.ONE, defaultFqn("Manager"),
+            "r_Employees", EdmMultiplicity.MANY, defaultFqn("Employee"));
+        break;
+      case "TeamEmployees":
+        validateAssociation(association,
+            "r_Team", EdmMultiplicity.ONE, defaultFqn("Team"),
+            "r_Employees", EdmMultiplicity.MANY, defaultFqn("Employee"));
+        break;
+      case "Team_2_r_SubTeam":
+        validateAssociation(association,
+            "Team", EdmMultiplicity.ONE, defaultFqn("Team"),
+            "r_SubTeam", EdmMultiplicity.ONE, defaultFqn("Team"));
+        break;
+      default:
+        fail("Got unknown association to validate with name '" + name + "'.");
+        break;
     }
   }
 

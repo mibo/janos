@@ -166,19 +166,16 @@ public class AnnotationsDataSourceTest {
     int max = 500;
     latch = new CountDownLatch(max);
     for (int i = 0; i < max; i++) {
-      Runnable run = new Runnable() {
-        @Override
-        public void run() {
-          SimpleEntity se = new SimpleEntity();
-          se.id = Integer.valueOf(String.valueOf(System.currentTimeMillis()).substring(8));
-          se.name = "Name: " + System.currentTimeMillis();
-          try {
-            localDs.createData(edmEntitySet, se);
-          } catch (Exception ex) {
-            throw new RuntimeException(ex);
-          } finally {
-            latch.countDown();
-          }
+      Runnable run = () -> {
+        SimpleEntity se = new SimpleEntity();
+        se.id = Integer.valueOf(String.valueOf(System.currentTimeMillis()).substring(8));
+        se.name = "Name: " + System.currentTimeMillis();
+        try {
+          localDs.createData(edmEntitySet, se);
+        } catch (Exception ex) {
+          throw new RuntimeException(ex);
+        } finally {
+          latch.countDown();
         }
       };
 
@@ -198,20 +195,17 @@ public class AnnotationsDataSourceTest {
 
   private Thread createBuildingThread(final CountDownLatch latch, final DataSource datasource,
       final EdmEntitySet edmEntitySet, final String id) {
-    Runnable run = new Runnable() {
-      @Override
-      public void run() {
-        Building building = new Building();
-        building.setName("Common Building - " + System.currentTimeMillis());
-        building.setId(id);
-        try {
-          datasource.createData(edmEntitySet, building);
-        } catch (Exception ex) {
-          ex.printStackTrace();
-          throw new RuntimeException(ex);
-        } finally {
-          latch.countDown();
-        }
+    Runnable run = () -> {
+      Building building = new Building();
+      building.setName("Common Building - " + System.currentTimeMillis());
+      building.setId(id);
+      try {
+        datasource.createData(edmEntitySet, building);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        throw new RuntimeException(ex);
+      } finally {
+        latch.countDown();
       }
     };
 
@@ -675,6 +669,107 @@ public class AnnotationsDataSourceTest {
     Assert.assertEquals("PNG", readUpdated.getType());
     Assert.assertEquals("image/jpg", readUpdated.getImageType());
     Assert.assertEquals("https://localhost/image.jpg", readUpdated.getImageUri());
+  }
+
+  @Test
+  public void createTwoKeyEntityWithOneKeyAlreadySet() throws Exception {
+    EdmEntitySet edmEntitySet = createMockedEdmEntitySet("Photos");
+
+    final String typeKeyValue = "PNG";
+    final String automaticNameKeyValue = "1";
+
+    Photo photo = new Photo();
+    photo.setType(typeKeyValue);
+    photo.setImageUri("https://localhost/big_picture.png");
+    photo.setImageType("image/png");
+    datasource.createData(edmEntitySet, photo);
+
+    ReadResult photos = datasource.readData(edmEntitySet, ReadOptions.none());
+    Photo readPhoto = (Photo) photos.getFirst();
+    Assert.assertEquals(automaticNameKeyValue + ":" + typeKeyValue,
+            readPhoto.getName() + ":" + readPhoto.getType());
+  }
+
+  @Test
+  public void ensureTwoKeyEntityKeysAreUnique() throws Exception {
+    EdmEntitySet edmEntitySet = createMockedEdmEntitySet("Photos");
+
+    final String nameKeyName = "Name";
+    final String typeKeyName = "ImageFormat";
+    final String nameKeyValue = "Big Picture";
+    final String typeKeyValue = "PNG";
+
+    final String generatedValue1 = "1";
+    final String generatedValue2 = "2";
+
+    final String imageUri1 = "https://localhost/big_picture.png";
+    final String imageUri2 = "https://localhost/bigger_picture.png";
+
+    // Add photo 1
+    Photo photo1 = new Photo();
+    photo1.setName(nameKeyValue);
+    photo1.setType(typeKeyValue);
+    photo1.setImageUri(imageUri1);
+    photo1.setImageType("image/png");
+    datasource.createData(edmEntitySet, photo1);
+
+    // Add photo 2 (same key values)
+    Photo photo2 = new Photo();
+    photo2.setName(nameKeyValue);
+    photo2.setType(typeKeyValue);
+    photo2.setImageUri("https://localhost/bigger_picture.png");
+    photo2.setImageType("image/png");
+    datasource.createData(edmEntitySet, photo2);
+
+    ReadResult photos = datasource.readData(edmEntitySet, ReadOptions.none());
+    Assert.assertEquals(2, photos.getResult().size());
+
+    // Check photo 1 has specified key values.
+    Map<String, Object> keys1 = new HashMap<String, Object>();
+    keys1.put(nameKeyName, nameKeyValue);
+    keys1.put(typeKeyName, typeKeyValue);
+    Photo readPhoto = (Photo) datasource.readData(edmEntitySet, keys1);
+    Assert.assertEquals(imageUri1, readPhoto.getImageUri());
+
+    // Check photo 2 has generated key values.
+    Map<String, Object> keys2 = new HashMap<String, Object>();
+    keys2.put(nameKeyName, generatedValue1);
+    keys2.put(typeKeyName, generatedValue2);
+    Photo readPhoto2 = (Photo) datasource.readData(edmEntitySet, keys2);
+    Assert.assertEquals(imageUri2, readPhoto2.getImageUri());
+  }
+
+  @Test
+  public void createGuidKeyEntity() throws Exception {
+    EdmEntitySet edmEntitySet = createMockedEdmEntitySet(GuidKeyEntity.GUID_KEY_ENTITIES);
+
+    final String entityName = "Entity name";
+    GuidKeyEntity testEntity = new GuidKeyEntity();
+    testEntity.setName(entityName);
+    datasource.createData(edmEntitySet, testEntity);
+
+    ReadResult result = datasource.readData(edmEntitySet, ReadOptions.none());
+    GuidKeyEntity readEntity = (GuidKeyEntity) result.getFirst();
+    Assert.assertEquals(entityName, readEntity.getName());
+  }
+
+  @Test
+  public void createGuidKeyEntityWithOwnKey() throws Exception {
+    EdmEntitySet edmEntitySet = createMockedEdmEntitySet(GuidKeyEntity.GUID_KEY_ENTITIES);
+
+    final UUID entityId = UUID.randomUUID();
+    final String entityName = "Entity name";
+    GuidKeyEntity testEntity = new GuidKeyEntity();
+    testEntity.setId(entityId);
+    testEntity.setName(entityName);
+    datasource.createData(edmEntitySet, testEntity);
+
+    Map<String, Object> keys = new HashMap<String, Object>();
+    keys.put("Id", entityId);
+
+    GuidKeyEntity readEntity = (GuidKeyEntity) datasource.readData(edmEntitySet, keys);
+    Assert.assertEquals(entityId, readEntity.getId());
+    Assert.assertEquals(entityName, readEntity.getName());
   }
 
   @Test
