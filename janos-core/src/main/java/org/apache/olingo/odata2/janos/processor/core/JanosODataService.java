@@ -7,6 +7,7 @@ import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.api.exception.ODataNotImplementedException;
 import org.apache.olingo.odata2.api.processor.part.*;
 import org.apache.olingo.odata2.api.rt.RuntimeDelegate;
+import org.apache.olingo.odata2.janos.processor.api.JanosService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by michael on 23.02.16.
  */
-public class JanosODataService implements ODataService {
+public class JanosODataService extends JanosService implements ODataService {
   private final ODataProcessor processor;
   private final Edm edm;
 

@@ -44,19 +44,9 @@ public class ClassHelper {
   private static final File[] EMPTY_FILE_ARRAY = new File[0];
   private static final String CLASSFILE_ENDING = ".class";
 
-  private static final FilenameFilter CLASSFILE_FILTER = new FilenameFilter() {
-    @Override
-    public boolean accept(final File dir, final String name) {
-      return name.endsWith(CLASSFILE_ENDING);
-    }
-  };
+  private static final FilenameFilter CLASSFILE_FILTER = (dir, name) -> name.endsWith(CLASSFILE_ENDING);
 
-  private static final FileFilter FOLDER_FILTER = new FileFilter() {
-    @Override
-    public boolean accept(final File pathname) {
-      return pathname.isDirectory();
-    }
-  };
+  private static final FileFilter FOLDER_FILTER = File::isDirectory;
 
   public static List<Class<?>> loadClasses(final String packageToScan, final ClassValidator cv) {
     return loadClasses(packageToScan, CLASSFILE_FILTER, cv);
@@ -82,7 +72,7 @@ public class ClassHelper {
       return Collections.emptyList();
     }
 
-    List<Class<?>> annotatedClasses = new ArrayList<Class<?>>(fqnForClasses.size());
+    List<Class<?>> annotatedClasses = new ArrayList<>(fqnForClasses.size());
     for (String fqn : fqnForClasses) {
       try {
         Class<?> c = classLoader.loadClass(fqn);
@@ -122,7 +112,7 @@ public class ClassHelper {
 
   private static Collection<String> getClassFqnFromDir(final FilenameFilter ff, final File folder,
       final String packageToScan) {
-    List<String> classFiles = new ArrayList<String>();
+    List<String> classFiles = new ArrayList<>();
     String[] classFilesForFolder = folder.list(ff);
     for (String name : classFilesForFolder) {
       String fqn = packageToScan + "." + name.substring(0, name.length() - CLASSFILE_ENDING.length());
@@ -150,7 +140,7 @@ public class ClassHelper {
     JarFile jarFile = null;
     try {
       jarFile = new JarFile(jarFilePath);
-      List<String> classFileNames = new ArrayList<String>();
+      List<String> classFileNames = new ArrayList<>();
       Enumeration<JarEntry> entries = jarFile.entries();
 
       while (entries.hasMoreElements()) {
@@ -201,9 +191,7 @@ public class ClassHelper {
         field.setAccessible(access);
         return value;
       }
-    } catch (IllegalArgumentException ex) { // should never happen
-      throw new AnnotationRuntimeException(ex);
-    } catch (IllegalAccessException ex) { // should never happen
+    } catch (IllegalArgumentException | IllegalAccessException ex) { // should never happen
       throw new AnnotationRuntimeException(ex);
     }
   }
@@ -216,9 +204,7 @@ public class ClassHelper {
         field.set(instance, value);
         field.setAccessible(access);
       }
-    } catch (IllegalArgumentException ex) { // should never happen
-      throw new AnnotationRuntimeException(ex);
-    } catch (IllegalAccessException ex) { // should never happen
+    } catch (IllegalArgumentException | IllegalAccessException ex) { // should never happen
       throw new AnnotationRuntimeException(ex);
     }
   }

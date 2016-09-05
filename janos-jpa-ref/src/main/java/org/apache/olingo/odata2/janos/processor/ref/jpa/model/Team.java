@@ -38,7 +38,7 @@ public class Team extends RefBase {
   private Boolean isScrumTeam;
   @OneToMany
   @EdmNavigationProperty(name = "nt_Employees", association = "TeamEmployees", toMultiplicity = Multiplicity.MANY)
-  private List<Employee> employees = new ArrayList<Employee>();
+  private List<Employee> employees = new ArrayList<>();
   @OneToOne
   @EdmNavigationProperty
   private Team subTeam;

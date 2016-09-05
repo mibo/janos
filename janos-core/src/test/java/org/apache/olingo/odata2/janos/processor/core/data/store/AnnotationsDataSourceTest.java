@@ -49,8 +49,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class AnnotationsDataSourceTest {
 
-  final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<Class<?>>();
-  final static Set<Class<?>> ANNOTATED_ENTITY_SET_CLASSES = new HashSet<Class<?>>();
+  final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<>();
+  final static Set<Class<?>> ANNOTATED_ENTITY_SET_CLASSES = new HashSet<>();
 
   static {
     ANNOTATED_ENTITY_SET_CLASSES.add(Building.class);
@@ -109,7 +109,7 @@ public class AnnotationsDataSourceTest {
 
   @Test(expected = ODataException.class)
   public void initFromClassCollectionNotAnnotated() throws Exception {
-    Set<Class<?>> annotatedClassesAndMore = new HashSet<Class<?>>(ANNOTATED_ENTITY_SET_CLASSES);
+    Set<Class<?>> annotatedClassesAndMore = new HashSet<>(ANNOTATED_ENTITY_SET_CLASSES);
     annotatedClassesAndMore.add(String.class);
     annotatedClassesAndMore.add(Object.class);
     AnnotationDataSource ds = new AnnotationDataSource(annotatedClassesAndMore, dataStoreFactory);
@@ -122,7 +122,7 @@ public class AnnotationsDataSourceTest {
     final EdmEntitySet edmEntitySet = createMockedEdmEntitySet("Buildings");
     CountDownLatch latch;
 
-    List<Thread> threads = new ArrayList<Thread>();
+    List<Thread> threads = new ArrayList<>();
     int max = 500;
 
     latch = new CountDownLatch(max);
@@ -155,14 +155,14 @@ public class AnnotationsDataSourceTest {
   @Test
   @Ignore
   public void multiThreadedSyncCreateReadTest() throws Exception {
-    Collection<Class<?>> ac = new ArrayList<Class<?>>();
+    Collection<Class<?>> ac = new ArrayList<>();
     ac.add(SimpleEntity.class);
     final AnnotationDataSource localDs = new AnnotationDataSource(SimpleEntity.class.getPackage().getName(), dataStoreFactory);
     final AnnotationEdmProvider localProvider = new AnnotationEdmProvider(ac);
     final EdmEntitySet edmEntitySet = createMockedEdmEntitySet(localProvider, "SimpleEntitySet");
     final CountDownLatch latch;
 
-    List<Thread> threads = new ArrayList<Thread>();
+    List<Thread> threads = new ArrayList<>();
     int max = 500;
     latch = new CountDownLatch(max);
     for (int i = 0; i < max; i++) {
@@ -231,7 +231,7 @@ public class AnnotationsDataSourceTest {
     photo.setImageType("image/png");
     photoDataStore.create(photo);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Name", "SomePic");
     keys.put("ImageFormat", "PNG");
     Photo toReadPhoto = (Photo) datasource.readData(entitySet, keys);
@@ -328,7 +328,7 @@ public class AnnotationsDataSourceTest {
     building.setName("Common Building");
 
     final int roomsCount = 3;
-    List<Room> rooms = new ArrayList<Room>();
+    List<Room> rooms = new ArrayList<>();
     for (int i = 0; i < roomsCount; i++) {
       Room room = new Room(i, "Room " + i);
       room.setBuilding(building);
@@ -339,7 +339,7 @@ public class AnnotationsDataSourceTest {
     building.getRooms().addAll(rooms);
     datasource.createData(buildingsEntitySet, building);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", "1");
 
     // execute
@@ -363,7 +363,7 @@ public class AnnotationsDataSourceTest {
   public void readUnknownEntity() throws Exception {
     EdmEntitySet unknownEntitySet = Mockito.mock(EdmEntitySet.class);
     Mockito.when(unknownEntitySet.getName()).thenReturn("UnknownEntity");
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", "1");
 
     // execute
@@ -387,7 +387,7 @@ public class AnnotationsDataSourceTest {
     building.setName("Common Building");
 
     final int roomsCount = 11;
-    List<Room> rooms = new ArrayList<Room>();
+    List<Room> rooms = new ArrayList<>();
     for (int i = 0; i < roomsCount; i++) {
       Room room = new Room(i, "Room " + i);
       room.setBuilding(building);
@@ -419,7 +419,7 @@ public class AnnotationsDataSourceTest {
     building.setName("Common Building");
 
     final int roomsCount = 10;
-    List<Room> rooms = new ArrayList<Room>();
+    List<Room> rooms = new ArrayList<>();
     for (int i = 0; i < roomsCount; i++) {
       Room room = new Room(i, "Room " + i);
       room.setBuilding(building);
@@ -430,7 +430,7 @@ public class AnnotationsDataSourceTest {
     building.getRooms().addAll(rooms);
     datasource.createData(buildingsEntitySet, building);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", "1");
 
     Building read = (Building) datasource.readData(buildingsEntitySet, keys);
@@ -466,7 +466,7 @@ public class AnnotationsDataSourceTest {
     datasource.createData(roomsEntitySet, room);
     datasource.createData(buildingsEntitySet, building);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", Integer.valueOf(12));
     Room read = (Room) datasource.readData(roomsEntitySet, keys);
     Assert.assertEquals("Room 12", read.getName());
@@ -496,7 +496,7 @@ public class AnnotationsDataSourceTest {
     room.setBuilding(null);
     datasource.createData(roomsEntitySet, room);
     //
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", Integer.valueOf(12));
     Room read = (Room) datasource.readData(roomsEntitySet, keys);
     Assert.assertEquals("Room 12", read.getName());
@@ -519,7 +519,7 @@ public class AnnotationsDataSourceTest {
     building.setName("Common Building");
 
     final int roomsCount = 10;
-    List<Room> rooms = new ArrayList<Room>();
+    List<Room> rooms = new ArrayList<>();
     for (int i = 0; i < roomsCount; i++) {
       Room room = new Room(i, "Room " + i);
       room.setBuilding(building);
@@ -530,7 +530,7 @@ public class AnnotationsDataSourceTest {
     building.getRooms().addAll(rooms);
     datasource.createData(buildingsEntitySet, building);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", "1");
 
     Building read = (Building) datasource.readData(buildingsEntitySet, keys);
@@ -538,7 +538,7 @@ public class AnnotationsDataSourceTest {
     Assert.assertEquals("1", read.getId());
 
     // execute
-    Map<String, Object> targetKeys = new HashMap<String, Object>();
+    Map<String, Object> targetKeys = new HashMap<>();
     targetKeys.put("Id", 3);
     Object relatedData = datasource.readRelatedData(
         buildingsEntitySet, building, roomsEntitySet, targetKeys);
@@ -559,7 +559,7 @@ public class AnnotationsDataSourceTest {
     building.setName("Common Building");
     datasource.createData(edmEntitySet, building);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", "1");
 
     Building read = (Building) datasource.readData(edmEntitySet, keys);
@@ -577,7 +577,7 @@ public class AnnotationsDataSourceTest {
     ah.setValueForProperty(building, "Id", "42");
     datasource.createData(edmEntitySet, building);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", "42");
 
     Building read = (Building) datasource.readData(edmEntitySet, keys);
@@ -600,13 +600,13 @@ public class AnnotationsDataSourceTest {
     ah.setValueForProperty(buildingDuplicate, "Id", "42");
     datasource.createData(edmEntitySet, buildingDuplicate);
 
-    Map<String, Object> keys42 = new HashMap<String, Object>();
+    Map<String, Object> keys42 = new HashMap<>();
     keys42.put("Id", "42");
     Building read42 = (Building) datasource.readData(edmEntitySet, keys42);
     Assert.assertEquals("Common Building", read42.getName());
     Assert.assertEquals("42", read42.getId());
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", "1");
     Building read = (Building) datasource.readData(edmEntitySet, keys);
     Assert.assertEquals("Duplicate Building", read.getName());
@@ -624,7 +624,7 @@ public class AnnotationsDataSourceTest {
     photo.setImageType("image/png");
     datasource.createData(edmEntitySet, photo);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("ImageFormat", "PNG");
     keys.put("Name", "BigPicture");
 
@@ -648,7 +648,7 @@ public class AnnotationsDataSourceTest {
     photo.setImageType("image/png");
     datasource.createData(edmEntitySet, photo);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Name", "BigPicture");
     keys.put("ImageFormat", "PNG");
 
@@ -666,7 +666,7 @@ public class AnnotationsDataSourceTest {
     updatedPhoto.setImageType("image/jpg");
     datasource.updateData(edmEntitySet, updatedPhoto);
 
-    Map<String, Object> updatedKeys = new HashMap<String, Object>();
+    Map<String, Object> updatedKeys = new HashMap<>();
     updatedKeys.put("Name", nameKeyValue);
     updatedKeys.put("ImageFormat", typeKeyValue);
 
@@ -686,7 +686,7 @@ public class AnnotationsDataSourceTest {
     building.setName("Common Building");
     datastore.create(building);
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", "1");
 
     Building read = (Building) datasource.readData(edmEntitySet, keys);
@@ -714,7 +714,7 @@ public class AnnotationsDataSourceTest {
     Mockito.when(edmEntitySet.getEntityType()).thenReturn(edmEntityType);
     Mockito.when(edmEntityType.getName()).thenReturn(entityType.getName());
 
-    Map<String, Object> keys = new HashMap<String, Object>();
+    Map<String, Object> keys = new HashMap<>();
     keys.put("Id", "1");
     //
     datasource.readData(edmEntitySet, keys);
@@ -753,7 +753,7 @@ public class AnnotationsDataSourceTest {
     room.setVersion(4711);
     roomStore.create(room);
 
-    Map<String, Object> targetEntityKeyValues = new HashMap<String, Object>();
+    Map<String, Object> targetEntityKeyValues = new HashMap<>();
     targetEntityKeyValues.put("Id", 42);
 
     // execute

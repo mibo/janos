@@ -1584,7 +1584,7 @@ public class DataSourceProcessor extends ODataSingleProcessor implements ODataPr
           valueMap.put(propertyName, value);
         } else {
           // TODO: enable MIME type mapping outside the current subtree
-          valueMap.put(propertyName, getSimpleTypeValueMap(data, Arrays.asList(property)));
+          valueMap.put(propertyName, getSimpleTypeValueMap(data, Collections.singletonList(property)));
         }
       } else {
         valueMap.put(propertyName, getStructuralTypeValueMap(value, (EdmStructuralType) property.getType()));

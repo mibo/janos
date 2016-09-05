@@ -46,7 +46,7 @@ public class Building {
   @OneToMany
   @EdmNavigationProperty(name = "nb_Rooms", toType = Room.class,
       association = "BuildingRooms", toMultiplicity = Multiplicity.MANY)
-  private List<Room> rooms = new ArrayList<Room>();
+  private List<Room> rooms = new ArrayList<>();
 
   public String getId() {
     return Integer.toString(id);

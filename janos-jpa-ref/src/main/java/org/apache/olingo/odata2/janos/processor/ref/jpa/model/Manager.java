@@ -39,7 +39,7 @@ public class Manager extends Employee {
   @OneToMany
   @EdmNavigationProperty(name = "nm_Employees", association = "ManagerEmployees",
       toMultiplicity = Multiplicity.MANY)
-  private List<Employee> employees = new ArrayList<Employee>();
+  private List<Employee> employees = new ArrayList<>();
 
   public List<Employee> getEmployees() {
     return employees;

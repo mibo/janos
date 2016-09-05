@@ -95,7 +95,7 @@ public class PersonStore implements DataStore<Person> {
   private Person readFromPath(Path path) {
     try {
       String content = new String(Files.readAllBytes(path));
-      return new Gson().fromJson(content.toString(), Person.class);
+      return new Gson().fromJson(content, Person.class);
     } catch (IOException e) {
       e.printStackTrace();
     }

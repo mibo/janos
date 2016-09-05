@@ -45,7 +45,7 @@ public abstract class BaseTest {
 
   protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private final Map<Class<?>, Level> disabledLoggings = new HashMap<Class<?>, Level>();
+  private final Map<Class<?>, Level> disabledLoggings = new HashMap<>();
 
   public BaseTest() {
     disableLogging(this.getClass());

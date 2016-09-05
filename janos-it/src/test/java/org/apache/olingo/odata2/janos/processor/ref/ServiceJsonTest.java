@@ -80,7 +80,7 @@ public class ServiceJsonTest extends AbstractRefTest {
         callUri("", HttpHeaders.ACCEPT, HttpContentType.APPLICATION_XML + "; charset=iso-latin-1",
             HttpStatusCodes.NOT_ACCEPTABLE);
     final String body = getBody(response);
-    Map<String, String> prefixMap = new HashMap<String, String>();
+    Map<String, String> prefixMap = new HashMap<>();
     prefixMap.put("a", Edm.NAMESPACE_M_2007_08);
     XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(prefixMap));
     assertXpathExists("/a:error", body);

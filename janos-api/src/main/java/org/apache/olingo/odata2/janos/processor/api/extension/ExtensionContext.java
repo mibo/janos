@@ -2,10 +2,11 @@ package org.apache.olingo.odata2.janos.processor.api.extension;
 
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.api.uri.UriInfo;
-import org.omg.CORBA.portable.InputStream;
+
+import java.io.InputStream;
 
 /**
- * Created by michael on 23.02.16.
+ * Created by mibo on 23.02.16.
  */
 public interface ExtensionContext {
   String PARA_URI_INFO = "~uriinfo";

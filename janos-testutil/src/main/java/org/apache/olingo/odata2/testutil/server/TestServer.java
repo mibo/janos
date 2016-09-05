@@ -18,8 +18,8 @@
  ******************************************************************************/
 package org.apache.olingo.odata2.testutil.server;
 
-import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.ODataServiceFactory;
+import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.apache.olingo.odata2.testutil.fit.FitStaticServiceFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -135,7 +135,7 @@ public class TestServer {
     return contextHandler;
   }
 
-  public void startServer(final ODataService service) {
+  public void startServer(final JanosServiceFactory service) {
     startServer(FitStaticServiceFactory.class);
 
     if ((server != null) && server.isStarted()) {
@@ -143,7 +143,7 @@ public class TestServer {
     }
   }
 
-  public void startServer(final ODataService service, Class<? extends FitStaticServiceFactory> clazz) {
+  public void startServer(final JanosServiceFactory service, Class<? extends FitStaticServiceFactory> clazz) {
     startServer(clazz);
 
     if ((server != null) && server.isStarted()) {

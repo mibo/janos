@@ -35,7 +35,7 @@ public class Manager extends Employee {
 
   @EdmNavigationProperty(name = "nm_Employees", association = "ManagerEmployees",
       toMultiplicity = Multiplicity.MANY)
-  private List<Employee> employees = new ArrayList<Employee>();
+  private List<Employee> employees = new ArrayList<>();
 
   public Manager(final String id, final String name) {
     super(id, name);

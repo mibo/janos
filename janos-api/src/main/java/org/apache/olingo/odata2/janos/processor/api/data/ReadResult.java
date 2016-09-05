@@ -85,7 +85,7 @@ public final class ReadResult<T> {
    * @return the builder
    */
   public static <T> Builder<T> start() {
-    return new Builder<T>();
+    return new Builder<>();
   }
 
   /**
@@ -96,7 +96,7 @@ public final class ReadResult<T> {
    * @return the builder
    */
   public static <T> Builder<T> forResult(Collection<T> result) {
-    return new Builder<T>(result);
+    return new Builder<>(result);
   }
 
   /**
@@ -108,7 +108,7 @@ public final class ReadResult<T> {
    * @return the new ReadResult
    */
   public static <T> Builder<T> fromResult(ReadResult<T> readResult, Collection<T> result) {
-    return new Builder<T>(result).apply(readResult);
+    return new Builder<>(result).apply(readResult);
   }
 
   /**
@@ -132,7 +132,7 @@ public final class ReadResult<T> {
      * Instantiates a new Builder.
      */
     public Builder() {
-      this(new ArrayList<T>());
+      this(new ArrayList<>());
     }
 
     /**

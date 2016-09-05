@@ -30,6 +30,7 @@ import org.apache.olingo.odata2.api.processor.ODataErrorCallback;
 import org.apache.olingo.odata2.api.processor.ODataErrorContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
+import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,12 +48,12 @@ public class SampleDsServiceFactory extends ODataServiceFactory {
    * instances within the ODataApplication (ODataService)
    */
   private static class AnnotationInstances {
-    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<Class<?>>();
+    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<>();
     static {
       ANNOTATED_MODEL_CLASSES.add(Address.class);
       ANNOTATED_MODEL_CLASSES.add(Person.class);
     }
-    final static ODataService ANNOTATION_ODATA_SERVICE;
+    final static JanosServiceFactory ANNOTATION_ODATA_SERVICE;
 
     static {
       try {
@@ -75,7 +76,7 @@ public class SampleDsServiceFactory extends ODataServiceFactory {
   @Override
   public ODataService createService(final ODataContext context) throws ODataException {
     // Edm via Annotations and ListProcessor via AnnotationDS with AnnotationsValueAccess
-    return AnnotationInstances.ANNOTATION_ODATA_SERVICE;
+    return AnnotationInstances.ANNOTATION_ODATA_SERVICE.createService(context);
   }
 
   @SuppressWarnings("unchecked")

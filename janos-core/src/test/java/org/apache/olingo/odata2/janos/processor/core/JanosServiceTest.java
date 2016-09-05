@@ -1,10 +1,10 @@
 package org.apache.olingo.odata2.janos.processor.core;
 
-import org.apache.olingo.odata2.api.ODataService;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
 import org.apache.olingo.odata2.api.edm.provider.EdmProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
+import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.apache.olingo.odata2.janos.processor.core.model.*;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class JanosServiceTest {
 
   @Test
   public void createFromPackage() throws ODataException {
-    ODataService service = JanosService.createFor(Building.class.getPackage().getName()).build();
+    JanosServiceFactory service = JanosService.createFor(Building.class.getPackage().getName()).build();
     assertNotNull(service);
   }
 
@@ -37,7 +37,7 @@ public class JanosServiceTest {
     annotatedClasses.add(Photo.class);
     annotatedClasses.add(Room.class);
     annotatedClasses.add(Team.class);
-    ODataService service = JanosService.createFor(annotatedClasses).build();
+    JanosServiceFactory service = JanosService.createFor(annotatedClasses).build();
 
     assertNotNull(service);
   }
@@ -47,7 +47,7 @@ public class JanosServiceTest {
     final Collection<Class<?>> notAnnotatedClasses = new ArrayList<>();
     notAnnotatedClasses.add(String.class);
     notAnnotatedClasses.add(Long.class);
-    ODataService service = JanosService.createFor(notAnnotatedClasses).build();
+    JanosServiceFactory service = JanosService.createFor(notAnnotatedClasses).build();
 
     assertNotNull(service);
   }

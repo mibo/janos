@@ -170,11 +170,12 @@ public abstract class JanosService {
     JanosServiceBuilder extensions(Collection<Class<?>> extensions);
 
     /**
-     * Finish building and build/create the configured JanosService (ODataService)
-     * @return an instance of a JanosService (ODataService)
+     * Finish building and build/create the configured The {@link JanosServiceFactory}
+     * which then can be used to create thread safe {@link ODataService} ({@link JanosService)} instances.
+     * @return an instance of a {@link JanosServiceFactory} (ODataService)
      * @throws ODataException the o data exception
      */
-    ODataService build() throws ODataException;
+    JanosServiceFactory build() throws ODataException;
   }
 
   /**

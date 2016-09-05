@@ -55,12 +55,7 @@ public class AnnotationDataSource implements DataSource {
           throws ODataException {
     this.dataStoreManager = dataStoreManager;
 
-    List<Class<?>> foundClasses = ClassHelper.loadClasses(packageToScan, new ClassHelper.ClassValidator() {
-      @Override
-      public boolean isClassValid(final Class<?> c) {
-        return ANNOTATION_HELPER.isEdmAnnotated(c);
-      }
-    });
+    List<Class<?>> foundClasses = ClassHelper.loadClasses(packageToScan, ANNOTATION_HELPER::isEdmAnnotated);
 
     init(foundClasses);
   }

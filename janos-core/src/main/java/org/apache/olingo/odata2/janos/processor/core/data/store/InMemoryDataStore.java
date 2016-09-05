@@ -271,9 +271,9 @@ public class InMemoryDataStore<T> implements DataStore<T> {
       if (type == String.class) {
         return String.valueOf(idCounter.getAndIncrement());
       } else if (type == Integer.class || type == int.class) {
-        return Integer.valueOf(idCounter.getAndIncrement());
+        return idCounter.getAndIncrement();
       } else if (type == Long.class || type == long.class) {
-        return Long.valueOf(idCounter.getAndIncrement());
+        return (long) idCounter.getAndIncrement();
       }
 
       throw new UnsupportedOperationException("Automated key generation for type '" + type

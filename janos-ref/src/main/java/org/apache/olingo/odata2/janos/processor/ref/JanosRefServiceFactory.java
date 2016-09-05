@@ -27,6 +27,7 @@ import org.apache.olingo.odata2.api.processor.ODataErrorCallback;
 import org.apache.olingo.odata2.api.processor.ODataErrorContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.janos.processor.api.JanosService;
+import org.apache.olingo.odata2.janos.processor.api.JanosServiceFactory;
 import org.apache.olingo.odata2.janos.processor.api.data.store.DataStoreException;
 import org.apache.olingo.odata2.janos.processor.core.data.store.InMemoryDataStore;
 import org.apache.olingo.odata2.janos.processor.ref.model.*;
@@ -47,7 +48,7 @@ public class JanosRefServiceFactory extends ODataServiceFactory {
    */
   private static class AnnotationInstances {
 //    final static String MODEL_PACKAGE = "org.apache.olingo.odata2.janos.processor.ref.model";
-    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<Class<?>>();
+    final static Set<Class<?>> ANNOTATED_MODEL_CLASSES = new HashSet<>();
     static {
       ANNOTATED_MODEL_CLASSES.add(Building.class);
       ANNOTATED_MODEL_CLASSES.add(City.class);
@@ -60,7 +61,7 @@ public class JanosRefServiceFactory extends ODataServiceFactory {
       ANNOTATED_MODEL_CLASSES.add(Team.class);
       ANNOTATED_MODEL_CLASSES.add(RefFunctions.class);
     }
-    final static ODataService ANNOTATION_ODATA_SERVICE;
+    final static JanosServiceFactory ANNOTATION_ODATA_SERVICE;
 
     static {
       try {
@@ -79,7 +80,7 @@ public class JanosRefServiceFactory extends ODataServiceFactory {
   @Override
   public ODataService createService(final ODataContext context) throws ODataException {
     // Edm via Annotations and ListProcessor via AnnotationDS with AnnotationsValueAccess
-    return AnnotationInstances.ANNOTATION_ODATA_SERVICE;
+    return AnnotationInstances.ANNOTATION_ODATA_SERVICE.createService(context);
   }
 
   @SuppressWarnings("unchecked")

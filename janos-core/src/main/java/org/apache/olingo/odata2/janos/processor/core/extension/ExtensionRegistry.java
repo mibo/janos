@@ -25,13 +25,14 @@ public class ExtensionRegistry {
     return Holder.INSTANCE;
   }
 
-  public void registerExtensions(Collection<Class<?>> clazzes) {
+  public ExtensionRegistry registerExtensions(Collection<Class<?>> clazzes) {
     for (Class<?> clazz : clazzes) {
       registerExtension(clazz);
     }
+    return this;
   }
 
-  public void registerExtension(Class<?> clazz) {
+  public ExtensionRegistry registerExtension(Class<?> clazz) {
     for (Method method : clazz.getDeclaredMethods()) {
       for (Annotation annotation : method.getDeclaredAnnotations()) {
         if (annotation instanceof Extension) {
@@ -39,6 +40,7 @@ public class ExtensionRegistry {
         }
       }
     }
+    return this;
   }
 
   private void registerExtension(Class<?> clazz, Method method, Extension extension) {
