@@ -28,7 +28,7 @@ public class RefFunctions implements FunctionExecutor {
     dataStoreManager = dataStore;
   }
 
-  @EdmFunctionImport(returnType = @ReturnType(type = ReturnType.Type.ENTITY))
+  @EdmFunctionImport(returnType = @ReturnType(type = ReturnType.Type.COMPLEX))
   public City citySearch(@EdmFunctionImportParameter(name = "cityName", type = EdmType.STRING) String name) {
     try {
       DataStore<Employee> ds = dataStoreManager.getDataStore("Employees", Employee.class);
