@@ -423,11 +423,9 @@ public class AnnotationHelper {
     }
 
     public String getRelationshipName() {
-      String toAssociation = toNavigation.association();
-      String fromAssociation = "";
-      if (!isBiDirectional()) {
-        fromAssociation = fromNavigation.association();
-      }
+
+      final String fromAssociation = fromNavigation == null ? "" : fromNavigation.association();
+      final String toAssociation = toNavigation == null ? "" : toNavigation.association();
 
       if (fromAssociation.isEmpty() && fromAssociation.equals(toAssociation)) {
         return createCanonicalRelationshipName(getFromRoleName(), getToRoleName());
@@ -459,13 +457,20 @@ public class AnnotationHelper {
       if (isBiDirectional()) {
         return "AnnotatedNavInfo{biDirectional = true" +
             ", toField=" + toField.getName() +
+            ", toNavigation=" + toNavigation.name() +
+            ", fromNavigation=" + fromNavigation.name() +
             ", toNavigation=" + toNavigation.name() + '}';
+      } else if (fromField != null) {
+        return "AnnotatedNavInfo{" +
+            "fromField=" + fromField.getName() +
+            ", fromNavigation=" + fromNavigation.name() + '}';
+      } else if (toField != null) {
+        return "AnnotatedNavInfo{" +
+            "toField=" + toField.getName() +
+            ", toNavigation=" + toNavigation.name() + '}';
+      } else {
+        return "AnnotatedNavInfo{}";
       }
-      return "AnnotatedNavInfo{" +
-          "fromField=" + fromField.getName() +
-          ", toField=" + toField.getName() +
-          ", fromNavigation=" + fromNavigation.name() +
-          ", toNavigation=" + toNavigation.name() + '}';
     }
   }
 
