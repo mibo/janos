@@ -81,7 +81,7 @@ public class AnnotationHelper {
    * @return
    */
   public boolean keyMatch(final Object instance, final Map<String, Object> keyName2Value) {
-    if(instance == null) {
+    if (instance == null) {
       return false;
     }
     Map<String, Object> instanceKeyFields = getValueForAnnotatedFields(instance, EdmKey.class);
@@ -278,7 +278,7 @@ public class AnnotationHelper {
   public String extractToRoleEntityName(final EdmNavigationProperty enp, final Field field) {
     Class<?> clazz = enp.toType();
     if (clazz == Object.class) {
-      if(field.getType().isArray() || Collection.class.isAssignableFrom(field.getType())) {
+      if (field.getType().isArray() || Collection.class.isAssignableFrom(field.getType())) {
         clazz = (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
       } else {
         clazz = field.getType();
@@ -373,7 +373,7 @@ public class AnnotationHelper {
     private final EdmNavigationProperty toNavigation;
 
     public AnnotatedNavInfo(final Field fromField, final Field toField, final EdmNavigationProperty fromNavigation,
-        final EdmNavigationProperty toNavigation) {
+                            final EdmNavigationProperty toNavigation) {
       this.fromField = fromField;
       this.toField = toField;
       this.fromNavigation = fromNavigation;
@@ -385,7 +385,7 @@ public class AnnotationHelper {
     }
 
     public String getFromRoleName() {
-      if(isBiDirectional()) {
+      if (isBiDirectional()) {
         return extractFromRoleEntityName(toField);
       }
       return extractToRoleName(toNavigation, toField);
@@ -396,24 +396,26 @@ public class AnnotationHelper {
     }
 
     public String getToRoleName() {
-      if(isBiDirectional()) {
+      if (isBiDirectional()) {
         return extractToRoleName(toNavigation, toField);
       }
       return extractToRoleName(fromNavigation, fromField);
     }
 
     public EdmMultiplicity getFromMultiplicity() {
-      if(isBiDirectional()) {
-        return EdmMultiplicity.ONE;
+      if (toField != null) {
+        return extractMultiplicity(toNavigation, toField);
+      } else {
+        return null;
       }
-      return extractMultiplicity(toNavigation, toField);
     }
 
     public EdmMultiplicity getToMultiplicity() {
-      if(isBiDirectional()) {
-        return extractMultiplicity(toNavigation, toField);
+      if (fromField != null) {
+        return extractMultiplicity(fromNavigation, fromField);
+      } else {
+        return null;
       }
-      return extractMultiplicity(fromNavigation, fromField);
     }
 
     public boolean isBiDirectional() {
@@ -423,15 +425,15 @@ public class AnnotationHelper {
     public String getRelationshipName() {
       String toAssociation = toNavigation.association();
       String fromAssociation = "";
-      if(!isBiDirectional()) {
+      if (!isBiDirectional()) {
         fromAssociation = fromNavigation.association();
       }
 
-      if(fromAssociation.isEmpty() && fromAssociation.equals(toAssociation)) {
+      if (fromAssociation.isEmpty() && fromAssociation.equals(toAssociation)) {
         return createCanonicalRelationshipName(getFromRoleName(), getToRoleName());
-      } else if(toAssociation.isEmpty()) {
+      } else if (toAssociation.isEmpty()) {
         return fromAssociation;
-      } else if(!toAssociation.equals(fromAssociation)) {
+      } else if (!toAssociation.equals(fromAssociation)) {
         throw new AnnotationRuntimeException("Invalid associations for navigation properties '" +
             this.toString() + "'");
       }
@@ -439,14 +441,14 @@ public class AnnotationHelper {
     }
 
     public String getFromTypeName() {
-      if(isBiDirectional()) {
+      if (isBiDirectional()) {
         return extractEntityTypeName(toField.getDeclaringClass());
       }
       return extractEntityTypeName(fromField.getDeclaringClass());
     }
 
     public String getToTypeName() {
-      if(isBiDirectional()) {
+      if (isBiDirectional()) {
         return extractEntityTypeName(ClassHelper.getFieldType(toField));
       }
       return extractEntityTypeName(toField.getDeclaringClass());
@@ -454,7 +456,7 @@ public class AnnotationHelper {
 
     @Override
     public String toString() {
-      if(isBiDirectional()) {
+      if (isBiDirectional()) {
         return "AnnotatedNavInfo{biDirectional = true" +
             ", toField=" + toField.getName() +
             ", toNavigation=" + toNavigation.name() + '}';
@@ -467,52 +469,61 @@ public class AnnotationHelper {
     }
   }
 
-
+  /**
+   * Gets navigation information between two entity classes.
+   *
+   * @param sourceClass one entity class
+   * @param targetClass another entity class
+   * @return navigation information between the two classes, if any
+   */
   public AnnotatedNavInfo getCommonNavigationInfo(final Class<?> sourceClass, final Class<?> targetClass) {
-    List<Field> sourceFields = getAnnotatedFields(sourceClass, EdmNavigationProperty.class);
-    List<Field> targetFields = getAnnotatedFields(targetClass, EdmNavigationProperty.class);
 
-    if(sourceClass == targetClass) {
-      // special case, actual handled as bi-directional
-      return getCommonNavigationInfoBiDirectional(sourceClass, targetClass);
+    // Lists of fields of the type of the other class.
+    List<Field> sourceFields = getAnnotatedFieldsOfClass(sourceClass, EdmNavigationProperty.class, targetClass);
+    List<Field> targetFields = getAnnotatedFieldsOfClass(targetClass, EdmNavigationProperty.class, sourceClass);
+
+    // Self-navigation: return the first field in the list.
+    if (sourceClass == targetClass && !sourceFields.isEmpty()) {
+      final Field field = sourceFields.get(0);
+      final EdmNavigationProperty navProperty = field.getAnnotation(EdmNavigationProperty.class);
+      return new AnnotatedNavInfo(field, field, navProperty, navProperty);
     }
 
-    // first try via association name to get full navigation information
+    // Look for bi-directional navigation, returning the first with matching association name.
     for (Field sourceField : sourceFields) {
-      if(ClassHelper.getFieldType(sourceField) == targetClass) {
-        final EdmNavigationProperty sourceNav = sourceField.getAnnotation(EdmNavigationProperty.class);
-        final String sourceAssociation = extractRelationshipName(sourceNav, sourceField);
-        for (Field targetField : targetFields) {
-          if(ClassHelper.getFieldType(targetField) == sourceClass) {
-            final EdmNavigationProperty targetNav = targetField.getAnnotation(EdmNavigationProperty.class);
-            final String targetAssociation = extractRelationshipName(targetNav, targetField);
-            if (sourceAssociation.equals(targetAssociation)) {
-              return new AnnotatedNavInfo(sourceField, targetField, sourceNav, targetNav);
-            }
-          }
+      final EdmNavigationProperty sourceNav = sourceField.getAnnotation(EdmNavigationProperty.class);
+      final String sourceAssociation = extractRelationshipName(sourceNav, sourceField);
+      for (Field targetField : targetFields) {
+        final EdmNavigationProperty targetNav = targetField.getAnnotation(EdmNavigationProperty.class);
+        final String targetAssociation = extractRelationshipName(targetNav, targetField);
+        if (sourceAssociation.equals(targetAssociation)) {
+          return new AnnotatedNavInfo(sourceField, targetField, sourceNav, targetNav);
         }
       }
     }
 
-    // if nothing was found assume/guess none bi-directional navigation
-    return getCommonNavigationInfoBiDirectional(sourceClass, targetClass);
+    // Look for uni-directional navigation.
+    if (sourceFields.isEmpty()) {
+      if (targetFields.isEmpty()) {
+        return null;
+      } else {
+        final Field field = targetFields.get(0);
+        final EdmNavigationProperty navProperty = field.getAnnotation(EdmNavigationProperty.class);
+        return new AnnotatedNavInfo(null, field, null, navProperty);
+      }
+    } else {
+      final Field field = sourceFields.get(0);
+      final EdmNavigationProperty navProperty = field.getAnnotation(EdmNavigationProperty.class);
+      return new AnnotatedNavInfo(field, null, navProperty, null);
+    }
   }
 
-  private AnnotatedNavInfo getCommonNavigationInfoBiDirectional(final Class<?> sourceClass,
-                                                                final Class<?> targetClass) {
-    List<Field> sourceFields = getAnnotatedFields(sourceClass, EdmNavigationProperty.class);
-
-    String targetEntityTypeName = extractEntityTypeName(targetClass);
-    for (Field sourceField : sourceFields) {
-      final EdmNavigationProperty sourceNav = sourceField.getAnnotation(EdmNavigationProperty.class);
-      final String navTargetEntityName = extractEntityTypeName(sourceNav, sourceField);
-
-      if (navTargetEntityName.equals(targetEntityTypeName)) {
-        return new AnnotatedNavInfo(null, sourceField, null, sourceNav);
-      }
-    }
-
-    return null;
+  private List<Field> getAnnotatedFieldsOfClass(Class<?> sourceClass,
+                                                Class<? extends Annotation> annotationClass,
+                                                Class<?> targetClass) {
+    final List<Field> fieldList = getAnnotatedFields(sourceClass, annotationClass);
+    fieldList.removeIf(field -> ClassHelper.getFieldType(field) != targetClass);
+    return fieldList;
   }
 
   public Class<?> getFieldTypeForProperty(final Class<?> clazz, final String propertyName)
@@ -561,13 +572,13 @@ public class AnnotationHelper {
   }
 
   private Field getFieldForPropertyName(final String propertyName,
-      final Class<?> resultClass, final boolean inherited) {
+                                        final Class<?> resultClass, final boolean inherited) {
 
     Field[] fields = resultClass.getDeclaredFields();
     for (Field field : fields) {
       EdmProperty property = field.getAnnotation(EdmProperty.class);
       if (property == null) {
-        if(getCanonicalName(field).equals(propertyName)) {
+        if (getCanonicalName(field).equals(propertyName)) {
           return field;
         }
       } else {
@@ -588,7 +599,7 @@ public class AnnotationHelper {
   }
 
   public Object getValueForField(final Object instance, final String fieldName,
-      final Class<? extends Annotation> annotation) {
+                                 final Class<? extends Annotation> annotation) {
     if (instance == null) {
       return null;
     }
@@ -603,12 +614,12 @@ public class AnnotationHelper {
   }
 
   private Object getValueForField(final Object instance, final Class<?> resultClass,
-      final Class<? extends Annotation> annotation, final boolean inherited) {
+                                  final Class<? extends Annotation> annotation, final boolean inherited) {
     return getValueForField(instance, null, resultClass, annotation, inherited);
   }
 
   public Map<String, Object> getValueForAnnotatedFields(final Object instance,
-      final Class<? extends Annotation> annotation) {
+                                                        final Class<? extends Annotation> annotation) {
     if (instance == null) {
       return null;
     }
@@ -616,7 +627,7 @@ public class AnnotationHelper {
   }
 
   private Map<String, Object> getValueForAnnotatedFields(final Object instance, final Class<?> resultClass,
-      final Class<? extends Annotation> annotation, final boolean inherited) {
+                                                         final Class<? extends Annotation> annotation, final boolean inherited) {
     Field[] fields = resultClass.getDeclaredFields();
     Map<String, Object> fieldName2Value = new HashMap<>();
 
@@ -677,7 +688,7 @@ public class AnnotationHelper {
       for (Annotation annotation : annotations) {
         if (annotation.annotationType().equals(EdmFunctionImportParameter.class)) {
           FunctionImportParameter fip = new FunctionImportParameter();
-          EdmFunctionImportParameter fipAnnotation = (EdmFunctionImportParameter)annotation;
+          EdmFunctionImportParameter fipAnnotation = (EdmFunctionImportParameter) annotation;
           // Set facets
           if (fipAnnotation.facets() != null) {
             EdmFacets edmFacets = fipAnnotation.facets();
@@ -734,11 +745,11 @@ public class AnnotationHelper {
         break;
       case ENTITY:
         returnType.setTypeName(extractEntityTypeFqn(
-                determineAnnotatedClass(functionImport, annotatedMethod)));
+            determineAnnotatedClass(functionImport, annotatedMethod)));
         break;
       case COMPLEX:
         returnType.setTypeName(extractComplexTypeFqn(
-                determineAnnotatedClass(functionImport, annotatedMethod)));
+            determineAnnotatedClass(functionImport, annotatedMethod)));
         break;
       default:
         throw new UnsupportedOperationException("Not yet supported return type type '" + functionImport.returnType().type() + "'.");
@@ -774,7 +785,7 @@ public class AnnotationHelper {
 
 
   public void setValueForAnnotatedField(final Object instance, final Class<? extends Annotation> annotation,
-      final Object value)
+                                        final Object value)
       throws ODataAnnotationException {
     List<Field> fields = getAnnotatedFields(instance, annotation);
 
@@ -790,7 +801,7 @@ public class AnnotationHelper {
   }
 
   public void setValuesToAnnotatedFields(final Object instance,
-      final Class<? extends Annotation> annotation, final Map<String, Object> fieldName2Value) {
+                                         final Class<? extends Annotation> annotation, final Map<String, Object> fieldName2Value) {
     List<Field> fields = getAnnotatedFields(instance, annotation);
 
     // XXX: refactore
@@ -814,15 +825,8 @@ public class AnnotationHelper {
     return getAnnotatedFields(fieldClass, annotation, true);
   }
 
-  /**
-   *
-   * @param resultClass
-   * @param annotation
-   * @param inherited
-   * @return
-   */
   private List<Field> getAnnotatedFields(final Class<?> resultClass,
-      final Class<? extends Annotation> annotation, final boolean inherited) {
+                                         final Class<? extends Annotation> annotation, final boolean inherited) {
     if (resultClass == null) {
       return null;
     }
@@ -846,7 +850,7 @@ public class AnnotationHelper {
   }
 
   private Object getValueForField(final Object instance, final String fieldName, final Class<?> resultClass,
-      final Class<? extends Annotation> annotation, final boolean inherited) {
+                                  final Class<? extends Annotation> annotation, final boolean inherited) {
     if (instance == null) {
       return null;
     }
@@ -898,8 +902,8 @@ public class AnnotationHelper {
 
 
   public List<Method> getAnnotatedMethods(final Class<?> resultClass,
-                                           final Class<? extends Annotation> annotation,
-                                           final boolean inherited) {
+                                          final Class<? extends Annotation> annotation,
+                                          final boolean inherited) {
     if (resultClass == null) {
       return null;
     }
@@ -907,7 +911,7 @@ public class AnnotationHelper {
     Method[] methods = resultClass.getDeclaredMethods();
     List<Method> annotatedMethods = new ArrayList<>();
 
-    for (Method method: methods) {
+    for (Method method : methods) {
       if (method.getAnnotation(annotation) != null) {
         annotatedMethods.add(method);
       }
@@ -991,49 +995,49 @@ public class AnnotationHelper {
 
   public EdmSimpleTypeKind mapTypeKind(final org.apache.olingo.odata2.api.annotation.edm.EdmType type) {
     switch (type) {
-    case BINARY:
-      return EdmSimpleTypeKind.Binary;
-    case BOOLEAN:
-      return EdmSimpleTypeKind.Boolean;
-    case BYTE:
-      return EdmSimpleTypeKind.Byte;
-    case COMPLEX:
-      return EdmSimpleTypeKind.Null;
-    case DATE_TIME:
-      return EdmSimpleTypeKind.DateTime;
-    case DATE_TIME_OFFSET:
-      return EdmSimpleTypeKind.DateTimeOffset;
-    case DECIMAL:
-      return EdmSimpleTypeKind.Decimal;
-    case DOUBLE:
-      return EdmSimpleTypeKind.Double;
-    case GUID:
-      return EdmSimpleTypeKind.Guid;
-    case INT16:
-      return EdmSimpleTypeKind.Int16;
-    case INT32:
-      return EdmSimpleTypeKind.Int32;
-    case INT64:
-      return EdmSimpleTypeKind.Int64;
-    case NULL:
-      return EdmSimpleTypeKind.Null;
-    case SBYTE:
-      return EdmSimpleTypeKind.SByte;
-    case SINGLE:
-      return EdmSimpleTypeKind.Single;
-    case STRING:
-      return EdmSimpleTypeKind.String;
-    case TIME:
-      return EdmSimpleTypeKind.Time;
-    default:
-      throw new AnnotationRuntimeException("Unknown type '" + type
-          + "' for mapping to EdmSimpleTypeKind.");
+      case BINARY:
+        return EdmSimpleTypeKind.Binary;
+      case BOOLEAN:
+        return EdmSimpleTypeKind.Boolean;
+      case BYTE:
+        return EdmSimpleTypeKind.Byte;
+      case COMPLEX:
+        return EdmSimpleTypeKind.Null;
+      case DATE_TIME:
+        return EdmSimpleTypeKind.DateTime;
+      case DATE_TIME_OFFSET:
+        return EdmSimpleTypeKind.DateTimeOffset;
+      case DECIMAL:
+        return EdmSimpleTypeKind.Decimal;
+      case DOUBLE:
+        return EdmSimpleTypeKind.Double;
+      case GUID:
+        return EdmSimpleTypeKind.Guid;
+      case INT16:
+        return EdmSimpleTypeKind.Int16;
+      case INT32:
+        return EdmSimpleTypeKind.Int32;
+      case INT64:
+        return EdmSimpleTypeKind.Int64;
+      case NULL:
+        return EdmSimpleTypeKind.Null;
+      case SBYTE:
+        return EdmSimpleTypeKind.SByte;
+      case SINGLE:
+        return EdmSimpleTypeKind.Single;
+      case STRING:
+        return EdmSimpleTypeKind.String;
+      case TIME:
+        return EdmSimpleTypeKind.Time;
+      default:
+        throw new AnnotationRuntimeException("Unknown type '" + type
+            + "' for mapping to EdmSimpleTypeKind.");
     }
   }
 
   public EdmType mapType(final Class<?> type) {
     if (type == String.class || type == URI.class || type == URL.class
-        || type.isEnum() || type == TimeZone.class || type == Locale.class  ) {
+        || type.isEnum() || type == TimeZone.class || type == Locale.class) {
       return EdmType.STRING;
     } else if (type == boolean.class || type == Boolean.class) {
       return EdmType.BOOLEAN;
@@ -1066,14 +1070,14 @@ public class AnnotationHelper {
 
   public EdmMultiplicity mapMultiplicity(final Multiplicity multiplicity) {
     switch (multiplicity) {
-    case ZERO_OR_ONE:
-      return EdmMultiplicity.ZERO_TO_ONE;
-    case ONE:
-      return EdmMultiplicity.ONE;
-    case MANY:
-      return EdmMultiplicity.MANY;
-    default:
-      throw new AnnotationRuntimeException("Unknown type '" + multiplicity + "' for mapping to EdmMultiplicity.");
+      case ZERO_OR_ONE:
+        return EdmMultiplicity.ZERO_TO_ONE;
+      case ONE:
+        return EdmMultiplicity.ONE;
+      case MANY:
+        return EdmMultiplicity.MANY;
+      default:
+        throw new AnnotationRuntimeException("Unknown type '" + multiplicity + "' for mapping to EdmMultiplicity.");
     }
   }
 
