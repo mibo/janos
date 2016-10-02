@@ -125,7 +125,7 @@ public class AnnotationDataSource implements DataSource {
     AnnotationHelper.AnnotatedNavInfo navInfo = ANNOTATION_HELPER.getCommonNavigationInfo(
         sourceStore.getDataTypeClass(), targetStore.getDataTypeClass());
     final Field sourceField;
-    if(navInfo.isBiDirectional()) {
+    if (navInfo.getFromField() == null) {
       sourceField = navInfo.getToField();
     } else {
       sourceField = navInfo.getFromField();
