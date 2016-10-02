@@ -17,10 +17,13 @@ package org.apache.olingo.odata2.janos.processor.core.util;
 
 import junit.framework.Assert;
 import org.apache.olingo.odata2.api.annotation.edm.*;
+import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
 import org.apache.olingo.odata2.api.edm.FullQualifiedName;
-import org.apache.olingo.odata2.api.edm.provider.*;
+import org.apache.olingo.odata2.api.edm.provider.ReturnType;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.janos.processor.core.model.Building;
 import org.apache.olingo.odata2.janos.processor.core.model.Location;
+import org.apache.olingo.odata2.janos.processor.core.model.Room;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -251,6 +254,42 @@ public class AnnotationHelperTest {
     Method method = FunctionExecutor.class.getMethod("findSimple", String.class);
     ReturnType returnType = annotationHelper.extractReturnType(method);
     Assert.assertEquals("SimpleEntity", returnType.getTypeName().getName());
+  }
+
+  @Test
+  public void getNavInfoBiDirectionalFromManyToOne() throws Exception {
+
+    AnnotationHelper.AnnotatedNavInfo navInfo =
+        annotationHelper.getCommonNavigationInfo(Room.class, Building.class);
+
+    Assert.assertTrue("Navigation between Room and Building should be bi-directional",
+        navInfo.isBiDirectional());
+
+    Assert.assertEquals("building", navInfo.getFromField().getName());
+    Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getFromMultiplicity());
+    Assert.assertEquals("Building", navInfo.getFromTypeName());
+
+    Assert.assertEquals("rooms", navInfo.getToField().getName());
+    Assert.assertEquals(EdmMultiplicity.MANY, navInfo.getToMultiplicity());
+    Assert.assertEquals("Room", navInfo.getToTypeName());
+  }
+
+  @Test
+  public void getNavInfoBiDirectionalFromOneToMany() throws Exception {
+
+    AnnotationHelper.AnnotatedNavInfo navInfo =
+        annotationHelper.getCommonNavigationInfo(Building.class, Room.class);
+
+    Assert.assertTrue("Navigation between Building and Room should be bi-directional",
+        navInfo.isBiDirectional());
+
+    Assert.assertEquals("rooms", navInfo.getFromField().getName());
+    Assert.assertEquals(EdmMultiplicity.MANY, navInfo.getFromMultiplicity());
+    Assert.assertEquals("Room", navInfo.getFromTypeName());
+
+    Assert.assertEquals("building", navInfo.getToField().getName());
+    Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getToMultiplicity());
+    Assert.assertEquals("Building", navInfo.getToTypeName());
   }
 
   @EdmEntityType

@@ -352,6 +352,20 @@ public class AnnotationHelper {
     }
   }
 
+  /**
+   * Description of annotated navigation between two entity classes.
+   *
+   * Navigation may be unidirectional or bidirectional:
+   *
+   * <dl>
+   *   <dt>Unidirectional</dt>
+   *   <dd>A class has a navigation property to another class but the second class
+   *       does not have a navigation property back to the first.</dd>
+   *   <dt>Bidirectional</dt>
+   *   <dd>A class has a navigation property to another class and the second class
+   *       has a navigation property back to the first.</dd>
+   * </dl>
+   */
   public class AnnotatedNavInfo {
     private final Field fromField;
     private final Field toField;
@@ -403,7 +417,7 @@ public class AnnotationHelper {
     }
 
     public boolean isBiDirectional() {
-      return fromNavigation == null;
+      return fromNavigation != null && toNavigation != null;
     }
 
     public String getRelationshipName() {
