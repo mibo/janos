@@ -385,10 +385,11 @@ public class AnnotationHelper {
     }
 
     public String getFromRoleName() {
-      if (isBiDirectional()) {
-        return extractFromRoleEntityName(toField);
+      if (toField != null) {
+        return extractToRoleName(toNavigation, toField);
+      } else {
+        return extractFromRoleEntityName(fromField);
       }
-      return extractToRoleName(toNavigation, toField);
     }
 
     public Field getToField() {
@@ -396,10 +397,11 @@ public class AnnotationHelper {
     }
 
     public String getToRoleName() {
-      if (isBiDirectional()) {
-        return extractToRoleName(toNavigation, toField);
+      if (fromField != null) {
+        return extractToRoleName(fromNavigation, fromField);
+      } else {
+        return extractFromRoleEntityName(toField);
       }
-      return extractToRoleName(fromNavigation, fromField);
     }
 
     public EdmMultiplicity getFromMultiplicity() {
@@ -439,23 +441,26 @@ public class AnnotationHelper {
     }
 
     public String getFromTypeName() {
-      if (isBiDirectional()) {
-        return extractEntityTypeName(toField.getDeclaringClass());
+      if (toField != null) {
+        return extractEntityTypeName(ClassHelper.getFieldType(toField));
+      } else {
+        return extractEntityTypeName(fromField.getDeclaringClass());
       }
-      return extractEntityTypeName(fromField.getDeclaringClass());
     }
 
     public String getToTypeName() {
-      if (isBiDirectional()) {
-        return extractEntityTypeName(ClassHelper.getFieldType(toField));
+      if (fromField != null) {
+        return extractEntityTypeName(ClassHelper.getFieldType(fromField));
+      } else {
+        return extractEntityTypeName(toField.getDeclaringClass());
       }
-      return extractEntityTypeName(toField.getDeclaringClass());
     }
 
     @Override
     public String toString() {
       if (isBiDirectional()) {
         return "AnnotatedNavInfo{biDirectional = true" +
+            ", fromField=" + fromField.getName() +
             ", toField=" + toField.getName() +
             ", toNavigation=" + toNavigation.name() +
             ", fromNavigation=" + fromNavigation.name() +
