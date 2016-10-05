@@ -256,20 +256,39 @@ public class AnnotationHelperTest {
   }
 
   @Test
-  public void navInfoSelfNavigation() throws Exception {
+  public void navInfoBiDirectionalContainedToContainer() throws Exception {
+
     AnnotationHelper.AnnotatedNavInfo navInfo = annotationHelper.getCommonNavigationInfo(
-        NavigationAnnotated.class, NavigationAnnotated.class);
-    Assert.assertFalse("Self-navigation should be uni-directional", navInfo.isBiDirectional());
+        BiDirectionalContainedEntity.class, BiDirectionalContainerEntity.class);
+    Assert.assertTrue("Navigation should be bi-directional", navInfo.isBiDirectional());
 
-    Assert.assertEquals("selfReferencedNavigation", navInfo.getFromField().getName());
-    Assert.assertEquals("NavigationAnnotated", navInfo.getFromTypeName());
+    Assert.assertEquals("containerEntity", navInfo.getFromField().getName());
+    Assert.assertEquals("BiDirectionalContainedEntity", navInfo.getFromTypeName());
+    Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getToMultiplicity());
+    Assert.assertEquals("r_ContainerEntity", navInfo.getToRoleName());
+
+    Assert.assertEquals("containedEntities", navInfo.getToField().getName());
+    Assert.assertEquals("BiDirectionalContainerEntity", navInfo.getToTypeName());
+    Assert.assertEquals(EdmMultiplicity.MANY, navInfo.getFromMultiplicity());
+    Assert.assertEquals("r_ContainedEntities", navInfo.getFromRoleName());
+  }
+
+  @Test
+  public void navInfoBiDirectionalContainerToContained() throws Exception {
+
+    AnnotationHelper.AnnotatedNavInfo navInfo = annotationHelper.getCommonNavigationInfo(
+        BiDirectionalContainerEntity.class, BiDirectionalContainedEntity.class);
+    Assert.assertTrue("Navigation should be bi-directional", navInfo.isBiDirectional());
+
+    Assert.assertEquals("containedEntities", navInfo.getFromField().getName());
+    Assert.assertEquals("BiDirectionalContainerEntity", navInfo.getFromTypeName());
     Assert.assertEquals(EdmMultiplicity.MANY, navInfo.getToMultiplicity());
-    Assert.assertEquals("r_SelfReferencedNavigation", navInfo.getToRoleName());
+    Assert.assertEquals("r_ContainedEntities", navInfo.getToRoleName());
 
-    Assert.assertNull("Self-navigation target entity has no return field", navInfo.getToField());
-    Assert.assertEquals("NavigationAnnotated", navInfo.getToTypeName());
+    Assert.assertEquals("containerEntity", navInfo.getToField().getName());
+    Assert.assertEquals("BiDirectionalContainedEntity", navInfo.getToTypeName());
     Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getFromMultiplicity());
-    Assert.assertEquals("NavigationAnnotated", navInfo.getFromRoleName());
+    Assert.assertEquals("r_ContainerEntity", navInfo.getFromRoleName());
   }
 
   @Test
@@ -309,39 +328,20 @@ public class AnnotationHelperTest {
   }
 
   @Test
-  public void navInfoBiDirectionalContainedToContainer() throws Exception {
-
+  public void navInfoSelfNavigation() throws Exception {
     AnnotationHelper.AnnotatedNavInfo navInfo = annotationHelper.getCommonNavigationInfo(
-        BiDirectionalContainedEntity.class, BiDirectionalContainerEntity.class);
-    Assert.assertTrue("Navigation is bi-directional", navInfo.isBiDirectional());
+        NavigationAnnotated.class, NavigationAnnotated.class);
+    Assert.assertFalse("Self-navigation should be uni-directional", navInfo.isBiDirectional());
 
-    Assert.assertEquals("containerEntity", navInfo.getFromField().getName());
-    Assert.assertEquals("BiDirectionalContainedEntity", navInfo.getFromTypeName());
-    Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getToMultiplicity());
-    Assert.assertEquals("r_ContainerEntity", navInfo.getToRoleName());
-
-    Assert.assertEquals("containedEntities", navInfo.getToField().getName());
-    Assert.assertEquals("BiDirectionalContainerEntity", navInfo.getToTypeName());
-    Assert.assertEquals(EdmMultiplicity.MANY, navInfo.getFromMultiplicity());
-    Assert.assertEquals("r_ContainedEntities", navInfo.getFromRoleName());
-  }
-
-  @Test
-  public void navInfoBiDirectionalContainerToContained() throws Exception {
-
-    AnnotationHelper.AnnotatedNavInfo navInfo = annotationHelper.getCommonNavigationInfo(
-        BiDirectionalContainerEntity.class, BiDirectionalContainedEntity.class);
-    Assert.assertTrue("Navigation is bi-directional", navInfo.isBiDirectional());
-
-    Assert.assertEquals("containedEntities", navInfo.getFromField().getName());
-    Assert.assertEquals("BiDirectionalContainerEntity", navInfo.getFromTypeName());
+    Assert.assertEquals("selfReferencedNavigation", navInfo.getFromField().getName());
+    Assert.assertEquals("NavigationAnnotated", navInfo.getFromTypeName());
     Assert.assertEquals(EdmMultiplicity.MANY, navInfo.getToMultiplicity());
-    Assert.assertEquals("r_ContainedEntities", navInfo.getToRoleName());
+    Assert.assertEquals("r_SelfReferencedNavigation", navInfo.getToRoleName());
 
-    Assert.assertEquals("containerEntity", navInfo.getToField().getName());
-    Assert.assertEquals("BiDirectionalContainedEntity", navInfo.getToTypeName());
+    Assert.assertNull("Self-navigation target entity has no return field", navInfo.getToField());
+    Assert.assertEquals("NavigationAnnotated", navInfo.getToTypeName());
     Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getFromMultiplicity());
-    Assert.assertEquals("r_ContainerEntity", navInfo.getFromRoleName());
+    Assert.assertEquals("NavigationAnnotated", navInfo.getFromRoleName());
   }
 
   @EdmEntityType

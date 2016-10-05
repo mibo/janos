@@ -48,6 +48,47 @@ public class Closet {
 }
 ```
 
+```java
+@EdmEntityType(name = "Task")
+@EdmEntitySet(name = "Tasks")
+public class Task {
+  @EdmKey @EdmProperty(name = "ID")
+  private String id;
+  @EdmProperty(name = "Name")
+  private String name;
+  @EdmNavigationProperty(multiplicity = Multiplicity.MANY)
+  private List<Task> subTasks = new ArrayList<>();
+  // etc.
+}
+```
+
+## Bi-directional navigation
+
+A class has a navigation property to another class and the second class
+has a navigation property back to the first.
+
+In the above code fragments, the relationship between `Building` and `Room` is
+bi-directional. A room has a link to the building where it is found and a
+building maintains a list of its rooms.
+
+A call to `AnnotationHelper.getCommonNavigation(Room.class, Building.class)`
+returns an `AnnotatedNavInfo` instance with:
+
+* `isBiDirectional()` = `true`
+* `getFromField()` = `building`
+* `getToMultiplicity()` = `ONE`
+* `getToField()` = `rooms`
+* `getFromMultiplicity()` = `MANY`
+
+A call to `AnnotationHelper.getCommonNavigation(Building.class, Room.class)`
+returns an `AnnotatedNavInfo` instance with:
+
+* `isBiDirectional()` = `true`
+* `getFromField()` = `rooms`
+* `getToMultiplicity()` = `MANY`
+* `getToField()` = `building`
+* `getFromMultiplicity()` = `ONE`
+
 ## Uni-directional navigation
 
 A class has a navigation property to another class but the second class
@@ -64,41 +105,26 @@ returns an `AnnotatedNavInfo` instance with:
 * `getFromField()` = `building`
 * `getFromMultiplicity()` = `ONE`
 * `getToField()` = `null`
-* `getToMultiplicity()` = `null`
+* `getToMultiplicity()` = `ONE`
 
 A call to `AnnotationHelper.getCommonNavigation(Building.class, Closet.class)`
 returns an `AnnotatedNavInfo` instance with:
 
 * `isBiDirectional()` = `false`
 * `getFromField()` = `null`
-* `getFromMultiplicity()` = `null`
+* `getFromMultiplicity()` = `ONE`
 * `getToField()` = `closet`
 * `getToMultiplicity()` = `ONE`
 
-## Bi-directional navigation
+## Self-navigation
 
-A class has a navigation property to another class and the second class
-has a navigation property back to the first.
+Self-navigation is a special case of uni-directional navigation.
 
-In the above code fragments, the relationship between `Building` and `Room` is
-bi-directional. A room has a link to the building where it is found and a
-building maintains a list of its rooms.
-
-A call to `AnnotationHelper.getCommonNavigation(Room.class, Building.class)`
+A call to `AnnotationHelper.getCommonNavigation(Task.class, Task.class)`
 returns an `AnnotatedNavInfo` instance with:
 
-* `isBiDirectional()` = `true`
-* `getFromField()` = `building`
-* `getFromMultiplicity()` = `MANY`
-* `getToField()` = `room`
+* `isBiDirectional()` = `false`
+* `getFromField()` = `subTasks`
 * `getToMultiplicity()` = `ONE`
-
-A call to `AnnotationHelper.getCommonNavigation(Building.class, Room.class)`
-returns an `AnnotatedNavInfo` instance with:
-
-* `isBiDirectional()` = `true`
-* `getFromField()` = `room`
+* `getToField()` = `null`
 * `getFromMultiplicity()` = `ONE`
-* `getToField()` = `building`
-* `getToMultiplicity()` = `MANY`
-
