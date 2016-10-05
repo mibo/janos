@@ -407,7 +407,7 @@ public class AnnotationHelper {
       if (toField != null) {
         return extractMultiplicity(toNavigation, toField);
       } else {
-        return null;
+        return EdmMultiplicity.ONE;
       }
     }
 
@@ -415,7 +415,7 @@ public class AnnotationHelper {
       if (fromField != null) {
         return extractMultiplicity(fromNavigation, fromField);
       } else {
-        return null;
+        return EdmMultiplicity.ONE;
       }
     }
 

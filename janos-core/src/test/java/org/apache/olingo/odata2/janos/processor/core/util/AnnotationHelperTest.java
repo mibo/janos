@@ -268,7 +268,7 @@ public class AnnotationHelperTest {
 
     Assert.assertNull("Self-navigation target entity has no return field", navInfo.getToField());
     Assert.assertEquals("NavigationAnnotated", navInfo.getToTypeName());
-    Assert.assertNull("Uni-directional target entity has no return navigation", navInfo.getFromMultiplicity());
+    Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getFromMultiplicity());
     Assert.assertEquals("NavigationAnnotated", navInfo.getFromRoleName());
   }
 
@@ -286,7 +286,7 @@ public class AnnotationHelperTest {
 
     Assert.assertNull("Uni-directional target entity has no return field", navInfo.getToField());
     Assert.assertEquals("UniDirectionalTargetEntity", navInfo.getToTypeName());
-    Assert.assertNull("Uni-directional target entity has no return navigation", navInfo.getFromMultiplicity());
+    Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getFromMultiplicity());
     Assert.assertEquals("UniDirectionalSourceEntity", navInfo.getFromRoleName());
   }
 
@@ -299,7 +299,7 @@ public class AnnotationHelperTest {
 
     Assert.assertNull("Uni-directional target entity has no return field", navInfo.getFromField());
     Assert.assertEquals("UniDirectionalTargetEntity", navInfo.getFromTypeName());
-    Assert.assertNull("Uni-directional target entity has no return navigation", navInfo.getToMultiplicity());
+    Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getToMultiplicity());
     Assert.assertEquals("UniDirectionalSourceEntity", navInfo.getToRoleName());
 
     Assert.assertEquals("targetEntity", navInfo.getToField().getName());
