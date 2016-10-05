@@ -256,6 +256,23 @@ public class AnnotationHelperTest {
   }
 
   @Test
+  public void navInfoSelfNavigation() throws Exception {
+    AnnotationHelper.AnnotatedNavInfo navInfo = annotationHelper.getCommonNavigationInfo(
+        NavigationAnnotated.class, NavigationAnnotated.class);
+    Assert.assertFalse("Self-navigation should be uni-directional", navInfo.isBiDirectional());
+
+    Assert.assertEquals("selfReferencedNavigation", navInfo.getFromField().getName());
+    Assert.assertEquals("NavigationAnnotated", navInfo.getFromTypeName());
+    Assert.assertEquals(EdmMultiplicity.MANY, navInfo.getToMultiplicity());
+    Assert.assertEquals("r_SelfReferencedNavigation", navInfo.getToRoleName());
+
+    Assert.assertNull("Self-navigation target entity has no return field", navInfo.getToField());
+    Assert.assertEquals("NavigationAnnotated", navInfo.getToTypeName());
+    Assert.assertNull("Uni-directional target entity has no return navigation", navInfo.getFromMultiplicity());
+    Assert.assertEquals("NavigationAnnotated", navInfo.getFromRoleName());
+  }
+
+  @Test
   public void navInfoUniDirectionalSourceFirst() throws Exception {
 
     AnnotationHelper.AnnotatedNavInfo navInfo = annotationHelper.getCommonNavigationInfo(
@@ -325,17 +342,6 @@ public class AnnotationHelperTest {
     Assert.assertEquals("BiDirectionalContainedEntity", navInfo.getToTypeName());
     Assert.assertEquals(EdmMultiplicity.ONE, navInfo.getFromMultiplicity());
     Assert.assertEquals("r_ContainerEntity", navInfo.getFromRoleName());
-  }
-
-  @Test
-  public void navInfoSelfNavigation() throws Exception {
-    AnnotationHelper.AnnotatedNavInfo navInfo = annotationHelper.getCommonNavigationInfo(
-        NavigationAnnotated.class, NavigationAnnotated.class);
-    Assert.assertTrue("Self-navigation is bi-directional", navInfo.isBiDirectional());
-    Assert.assertEquals("selfReferencedNavigation", navInfo.getFromField().getName());
-    Assert.assertEquals(EdmMultiplicity.MANY, navInfo.getToMultiplicity());
-    Assert.assertEquals("selfReferencedNavigation", navInfo.getToField().getName());
-    Assert.assertEquals(EdmMultiplicity.MANY, navInfo.getFromMultiplicity());
   }
 
   @EdmEntityType

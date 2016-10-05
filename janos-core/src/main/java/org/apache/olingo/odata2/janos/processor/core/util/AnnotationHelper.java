@@ -493,8 +493,7 @@ public class AnnotationHelper {
 
     // Self-navigation: return the first field in the list.
     if (sourceClass == targetClass && !sourceFields.isEmpty()) {
-      final Field field = sourceFields.get(0);
-      return new AnnotatedNavInfo(field, field);
+      return new AnnotatedNavInfo(sourceFields.get(0), null);
     }
 
     // Look for bi-directional navigation, returning the first with matching association name.
