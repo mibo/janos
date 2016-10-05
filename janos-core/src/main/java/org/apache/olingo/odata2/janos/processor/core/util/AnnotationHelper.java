@@ -372,12 +372,11 @@ public class AnnotationHelper {
     private final EdmNavigationProperty fromNavigation;
     private final EdmNavigationProperty toNavigation;
 
-    public AnnotatedNavInfo(final Field fromField, final Field toField, final EdmNavigationProperty fromNavigation,
-                            final EdmNavigationProperty toNavigation) {
+    public AnnotatedNavInfo(final Field fromField, final Field toField) {
       this.fromField = fromField;
       this.toField = toField;
-      this.fromNavigation = fromNavigation;
-      this.toNavigation = toNavigation;
+      this.fromNavigation = fromField == null ? null : fromField.getAnnotation(EdmNavigationProperty.class);
+      this.toNavigation = toField == null ? null : toField.getAnnotation(EdmNavigationProperty.class);
     }
 
     public Field getFromField() {
@@ -495,8 +494,7 @@ public class AnnotationHelper {
     // Self-navigation: return the first field in the list.
     if (sourceClass == targetClass && !sourceFields.isEmpty()) {
       final Field field = sourceFields.get(0);
-      final EdmNavigationProperty navProperty = field.getAnnotation(EdmNavigationProperty.class);
-      return new AnnotatedNavInfo(field, field, navProperty, navProperty);
+      return new AnnotatedNavInfo(field, field);
     }
 
     // Look for bi-directional navigation, returning the first with matching association name.
@@ -507,7 +505,7 @@ public class AnnotationHelper {
         final EdmNavigationProperty targetNav = targetField.getAnnotation(EdmNavigationProperty.class);
         final String targetAssociation = extractRelationshipName(targetNav, targetField);
         if (sourceAssociation.equals(targetAssociation)) {
-          return new AnnotatedNavInfo(sourceField, targetField, sourceNav, targetNav);
+          return new AnnotatedNavInfo(sourceField, targetField);
         }
       }
     }
@@ -517,14 +515,10 @@ public class AnnotationHelper {
       if (targetFields.isEmpty()) {
         return null;
       } else {
-        final Field field = targetFields.get(0);
-        final EdmNavigationProperty navProperty = field.getAnnotation(EdmNavigationProperty.class);
-        return new AnnotatedNavInfo(null, field, null, navProperty);
+        return new AnnotatedNavInfo(null, targetFields.get(0));
       }
     } else {
-      final Field field = sourceFields.get(0);
-      final EdmNavigationProperty navProperty = field.getAnnotation(EdmNavigationProperty.class);
-      return new AnnotatedNavInfo(field, null, navProperty, null);
+      return new AnnotatedNavInfo(sourceFields.get(0), null);
     }
   }
 
