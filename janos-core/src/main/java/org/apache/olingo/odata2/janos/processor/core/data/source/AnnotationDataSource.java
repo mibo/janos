@@ -162,10 +162,14 @@ public class AnnotationDataSource implements DataSource {
         Map<String, Object> keyName2Value = 
                 ANNOTATION_HELPER.getValueForAnnotatedFields(sourceData, EdmKey.class);
         Field toField = navInfo.getToField();
-        Object backInstance = ClassHelper.getFieldValue(targetInstance, toField);
-        boolean keyMatch = ANNOTATION_HELPER.keyMatch(backInstance, keyName2Value);
-        if(keyMatch) {
+        if (toField == null) {
           resultData.add(targetInstance);
+        } else {
+          Object backInstance = ClassHelper.getFieldValue(targetInstance, toField);
+          boolean keyMatch = ANNOTATION_HELPER.keyMatch(backInstance, keyName2Value);
+          if (keyMatch) {
+            resultData.add(targetInstance);
+          }
         }
       } else if (targetStore.isKeyEqualChecked(targetInstance, navigationInstance)) {
         resultData.add(targetInstance);
