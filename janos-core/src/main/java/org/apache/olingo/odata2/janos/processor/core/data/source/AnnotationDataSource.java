@@ -125,7 +125,7 @@ public class AnnotationDataSource implements DataSource {
     AnnotationHelper.AnnotatedNavInfo navInfo = ANNOTATION_HELPER.getCommonNavigationInfo(
         sourceStore.getDataTypeClass(), targetStore.getDataTypeClass());
     final Field sourceField;
-    if(navInfo.isBiDirectional()) {
+    if (navInfo.getFromField() == null) {
       sourceField = navInfo.getToField();
     } else {
       sourceField = navInfo.getFromField();
@@ -162,10 +162,14 @@ public class AnnotationDataSource implements DataSource {
         Map<String, Object> keyName2Value = 
                 ANNOTATION_HELPER.getValueForAnnotatedFields(sourceData, EdmKey.class);
         Field toField = navInfo.getToField();
-        Object backInstance = ClassHelper.getFieldValue(targetInstance, toField);
-        boolean keyMatch = ANNOTATION_HELPER.keyMatch(backInstance, keyName2Value);
-        if(keyMatch) {
+        if (toField == null) {
           resultData.add(targetInstance);
+        } else {
+          Object backInstance = ClassHelper.getFieldValue(targetInstance, toField);
+          boolean keyMatch = ANNOTATION_HELPER.keyMatch(backInstance, keyName2Value);
+          if (keyMatch) {
+            resultData.add(targetInstance);
+          }
         }
       } else if (targetStore.isKeyEqualChecked(targetInstance, navigationInstance)) {
         resultData.add(targetInstance);
