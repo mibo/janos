@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -148,7 +149,11 @@ public class ExtensionProcessor<T extends ODataProcessor> {
       // XXX: change
       if (isValid(method)) {
         invokeMethod = method;
-        invokeParameters = Arrays.copyOf(objects, objects.length);
+        if (objects != null) {
+        	invokeParameters = Arrays.copyOf(objects, objects.length);
+        } else {
+        	invokeParameters = new Object[0];
+        }
       } else {
         throw new RuntimeException("Invalid class '" + method.getDeclaringClass() +
             "' can not wrapped for asynchronous processing.");
